@@ -1,20 +1,34 @@
 import React from 'react';
-import PageShell from '../components/ui/PageShell.jsx';
+import CompanyHero from '../sections/company/CompanyHero.jsx';
+import NameModel from '../sections/company/NameModel.jsx';
+import CompanyStory from '../sections/company/CompanyStory.jsx';
+import FounderProfile from '../sections/company/FounderProfile.jsx';
+import TalentUmbrella from '../sections/company/TalentUmbrella.jsx';
+import CompanyCTA from '../sections/company/CompanyCTA.jsx';
 
 const Company = () => {
   return (
-    <PageShell
-      eyebrow="Company"
-      title="The company behind Engineering Clarity."
-      description="This page will explain DevReCon's story, operating philosophy, talent umbrella model, founder profile, and long term vision."
-    >
-      <section id="talent-umbrella" className="p-8 border border-gray-100 rounded-3xl bg-white">
-        <h2 className="text-2xl font-bold tracking-tight mb-4">Talent Umbrella</h2>
-        <p className="text-gray-600 leading-loose tracking-wide font-light">
-          DevReCon supports builders, freelancers, students, founders, and technical operators who have serious ideas but need structure, direction, documentation, development support, or operational clarity.
-        </p>
-      </section>
-    </PageShell>
+    <main className="relative overflow-hidden bg-white text-[#111111]">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.045]">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="companyGrid" width="72" height="72" patternUnits="userSpaceOnUse">
+              <path d="M 72 0 L 0 0 0 72" fill="none" stroke="black" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#companyGrid)" />
+        </svg>
+      </div>
+
+      <div className="relative z-10">
+        <CompanyHero />
+        <NameModel />
+        <CompanyStory />
+        <FounderProfile />
+        <TalentUmbrella />
+        <CompanyCTA />
+      </div>
+    </main>
   );
 };
 

@@ -334,13 +334,13 @@ const MyMedicalsPhone = () => (
       <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent" />
       <div className="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06),inset_0_-40px_60px_rgba(0,0,0,0.48)]" />
 
-      <div className="absolute left-1/2 top-[7px] z-30 flex w-full -translate-x-1/2 justify-center px-3">
-        <div className="flex h-[27.8px] w-[136px] items-center justify-center overflow-hidden rounded-full bg-black shadow-[0_5px_16px_rgba(0,0,0,0.42)] sm:h-[29.1px] sm:w-[145px]">
-          <div className="flex min-w-0 items-center justify-center gap-[5px] px-2">
-            <span className="flex h-[15px] w-[15px] shrink-0 items-center justify-center rounded-full bg-white/10">
-              <CheckCircle2 className="native-colour-stage h-[10.5px] w-[10.5px] text-[#66C72A]" />
+      <div className="absolute left-1/2 top-[7px] z-30 flex w-full -translate-x-1/2 justify-center px-2">
+        <div className="flex h-[29.6px] w-[160px] items-center overflow-hidden rounded-full bg-black shadow-[0_5px_16px_rgba(0,0,0,0.42)] sm:h-[31px] sm:w-[170px]">
+          <div className="flex w-full items-center gap-[6px] px-[8px]">
+            <span className="flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-full bg-white/10">
+              <CheckCircle2 className="native-colour-stage h-[11px] w-[11px] text-[#66C72A]" />
             </span>
-            <span className="max-w-[106px] truncate text-[6.95px] font-bold leading-none tracking-[-0.025em] text-white/90 sm:max-w-[114px] sm:text-[7.25px]">
+            <span className="min-w-0 flex-1 whitespace-nowrap text-left text-[7.2px] font-normal leading-none tracking-normal text-white/92 [word-spacing:1px] sm:text-[7.5px]">
               Anura took medication, B12
             </span>
           </div>
