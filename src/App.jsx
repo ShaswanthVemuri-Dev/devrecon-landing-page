@@ -1,22 +1,23 @@
 import React from 'react';
-import Navbar from './components/Navbar.jsx';
-import Hero from './components/Hero.jsx';
-import Approach from './components/Approach.jsx';
-import Capabilities from './components/Capabilities.jsx';
-import Partnerships from './components/Partnerships.jsx';
-import Footer from './components/Footer.jsx';
-import ScrollToTop from './components/ScrollToTop.jsx';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Layout from './components/layout/Layout.jsx';
+import Home from './pages/Home.jsx';
+import Solutions from './pages/Solutions.jsx';
+import Products from './pages/Products.jsx';
+import Company from './pages/Company.jsx';
 
 export default function App() {
   return (
-    <div className="bg-white text-slate-900">
-      <Navbar />
-      <Hero />
-      <Approach />
-      <Capabilities />
-      <Partnerships />
-      <Footer />
-      <ScrollToTop />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/solutions" element={<Solutions />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/company" element={<Company />} />
+          <Route path="*" element={<Home />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }

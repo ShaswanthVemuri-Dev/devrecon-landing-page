@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
-import CircuitBackground from './CircuitBackground.jsx';
+import { ArrowDown } from 'lucide-react';
+import CircuitBackground from '../../components/ui/CircuitBackground.jsx';
 
 const Hero = () => {
   return (
@@ -22,9 +22,9 @@ const Hero = () => {
         </p>
 
         <div className="mt-12 md:mt-16 flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-          <a href="#approach" className="group flex items-center gap-3 text-lg font-semibold text-black border-b-2 border-black pb-1 hover:text-gray-600 hover:border-gray-600 transition-all tracking-wide">
-            See how we work 
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform"/>
+          <a href="#how-it-works" className="group flex items-center gap-3 text-lg font-semibold text-black border-b-2 border-black pb-1 hover:text-gray-600 hover:border-gray-600 transition-all tracking-wide">
+            See how it works
+            <ArrowDown className="w-5 h-5 group-hover:translate-y-1 transition-transform"/>
           </a>
         </div>
       </motion.div>

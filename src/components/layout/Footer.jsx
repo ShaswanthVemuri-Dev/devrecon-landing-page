@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ExternalLink } from 'lucide-react';
 
 const Footer = () => {
@@ -30,10 +30,11 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto mt-16 md:mt-20 pt-8 border-t border-gray-100 text-sm text-gray-400 flex flex-col md:flex-row justify-between gap-4 font-light tracking-wide">
         <p>© 2025 DEVRECON Softwares Pvt. Ltd.</p>
-        <p>Designed with Clarity.</p>
+        <p>Engineering Clarity.</p>
       </div>
     </footer>
   );
 };
 
 export default Footer;
+

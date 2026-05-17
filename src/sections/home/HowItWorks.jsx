@@ -2,9 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
 
-const Approach = () => {
+const HowItWorks = () => {
   return (
-    <section id="approach" className="py-20 md:py-32 bg-[#111111] text-white px-6 relative overflow-hidden">
+    <section id="how-it-works" className="py-20 md:py-32 bg-[#111111] text-white px-6 relative overflow-hidden">
       <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -68,4 +68,4 @@ const Approach = () => {
   );
 };
 
-export default Approach;
+export default HowItWorks;
