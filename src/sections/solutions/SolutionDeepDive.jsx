@@ -4,15 +4,15 @@ import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import { mixedInquiry, solutions } from '../../data/solutions.js';
 
 const ease = [0.22, 1, 0.36, 1];
-const softEase = [0.19, 1, 0.22, 1];
+const softEase = [0.2, 0.95, 0.25, 1];
 
 const panelTransition = {
-  duration: 0.7,
+  duration: 0.82,
   ease: softEase,
 };
 
 const hoverTransition = {
-  duration: 0.42,
+  duration: 0.48,
   ease,
 };
 
@@ -35,9 +35,15 @@ const buttonMotion = {
 };
 
 const panelShellMotion = {
+  rest: {
+    y: 0,
+    scale: 1,
+    boxShadow: '0 24px 70px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(255,255,255,0)',
+  },
   hover: {
-    y: -2,
-    boxShadow: '0 30px 78px rgba(0,0,0,0.115), inset 0 0 0 1px rgba(255,255,255,0.08)',
+    y: -3,
+    scale: 1.004,
+    boxShadow: '0 32px 82px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.08)',
     transition: hoverTransition,
   },
 };
@@ -73,12 +79,14 @@ const panelMotion = {
   visible: {
     opacity: 1,
     y: 0,
-    boxShadow: '0 24px 70px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(255,255,255,0)',
+    scale: 1,
+    boxShadow: panelShellMotion.rest.boxShadow,
     transition: {
-      duration: 0.62,
+      duration: 0.64,
       ease,
     },
   },
+  rest: panelShellMotion.rest,
   hover: panelShellMotion.hover,
 };
 
@@ -86,88 +94,59 @@ const detailGroup = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
+      staggerChildren: 0.085,
+      delayChildren: 0.18,
     },
   },
   exit: {
     transition: {
-      staggerChildren: 0.055,
+      staggerChildren: 0.06,
       staggerDirection: -1,
     },
   },
 };
 
 const detailItem = {
-  hidden: { opacity: 0, y: 14 },
+  hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.42, ease },
+    transition: { duration: 0.46, ease },
   },
   exit: {
     opacity: 0,
-    y: 10,
-    transition: { duration: 0.34, ease },
+    y: 12,
+    transition: { duration: 0.38, ease },
   },
 };
 
-const continuationMotion = {
-  initial: { opacity: 0, y: 6, filter: 'blur(2px)' },
-  animate: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.38, ease, delay: 0.08 },
-  },
-  exit: {
-    opacity: 0,
-    y: 8,
-    filter: 'blur(2px)',
-    transition: { duration: 0.28, ease },
-  },
+const collapsedTextMask = {
+  WebkitMaskImage: 'linear-gradient(to right, #000 0%, #000 76%, rgba(0,0,0,0.3) 89%, transparent 100%)',
+  maskImage: 'linear-gradient(to right, #000 0%, #000 76%, rgba(0,0,0,0.3) 89%, transparent 100%)',
 };
 
 const TextRun = ({ preview, continuation, isOpen }) => {
   return (
     <motion.div
-      className="relative mt-5 max-w-5xl overflow-hidden"
-      animate={{ maxHeight: isOpen ? 78 : 82 }}
-      transition={panelTransition}
+      className="relative max-w-5xl overflow-hidden"
+      initial={false}
+      animate={{
+        opacity: isOpen ? 0 : 1,
+        height: isOpen ? 0 : 'auto',
+        marginTop: isOpen ? 0 : 20,
+      }}
+      transition={{
+        duration: isOpen ? 0.44 : 0.52,
+        ease,
+        delay: isOpen ? 0 : 0.12,
+      }}
     >
-      <p className="text-base md:text-xl leading-loose tracking-wide font-light text-gray-300 pr-8 md:pr-12">
-        <span>{preview}</span>
-        <AnimatePresence initial={false} mode="popLayout">
-          {!isOpen && (
-            <motion.span
-              key="collapsed-continuation"
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={continuationMotion}
-              className="inline"
-            >
-              {' '}{continuation}
-            </motion.span>
-          )}
-        </AnimatePresence>
+      <p
+        style={collapsedTextMask}
+        className="text-sm sm:text-base md:text-xl leading-relaxed md:leading-loose tracking-wide font-light text-gray-300 pr-3 sm:pr-8 md:pr-12"
+      >
+        {preview} {continuation}
       </p>
-
-      <AnimatePresence initial={false}>
-        {!isOpen && (
-          <motion.div
-            key="text-fade"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.36, ease }}
-            className="pointer-events-none absolute inset-0"
-          >
-            <div className="absolute inset-y-0 right-0 w-44 bg-gradient-to-r from-transparent via-[#111111]/88 to-[#111111]" />
-            <div className="absolute inset-x-0 bottom-0 h-9 bg-gradient-to-b from-transparent to-[#111111]" />
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 };
@@ -176,20 +155,20 @@ const DetailColumn = ({ title, items }) => {
   return (
     <motion.div
       variants={detailItem}
-      className="h-full rounded-[1.55rem] border border-white/10 bg-white/[0.035] p-6 md:p-7"
+      className="h-full rounded-[1.35rem] sm:rounded-[1.55rem] border border-white/10 bg-white/[0.035] p-5 sm:p-6 md:p-7"
     >
-      <h3 className="text-xs font-bold uppercase tracking-[0.22em] text-gray-500 mb-6">
+      <h3 className="text-[0.68rem] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.22em] text-gray-500 mb-5 sm:mb-6">
         {title}
       </h3>
 
-      <div className="grid grid-rows-3 gap-5 h-[calc(100%-2.35rem)]">
+      <div className="grid gap-4 sm:gap-5">
         {items.map((item) => (
           <motion.p
             key={item}
             variants={detailItem}
             whileHover={{ x: 4 }}
             transition={{ duration: 0.32, ease }}
-            className="flex items-start text-base md:text-lg leading-loose tracking-wide text-gray-300 font-light border-l border-white/20 pl-5"
+            className="flex items-start min-h-[4.6rem] text-sm sm:text-base md:text-lg leading-loose tracking-wide text-gray-300 font-light border-l border-white/20 pl-4 sm:pl-5"
           >
             {item}
           </motion.p>
@@ -209,41 +188,43 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
     <motion.article
       id={solution.id}
       variants={panelMotion}
+      initial="hidden"
+      animate="visible"
       whileHover="hover"
-      className="scroll-mt-32 rounded-[2.15rem] bg-[#111111] text-white overflow-hidden border border-black shadow-[0_24px_70px_rgba(0,0,0,0.08)] will-change-transform"
+      className="scroll-mt-28 md:scroll-mt-32 rounded-[1.75rem] sm:rounded-[2.15rem] bg-[#111111] text-white overflow-hidden border border-black shadow-[0_24px_70px_rgba(0,0,0,0.08)] will-change-transform"
     >
       <motion.button
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className="w-full text-left p-6 sm:p-8 md:p-10 group relative focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
+        className="w-full text-left p-5 sm:p-8 md:p-10 group relative focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
         variants={panelButtonMotion}
         initial="rest"
         animate="rest"
         whileHover="hover"
         whileTap="tap"
       >
-        <div className="flex flex-col lg:flex-row lg:items-start gap-7 lg:gap-12">
+        <div className="flex flex-col lg:flex-row lg:items-start gap-5 sm:gap-7 lg:gap-12">
           <div className="flex items-center justify-between lg:block lg:w-28 shrink-0">
-            <span className="text-sm md:text-base font-bold tracking-[0.2em] text-gray-500">
+            <span className="text-xs sm:text-sm md:text-base font-bold tracking-[0.2em] text-gray-500">
               {solution.index}
             </span>
             <motion.span
-              className="lg:hidden flex h-11 w-11 items-center justify-center rounded-full bg-white text-black shadow-[0_0_0_0_rgba(255,255,255,0)] group-hover:shadow-[0_0_0_7px_rgba(255,255,255,0.06)] transition-shadow duration-500"
+              className="lg:hidden flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white text-black shadow-[0_0_0_0_rgba(255,255,255,0)] group-hover:shadow-[0_0_0_7px_rgba(255,255,255,0.06)] transition-shadow duration-500"
               animate={{ rotate: isOpen ? 180 : 0 }}
-              transition={{ duration: 0.46, ease }}
+              transition={{ duration: 0.52, ease }}
             >
-              <ChevronDown className="w-5 h-5" />
+              <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.span>
           </div>
 
           <div className="min-w-0 flex-1">
             <motion.div
               animate={{ y: isOpen ? -2 : 0 }}
-              transition={{ duration: 0.42, ease }}
-              className="flex flex-col gap-3"
+              transition={{ duration: 0.46, ease }}
+              className="flex flex-col gap-2 sm:gap-3"
             >
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-gray-500">
+              <span className="text-[0.68rem] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-gray-500">
                 {solution.shortTitle}
               </span>
               <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight leading-tight text-balance">
@@ -262,7 +243,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
             className="hidden lg:flex h-12 w-12 items-center justify-center rounded-full bg-white text-black shrink-0 shadow-[0_0_0_0_rgba(255,255,255,0)] group-hover:shadow-[0_0_0_8px_rgba(255,255,255,0.06)] transition-shadow duration-500"
             animate={{ rotate: isOpen ? 180 : 0 }}
             whileHover={{ y: -1 }}
-            transition={{ duration: 0.46, ease }}
+            transition={{ duration: 0.52, ease }}
           >
             <ChevronDown className="w-5 h-5" />
           </motion.span>
@@ -275,7 +256,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
         transition={panelTransition}
         className="overflow-hidden"
       >
-        <AnimatePresence initial={false}>
+        <AnimatePresence initial={false} mode="wait">
           {isOpen && (
             <motion.div
               key={`${solution.id}-details`}
@@ -283,26 +264,26 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="px-6 sm:px-8 md:px-10 pb-8 md:pb-11"
+              className="px-5 sm:px-8 md:px-10 pb-7 sm:pb-8 md:pb-11"
             >
-              <div className="border-t border-white/10 pt-8 md:pt-10">
+              <div className="border-t border-white/10 pt-7 sm:pt-8 md:pt-10">
                 <motion.p
                   variants={detailItem}
-                  className="max-w-5xl text-lg md:text-2xl leading-loose tracking-wide font-light text-gray-200"
+                  className="max-w-5xl text-base sm:text-lg md:text-2xl leading-loose tracking-wide font-light text-gray-200"
                 >
                   {solution.continuation}
                 </motion.p>
 
                 <motion.p
                   variants={detailItem}
-                  className="mt-7 max-w-4xl text-base md:text-lg leading-loose tracking-wide font-light text-gray-400"
+                  className="mt-5 sm:mt-7 max-w-4xl text-sm sm:text-base md:text-lg leading-loose tracking-wide font-light text-gray-400"
                 >
                   {solution.serviceLine}
                 </motion.p>
 
                 <motion.div
                   variants={detailItem}
-                  className="mt-10 grid lg:grid-cols-2 gap-6 md:gap-8 items-stretch"
+                  className="mt-8 sm:mt-10 grid lg:grid-cols-2 gap-5 sm:gap-6 md:gap-8 items-stretch"
                 >
                   <DetailColumn title="Useful when" items={solution.usefulWhen} />
                   <DetailColumn title="What DevReCon can build" items={solution.canBuild} />
@@ -310,7 +291,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
 
                 <motion.div
                   variants={detailItem}
-                  className="mt-9 flex flex-col sm:flex-row sm:items-center gap-5"
+                  className="mt-8 sm:mt-9 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5"
                 >
                   <motion.a
                     href={mailto}

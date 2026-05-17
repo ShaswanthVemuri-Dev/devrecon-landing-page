@@ -57,7 +57,7 @@ const SolutionsHero = () => {
 
         <motion.h1
           variants={rise}
-          className="max-w-6xl text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.08] text-[#111111] text-balance"
+          className="max-w-6xl text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.08] text-[#111111] text-balance [word-spacing:0.12em] sm:[word-spacing:0.14em] md:[word-spacing:0.14em]"
         >
           Systems for technical work that needs more than a template.
         </motion.h1>
@@ -82,7 +82,7 @@ const SolutionsHero = () => {
               animate="rest"
               whileHover="hover"
               whileTap="tap"
-              className="rounded-full border border-gray-200 bg-white/75 px-5 py-3 text-sm font-semibold tracking-wide text-gray-700 backdrop-blur-sm hover:border-black hover:bg-black hover:text-white transition-colors duration-300"
+              className="rounded-full border border-gray-200 bg-white/75 px-4 py-2.5 text-xs sm:px-5 sm:py-3 sm:text-sm font-semibold tracking-wide text-gray-700 backdrop-blur-sm hover:border-black hover:bg-black hover:text-white transition-colors duration-300"
             >
               {solution.label}
             </motion.a>

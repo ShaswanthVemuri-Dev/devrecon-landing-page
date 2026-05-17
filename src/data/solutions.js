@@ -5,9 +5,9 @@ export const solutions = [
   {
     id: 'ai',
     index: '01',
-    label: 'AI systems',
+    label: 'AI Systems',
     title: 'AI Consultation and Applications',
-    shortTitle: 'AI systems',
+    shortTitle: 'AI Systems',
     preview:
       'AI should earn its place in the product. It should reduce friction, improve decisions, or create a capability people can actually use.',
     continuation:
@@ -39,9 +39,9 @@ export const solutions = [
   {
     id: 'software',
     index: '02',
-    label: 'Software platforms',
+    label: 'Software Platforms',
     title: 'Custom Software Development',
-    shortTitle: 'Software platforms',
+    shortTitle: 'Software Platforms',
     preview:
       'Software should match the way work actually happens. The system should serve the operation, not force the operation into a template.',
     continuation:
@@ -73,9 +73,9 @@ export const solutions = [
   {
     id: 'frontier-tech',
     index: '03',
-    label: 'Frontier tech and IoT',
+    label: 'Frontier Tech and IoT',
     title: 'Frontier Tech and IoT',
-    shortTitle: 'Frontier tech',
+    shortTitle: 'Frontier Tech',
     preview:
       'Some products do not live only on a screen. They involve sensors, devices, field conditions, electronics, and software behavior.',
     continuation:
@@ -107,7 +107,7 @@ export const solutions = [
   {
     id: 'strategy',
     index: '04',
-    label: 'Technical strategy',
+    label: 'Technical Strategy',
     title: 'Technical Strategy and Deployment',
     shortTitle: 'Strategy',
     preview:

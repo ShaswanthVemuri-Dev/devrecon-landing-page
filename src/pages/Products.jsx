@@ -1,13 +1,14 @@
 import React from 'react';
-import PageShell from '../components/ui/PageShell.jsx';
+import ProductsHero from '../sections/products/ProductsHero.jsx';
+import ProductShowcase from '../sections/products/ProductShowcase.jsx';
+import { products } from '../data/products.js';
 
 const Products = () => {
   return (
-    <PageShell
-      eyebrow="Products"
-      title="Products and ventures."
-      description="This page will showcase public products, internal ventures, and product initiatives connected to DevReCon."
-    />
+    <main className="bg-white text-[#111111] overflow-hidden">
+      <ProductsHero />
+      <ProductShowcase products={products} />
+    </main>
   );
 };
 
