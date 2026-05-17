@@ -5,24 +5,20 @@ const RouteScrollManager = () => {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    if (hash) {
-      const targetId = hash.replace('#', '');
-
-      window.setTimeout(() => {
-        const target = document.getElementById(targetId);
+    const timeout = window.setTimeout(() => {
+      if (hash) {
+        const target = document.getElementById(hash.replace('#', ''));
 
         if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
         }
-      }, 80);
+      }
 
-      return;
-    }
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }, hash ? 220 : 210);
 
-    window.scrollTo(0, 0);
+    return () => window.clearTimeout(timeout);
   }, [pathname, hash]);
 
   return null;

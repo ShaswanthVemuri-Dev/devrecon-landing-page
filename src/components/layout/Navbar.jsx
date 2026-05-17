@@ -3,6 +3,8 @@ import { Link, NavLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
+const ease = [0.22, 1, 0.36, 1];
+
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -18,7 +20,7 @@ const Navbar = () => {
   ];
 
   const navClassName = ({ isActive }) =>
-    `text-sm font-medium tracking-wide transition-colors ${
+    `text-sm font-medium tracking-wide transition-colors duration-300 ${
       isActive ? 'text-black' : 'text-gray-600 hover:text-black'
     }`;
 
@@ -27,13 +29,15 @@ const Navbar = () => {
       isActive ? 'text-black' : 'text-gray-500'
     }`;
 
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
   return (
     <nav className="fixed w-full z-50 transition-all duration-300 glass-nav py-4 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <Link
           to="/"
           className="text-2xl font-bold tracking-tight z-50 relative"
-          onClick={() => setMobileMenuOpen(false)}
+          onClick={closeMobileMenu}
         >
           DevReCon
         </Link>
@@ -45,12 +49,17 @@ const Navbar = () => {
             </NavLink>
           ))}
 
-          <a
+          <motion.a
             href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
-            className="bg-black text-white px-6 py-2.5 rounded-full text-sm font-medium tracking-wide hover:bg-gray-800 transition-all transform hover:scale-105"
+            initial="rest"
+            animate="rest"
+            whileHover={{ y: -2 }}
+            whileTap={{ y: 0, scale: 0.992 }}
+            transition={{ duration: 0.28, ease }}
+            className="bg-black text-white px-6 py-2.5 rounded-full text-sm font-medium tracking-wide hover:bg-gray-800 hover:shadow-lg transition-[background-color,box-shadow] duration-300"
           >
             Start a Project
-          </a>
+          </motion.a>
         </div>
 
         <button
@@ -65,29 +74,31 @@ const Navbar = () => {
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -18 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+              exit={{ opacity: 0, y: -18 }}
+              transition={{ duration: 0.34, ease }}
               className="absolute top-0 left-0 w-full h-screen bg-white flex flex-col items-center justify-center gap-8 md:hidden"
             >
               {mobileNavLinks.map((link) => (
                 <NavLink
                   key={link.name}
                   to={link.to}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={closeMobileMenu}
                   className={mobileNavClassName}
                 >
                   {link.name}
                 </NavLink>
               ))}
 
-              <a
+              <motion.a
                 href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={closeMobileMenu}
+                whileTap={{ scale: 0.992 }}
                 className="mt-4 bg-black text-white px-8 py-4 rounded-full text-lg font-medium tracking-wide"
               >
                 Start a Project
-              </a>
+              </motion.a>
             </motion.div>
           )}
         </AnimatePresence>

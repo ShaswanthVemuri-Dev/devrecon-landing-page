@@ -1,36 +1,26 @@
 import React from 'react';
-import PageShell from '../components/ui/PageShell.jsx';
+import SolutionsHero from '../sections/solutions/SolutionsHero.jsx';
+import SolutionDeepDive from '../sections/solutions/SolutionDeepDive.jsx';
 
 const Solutions = () => {
   return (
-    <PageShell
-      eyebrow="Solutions"
-      title="Technical systems for ambitious operators."
-      description="DevReCon works across AI consulting, AI applications, custom software, frontier technology, IoT, technical strategy, deployment, and maintenance."
-    >
-      <div className="grid md:grid-cols-3 gap-8">
-        <section id="ai" className="p-8 border border-gray-100 rounded-3xl bg-white">
-          <h2 className="text-2xl font-bold tracking-tight mb-4">AI Consulting and Applications</h2>
-          <p className="text-gray-600 leading-loose tracking-wide font-light">
-            AI strategy, AI application development, custom AI models, LLM workflows, automation, and applied machine learning systems.
-          </p>
-        </section>
-
-        <section id="software" className="p-8 border border-gray-100 rounded-3xl bg-white">
-          <h2 className="text-2xl font-bold tracking-tight mb-4">Custom Software</h2>
-          <p className="text-gray-600 leading-loose tracking-wide font-light">
-            Web applications, dashboards, portals, business platforms, internal tools, and scalable product systems.
-          </p>
-        </section>
-
-        <section id="frontier-tech" className="p-8 border border-gray-100 rounded-3xl bg-white">
-          <h2 className="text-2xl font-bold tracking-tight mb-4">Frontier Tech and IoT</h2>
-          <p className="text-gray-600 leading-loose tracking-wide font-light">
-            Electronics integrated software, IoT systems, connected devices, research prototypes, and physical technology systems.
-          </p>
-        </section>
+    <main className="relative overflow-hidden bg-white text-[#111111]">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.045]">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="solutionsGrid" width="72" height="72" patternUnits="userSpaceOnUse">
+              <path d="M 72 0 L 0 0 0 72" fill="none" stroke="black" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#solutionsGrid)" />
+        </svg>
       </div>
-    </PageShell>
+
+      <div className="relative z-10">
+        <SolutionsHero />
+        <SolutionDeepDive />
+      </div>
+    </main>
   );
 };
 
