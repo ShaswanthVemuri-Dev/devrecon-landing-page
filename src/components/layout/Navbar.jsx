@@ -56,7 +56,8 @@ const Navbar = () => {
             whileHover={{ y: -2 }}
             whileTap={{ y: 0, scale: 0.992 }}
             transition={{ duration: 0.28, ease }}
-            className="bg-black text-white px-6 py-2.5 rounded-full text-sm font-medium tracking-wide hover:bg-gray-800 hover:shadow-lg transition-[background-color,box-shadow] duration-300"
+            style={{ color: '#ffffff', WebkitTapHighlightColor: 'transparent' }}
+            className="bg-[#111111] text-white px-6 py-2.5 rounded-full text-sm font-medium tracking-wide no-underline outline-none hover:bg-gray-800 hover:text-white hover:shadow-lg active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none transition-[background-color,box-shadow] duration-300"
           >
             Start a Project
           </motion.a>
@@ -95,7 +96,8 @@ const Navbar = () => {
                 href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
                 onClick={closeMobileMenu}
                 whileTap={{ scale: 0.992 }}
-                className="mt-4 bg-black text-white px-8 py-4 rounded-full text-lg font-medium tracking-wide"
+                style={{ color: '#ffffff', WebkitTapHighlightColor: 'transparent' }}
+                className="mt-4 bg-[#111111] text-white px-8 py-4 rounded-full text-lg font-medium tracking-wide no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
               >
                 Start a Project
               </motion.a>

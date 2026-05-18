@@ -20,10 +20,10 @@ const CompanyCTA = () => {
               Start with clarity
             </p>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-[1.08] text-[#111111] text-balance">
-              Have an idea, workflow, or system that needs structure?
+              Have an idea, workflow, or system ready to move forward?
             </h2>
             <p className="mt-6 max-w-3xl text-base md:text-lg text-gray-600 font-light leading-loose tracking-wide">
-              Start with the problem. We will help clarify the technical path, scope, and next practical step.
+              Start with the problem. We will help define the technical path, scope, and next practical step.
             </p>
           </div>
 
@@ -32,7 +32,8 @@ const CompanyCTA = () => {
             whileHover={{ y: -2 }}
             whileTap={{ y: 0, scale: 0.992 }}
             transition={{ duration: 0.28, ease }}
-            className="inline-flex items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm md:text-base font-semibold tracking-wide text-white hover:bg-gray-800 transition-colors w-full lg:w-auto"
+            style={{ color: '#ffffff', WebkitTapHighlightColor: 'transparent' }}
+            className="inline-flex items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm md:text-base font-semibold tracking-wide text-white no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none transition-colors w-full lg:w-auto"
           >
             Start a conversation
             <ArrowUpRight className="w-5 h-5" />

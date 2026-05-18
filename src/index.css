@@ -34,3 +34,19 @@ html {
 .text-balance {
   text-wrap: balance;
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:visited,
+a:hover,
+a:active,
+a:focus {
+  color: inherit;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}

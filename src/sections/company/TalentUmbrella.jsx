@@ -35,14 +35,14 @@ const TalentUmbrella = () => {
               Talent Umbrella
             </p>
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tighter leading-[1.08] text-[#111111] text-balance">
-              A structure for builders who should not have to figure everything out alone.
+              An umbrella for ethical technical talent.
             </h2>
             <div className="mt-8 grid gap-6 text-base md:text-lg text-gray-600 font-light leading-loose tracking-wide">
               <p>
-                The Talent Umbrella comes from the same place DevReCon started: the reality of building without a clear support system. Many students, freelancers, early founders, and technical people have strong ideas, but they often lack access to structure, mentorship, funding direction, documentation support, legal clarity, product thinking, or trusted technical guidance. Even asking for help can feel risky when people are unsure how to protect their idea.
+                The Talent Umbrella comes from the same place DevReCon started: the reality that capable builders often work without a reliable support system around them. Students, freelancers, early founders, and technical people may have strong ideas, but the path around mentorship, funding direction, documentation, legal clarity, product thinking, and trusted technical guidance is often fragmented. Asking for help can also feel risky when ownership expectations are not clear.
               </p>
               <p>
-                DevReCon&apos;s Talent Umbrella is designed as a support model for that gap. The goal is to help builders shape their ideas into clearer systems without taking away the identity of the work. We can help with documentation, technical direction, product structure, development planning, prototype thinking, execution support, and operational clarity. The builder&apos;s idea remains theirs unless a separate written agreement says otherwise.
+                DevReCon&apos;s Talent Umbrella is designed as a support model for ethical technical talent. The goal is to help builders shape ideas into clearer systems without taking away the identity of the work. We can help with documentation, technical direction, product structure, development planning, prototype thinking, execution support, and operational clarity. The builder&apos;s idea remains theirs unless a separate written agreement says otherwise.
               </p>
             </div>
           </motion.div>

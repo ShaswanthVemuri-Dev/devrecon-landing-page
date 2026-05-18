@@ -71,7 +71,6 @@ const SolutionsPreview = () => {
         transition={{ duration: 0.85, ease: slowEase }}
         className="mb-16 md:mb-24 md:max-w-2xl"
       >
-        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-6">Solutions</h2>
         <h3 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tighter leading-relaxed text-[#111111] text-balance">The Solution Landscape.</h3>
         <p className="mt-6 text-lg md:text-xl text-gray-500 font-light leading-relaxed tracking-wide">
           We do not sell preset packages. We choose the technical path based on the problem.
