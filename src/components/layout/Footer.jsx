@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import { ExternalLink } from 'lucide-react';
+import React from 'react';
 
 const Footer = () => {
   return (
@@ -16,8 +15,8 @@ const Footer = () => {
           <div className="flex flex-col gap-4 text-sm">
             <span className="font-bold text-black uppercase tracking-wider mb-2">Contact</span>
             <a href="mailto:management@devrecon.in" className="text-gray-600 hover:text-black transition-colors tracking-wide break-all">management@devrecon.in</a>
-            <a href="https://linktr.ee/shaswanthvemuri" target="_blank" rel="noreferrer noopener" className="text-gray-600 hover:text-black transition-colors flex items-center gap-1 tracking-wide">
-              Founder&apos;s Profile <ExternalLink className="w-3 h-3"/>
+            <a href="/company#founder-profile" className="text-gray-600 hover:text-black transition-colors tracking-wide">
+              Founder&apos;s Profile
             </a>
           </div>
 
