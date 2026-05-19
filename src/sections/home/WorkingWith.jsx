@@ -86,7 +86,7 @@ const WorkingWith = () => {
         <motion.div
           initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
           whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.34 }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.78, ease }}
           className="mb-14 max-w-3xl md:mb-16 lg:mb-20"
         >
@@ -101,7 +101,7 @@ const WorkingWith = () => {
         <motion.div
           initial={enableScrollMotion ? { opacity: 0, y: 22 } : false}
           whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.76, ease, delay: 0.04 }}
           className="grid gap-4 md:gap-5"
         >

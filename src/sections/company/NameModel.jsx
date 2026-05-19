@@ -45,7 +45,7 @@ const NameModel = () => {
         <motion.div
           initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
           whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.72, ease }}
           className="max-w-4xl"
         >
@@ -63,7 +63,7 @@ const NameModel = () => {
         <motion.div
           initial={enableScrollMotion ? 'hidden' : false}
           whileInView={enableScrollMotion ? 'visible' : undefined}
-          viewport={{ once: true, amount: 0.18 }}
+          viewport={{ once: true, amount: 0.08 }}
           className="mt-10 grid gap-5 md:grid-cols-3"
         >
           {nameParts.map((part, index) => (

@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const HASH_RETRY_TIMEOUT = 1400;
@@ -41,10 +41,19 @@ export const scrollToHashTarget = (hash, behavior = 'smooth') => {
 
 const RouteScrollManager = () => {
   const { pathname, hash } = useLocation();
+  const previousPathnameRef = useRef(null);
 
   useLayoutEffect(() => {
     let animationFrame = 0;
     let cancelled = false;
+    const previousPathname = previousPathnameRef.current;
+    const isSamePageHashNavigation = previousPathname === pathname;
+    previousPathnameRef.current = pathname;
+
+    const cancel = () => {
+      cancelled = true;
+      window.cancelAnimationFrame(animationFrame);
+    };
 
     if (!hash) {
       animationFrame = window.requestAnimationFrame(() => {
@@ -53,18 +62,16 @@ const RouteScrollManager = () => {
         }
       });
 
-      return () => {
-        cancelled = true;
-        window.cancelAnimationFrame(animationFrame);
-      };
+      return cancel;
     }
 
+    const behavior = isSamePageHashNavigation ? 'smooth' : 'auto';
     const startedAt = performance.now();
 
     const tryHashScroll = () => {
       if (cancelled) return;
 
-      if (scrollToHashTarget(hash, 'smooth')) return;
+      if (scrollToHashTarget(hash, behavior)) return;
 
       if (performance.now() - startedAt >= HASH_RETRY_TIMEOUT) {
         window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
@@ -74,14 +81,15 @@ const RouteScrollManager = () => {
       animationFrame = window.requestAnimationFrame(tryHashScroll);
     };
 
+    if (!isSamePageHashNavigation && scrollToHashTarget(hash, 'auto')) {
+      return cancel;
+    }
+
     animationFrame = window.requestAnimationFrame(() => {
       animationFrame = window.requestAnimationFrame(tryHashScroll);
     });
 
-    return () => {
-      cancelled = true;
-      window.cancelAnimationFrame(animationFrame);
-    };
+    return cancel;
   }, [pathname, hash]);
 
   return null;

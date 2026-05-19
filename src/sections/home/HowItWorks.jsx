@@ -21,9 +21,9 @@ const HowItWorks = () => {
 
       <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 min-[900px]:grid-cols-2 min-[900px]:gap-16 lg:gap-20 xl:gap-24">
         <motion.div
-          initial={enableScrollMotion ? { opacity: 0, x: -20 } : false}
+          initial={enableScrollMotion ? { opacity: 0, x: -8 } : false}
           whileInView={enableScrollMotion ? { opacity: 1, x: 0 } : undefined}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl font-bold leading-relaxed tracking-tight text-balance sm:text-4xl md:text-5xl min-[900px]:text-[3.15rem] lg:text-[3.4rem] xl:text-6xl">
@@ -34,9 +34,9 @@ const HowItWorks = () => {
 
         <motion.div
           className="space-y-10 text-base font-light text-gray-300 sm:text-lg lg:text-xl"
-          initial={enableScrollMotion ? { opacity: 0, x: 20 } : false}
+          initial={enableScrollMotion ? { opacity: 0, x: 8 } : false}
           whileInView={enableScrollMotion ? { opacity: 1, x: 0 } : undefined}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.6, delay: enableScrollMotion ? 0.2 : 0 }}
         >
           <p className="leading-loose tracking-wide">

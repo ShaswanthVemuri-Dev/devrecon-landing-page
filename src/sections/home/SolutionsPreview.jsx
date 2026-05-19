@@ -32,7 +32,7 @@ const ServiceCard = ({ icon: Icon, title, desc, to, index, enableScrollMotion, e
   <motion.div
     initial={enableScrollMotion ? { opacity: 0, y: 26 } : false}
     whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-    viewport={{ once: true, amount: 0.3 }}
+    viewport={{ once: true, amount: 0.08 }}
     transition={{ duration: 0.8, delay: enableScrollMotion ? index * 0.12 : 0, ease: slowEase }}
     whileHover={enableHoverMotion ? { y: -8 } : undefined}
     className="group relative flex h-full flex-col justify-start overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 transition-all duration-500 hover:border-gray-200 hover:shadow-xl sm:p-7 lg:p-8"
@@ -73,7 +73,7 @@ const SolutionsPreview = () => {
         <motion.div
           initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
           whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.85, ease: slowEase }}
           className="mb-14 max-w-2xl md:mb-20 xl:mb-24"
         >

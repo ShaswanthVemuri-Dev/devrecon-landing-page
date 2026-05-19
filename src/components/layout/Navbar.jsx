@@ -19,6 +19,51 @@ const mobileNavLinks = [
 const underlineBaseClassName =
   'pointer-events-none absolute left-0 w-full origin-left border-b-2 border-[#111111] opacity-0 transition-[transform,opacity] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 group-hover:opacity-100';
 
+const mobileOverlayVariants = {
+  closed: {
+    opacity: 0,
+    y: -16,
+    scale: 0.985,
+    filter: 'blur(5px)',
+    transition: {
+      duration: 0.48,
+      ease,
+    },
+  },
+  open: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.54,
+      ease,
+      when: 'beforeChildren',
+      staggerChildren: 0.055,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const mobileItemVariants = {
+  closed: {
+    opacity: 0,
+    y: 12,
+    transition: {
+      duration: 0.2,
+      ease,
+    },
+  },
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.42,
+      ease,
+    },
+  },
+};
+
 const Underline = ({ active = false, mobile = false }) => (
   <span
     aria-hidden="true"
@@ -30,6 +75,7 @@ const Underline = ({ active = false, mobile = false }) => (
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
@@ -45,6 +91,7 @@ const Navbar = () => {
 
     const closeOnEscape = (event) => {
       if (event.key === 'Escape') {
+        setPendingNavigation(null);
         setMobileMenuOpen(false);
       }
     };
@@ -62,17 +109,33 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   }, [location.pathname, location.hash]);
 
-  const closeMobileMenu = () => setMobileMenuOpen(false);
+  const closeMobileMenu = () => {
+    setPendingNavigation(null);
+    setMobileMenuOpen(false);
+  };
 
   const handleMobileNavigation = (event, to) => {
     event.preventDefault();
+
+    const currentDestination = `${location.pathname}${location.hash}`;
+    const targetDestination = to;
+
+    if (currentDestination === targetDestination) {
+      setPendingNavigation(null);
+      setMobileMenuOpen(false);
+      return;
+    }
+
+    setPendingNavigation(targetDestination);
     setMobileMenuOpen(false);
+  };
 
-    if (`${location.pathname}${location.hash}` === to) return;
+  const handleMobileMenuExitComplete = () => {
+    if (!pendingNavigation) return;
 
-    window.setTimeout(() => {
-      navigate(to);
-    }, 260);
+    const destination = pendingNavigation;
+    setPendingNavigation(null);
+    navigate(destination);
   };
 
   const desktopNavClassName = ({ isActive }) =>
@@ -126,43 +189,59 @@ const Navbar = () => {
 
         <button
           type="button"
-          className="relative z-[60] text-[#111111] md:hidden"
-          onClick={() => setMobileMenuOpen((open) => !open)}
+          className="relative z-[60] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
+          onClick={() => {
+            setPendingNavigation(null);
+            setMobileMenuOpen((open) => !open);
+          }}
           aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-navigation"
         >
-          {mobileMenuOpen ? <X /> : <Menu />}
+          <AnimatePresence initial={false} mode="wait">
+            <motion.span
+              key={mobileMenuOpen ? 'close' : 'open'}
+              initial={{ opacity: 0, rotate: mobileMenuOpen ? -28 : 28, scale: 0.92 }}
+              animate={{ opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ opacity: 0, rotate: mobileMenuOpen ? 28 : -28, scale: 0.92 }}
+              transition={{ duration: 0.24, ease }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              {mobileMenuOpen ? <X /> : <Menu />}
+            </motion.span>
+          </AnimatePresence>
         </button>
 
-        <AnimatePresence initial={false}>
+        <AnimatePresence initial={false} onExitComplete={handleMobileMenuExitComplete}>
           {mobileMenuOpen && (
             <motion.div
               id="mobile-navigation"
-              initial={{ opacity: 0, y: -18 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -18 }}
-              transition={{ duration: 0.36, ease }}
+              variants={mobileOverlayVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
               className="fixed inset-0 z-50 flex min-h-[100dvh] flex-col items-center justify-center gap-8 bg-white px-6 md:hidden"
             >
               {mobileNavLinks.map((link) => (
-                <NavLink
-                  key={link.name}
-                  to={link.to}
-                  onClick={(event) => handleMobileNavigation(event, link.to)}
-                  className={mobileNavClassName}
-                >
-                  {({ isActive }) => (
-                    <>
-                      <span>{link.name}</span>
-                      <Underline active={isActive} mobile />
-                    </>
-                  )}
-                </NavLink>
+                <motion.div key={link.name} variants={mobileItemVariants}>
+                  <NavLink
+                    to={link.to}
+                    onClick={(event) => handleMobileNavigation(event, link.to)}
+                    className={mobileNavClassName}
+                  >
+                    {({ isActive }) => (
+                      <>
+                        <span>{link.name}</span>
+                        <Underline active={isActive} mobile />
+                      </>
+                    )}
+                  </NavLink>
+                </motion.div>
               ))}
 
               <motion.a
                 href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
+                variants={mobileItemVariants}
                 onClick={closeMobileMenu}
                 whileTap={{ scale: 0.992 }}
                 style={{ color: '#ffffff', WebkitTapHighlightColor: 'transparent' }}

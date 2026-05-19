@@ -17,7 +17,7 @@ const FounderProfile = () => {
           initial={enableScrollMotion ? { opacity: 0, y: 22 } : false}
           whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
           whileHover={enableHoverMotion ? { y: -4 } : undefined}
-          viewport={{ once: true, amount: 0.24 }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.72, ease }}
           className={`rounded-[2rem] border border-gray-100 bg-[#F5F5F7] p-4 shadow-[0_22px_72px_rgba(17,17,17,0.045)] transition-shadow duration-500 md:p-5 ${enableHoverMotion ? 'hover:shadow-[0_30px_90px_rgba(17,17,17,0.075)]' : ''}`}
         >

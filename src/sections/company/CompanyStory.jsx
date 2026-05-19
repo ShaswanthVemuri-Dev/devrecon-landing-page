@@ -14,7 +14,7 @@ const CompanyStory = () => {
           <motion.div
             initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
             whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.08 }}
             transition={{ duration: 0.74, ease }}
             className="max-w-2xl"
           >
@@ -29,7 +29,7 @@ const CompanyStory = () => {
           <motion.div
             initial={enableScrollMotion ? { opacity: 0, y: 26 } : false}
             whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-            viewport={{ once: true, amount: 0.28 }}
+            viewport={{ once: true, amount: 0.08 }}
             transition={{ duration: 0.74, ease, delay: 0.06 }}
             className="grid gap-7 text-lg md:text-xl text-gray-600 font-light leading-loose tracking-wide"
           >

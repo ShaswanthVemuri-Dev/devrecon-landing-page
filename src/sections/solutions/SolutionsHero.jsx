@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { solutions } from '../../data/solutions.js';
 
 const ease = [0.22, 1, 0.36, 1];
@@ -73,6 +74,12 @@ const chipMotion = {
 
 const SolutionsHero = () => {
   const enableHoverMotion = useDesktopInteraction();
+  const navigate = useNavigate();
+
+  const handleChipClick = (event, id) => {
+    event.preventDefault();
+    navigate(`#${id}`);
+  };
 
   return (
     <section className="relative px-6 pt-32 md:pt-40 pb-12 md:pb-16 overflow-hidden">
@@ -111,6 +118,7 @@ const SolutionsHero = () => {
             <motion.a
               key={solution.id}
               href={`#${solution.id}`}
+              onClick={(event) => handleChipClick(event, solution.id)}
               variants={chipMotion}
               initial="rest"
               animate="rest"

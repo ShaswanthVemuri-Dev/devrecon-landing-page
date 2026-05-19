@@ -32,7 +32,7 @@ const TalentUmbrella = () => {
           <motion.div
             initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
             whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.08 }}
             transition={{ duration: 0.74, ease }}
             className="max-w-2xl"
           >
@@ -55,7 +55,7 @@ const TalentUmbrella = () => {
           <motion.div
             initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
             whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-            viewport={{ once: true, amount: 0.24 }}
+            viewport={{ once: true, amount: 0.08 }}
             transition={{ duration: 0.76, ease, delay: 0.04 }}
             className="relative overflow-hidden rounded-[2rem] bg-[#111111] p-6 text-white md:p-8 lg:p-9"
           >

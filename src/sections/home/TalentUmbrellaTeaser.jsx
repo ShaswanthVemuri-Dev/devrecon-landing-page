@@ -31,7 +31,7 @@ const TalentUmbrellaTeaser = () => {
         <motion.div
           initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
           whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.72, ease }}
         >
           <h2 className="mb-8 text-3xl font-bold leading-relaxed tracking-tight text-[#111111] text-balance sm:text-4xl xl:text-5xl">

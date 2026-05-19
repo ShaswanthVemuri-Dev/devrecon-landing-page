@@ -21,7 +21,7 @@ const ProductPanel = ({ product, reverse, index }) => {
     <motion.article
       initial={enableScrollMotion ? { opacity: 0, y: 34 } : false}
       whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-      viewport={{ once: true, margin: '-12% 0px -12% 0px' }}
+      viewport={{ once: true, amount: 0.08, margin: '0px 0px 10% 0px' }}
       transition={{ duration: 0.78, delay: enableScrollMotion ? index * 0.08 : 0, ease }}
       className="grid items-center gap-10 min-[800px]:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] min-[800px]:gap-10 min-[1100px]:gap-14 min-[1280px]:grid-cols-2 min-[1280px]:gap-20 2xl:gap-24"
     >

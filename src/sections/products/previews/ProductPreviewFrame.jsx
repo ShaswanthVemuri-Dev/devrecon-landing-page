@@ -103,7 +103,7 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
       className="product-preview-card group relative overflow-hidden rounded-[2.5rem] border border-[#242424] bg-[#0E0E10] shadow-[0_30px_92px_rgba(0,0,0,0.24)]"
       initial={enableScrollMotion ? { opacity: 0, y: 28 } : false}
       whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-      viewport={{ once: true, margin: '-12% 0px -12% 0px' }}
+      viewport={{ once: true, amount: 0.08, margin: '0px 0px 10% 0px' }}
       transition={{ duration: 0.74, ease }}
       aria-label={`${product.name} miniature homepage preview`}
       onMouseEnter={() => {

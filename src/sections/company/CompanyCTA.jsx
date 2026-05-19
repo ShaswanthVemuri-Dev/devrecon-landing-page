@@ -16,7 +16,7 @@ const CompanyCTA = () => {
         <motion.div
           initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
           whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.28 }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.76, ease }}
           className="grid items-center gap-8 rounded-[2rem] border border-gray-100 bg-[#F5F5F7] p-8 md:rounded-[2.5rem] md:p-12 lg:grid-cols-[1fr_auto] lg:gap-12 lg:p-14"
         >

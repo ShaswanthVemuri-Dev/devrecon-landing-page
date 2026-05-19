@@ -12,11 +12,6 @@ const panelTransition = {
   ease: softEase,
 };
 
-const reducedPanelTransition = {
-  duration: 0.58,
-  ease: softEase,
-};
-
 
 const useDesktopInteraction = () => {
   const [enabled, setEnabled] = useState(() => {
@@ -171,6 +166,8 @@ const collapsedTextMask = {
 };
 
 const TextRun = ({ preview, continuation, isOpen, enableRichMotion }) => {
+  if (!enableRichMotion && isOpen) return null;
+
   return (
     <motion.div
       className="relative max-w-5xl overflow-hidden"
@@ -181,9 +178,9 @@ const TextRun = ({ preview, continuation, isOpen, enableRichMotion }) => {
         marginTop: isOpen ? 0 : 20,
       }}
       transition={{
-        duration: enableRichMotion ? (isOpen ? 0.44 : 0.52) : (isOpen ? 0.34 : 0.42),
+        duration: enableRichMotion ? (isOpen ? 0.44 : 0.52) : 0.22,
         ease,
-        delay: enableRichMotion && !isOpen ? 0.12 : 0.03,
+        delay: enableRichMotion && !isOpen ? 0.12 : 0,
       }}
     >
       <p
@@ -224,13 +221,72 @@ const DetailColumn = ({ title, items, enableRichMotion }) => {
   );
 };
 
+const DetailContent = ({ solution, mailto, enableRichMotion }) => {
+  const activeDetailItem = enableRichMotion ? detailItem : staticDetailItem;
+
+  return (
+    <motion.div
+      key={`${solution.id}-details`}
+      variants={enableRichMotion ? detailGroup : undefined}
+      initial={enableRichMotion ? 'hidden' : { opacity: 0, y: 8 }}
+      animate={enableRichMotion ? 'visible' : { opacity: 1, y: 0 }}
+      exit={enableRichMotion ? 'exit' : { opacity: 0, y: 4 }}
+      transition={enableRichMotion ? undefined : { duration: 0.28, ease }}
+      className="px-5 sm:px-8 md:px-10 pb-7 sm:pb-8 md:pb-11"
+    >
+      <div className="border-t border-white/10 pt-6 sm:pt-8 md:pt-10">
+        <motion.p
+          variants={activeDetailItem}
+          className="max-w-5xl text-base sm:text-lg md:text-2xl leading-loose tracking-wide font-light text-gray-200"
+        >
+          {solution.continuation}
+        </motion.p>
+
+        <motion.p
+          variants={activeDetailItem}
+          className="mt-5 sm:mt-7 max-w-4xl text-sm sm:text-base md:text-lg leading-loose tracking-wide font-light text-gray-400"
+        >
+          {solution.serviceLine}
+        </motion.p>
+
+        <motion.div
+          variants={activeDetailItem}
+          className="mt-8 sm:mt-10 grid lg:grid-cols-2 gap-5 sm:gap-6 md:gap-8 items-stretch"
+        >
+          <DetailColumn title="Useful when" items={solution.usefulWhen} enableRichMotion={enableRichMotion} />
+          <DetailColumn title="What DevReCon can build" items={solution.canBuild} enableRichMotion={enableRichMotion} />
+        </motion.div>
+
+        <motion.div
+          variants={activeDetailItem}
+          className="mt-8 sm:mt-9 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5"
+        >
+          <motion.a
+            href={mailto}
+            variants={buttonMotion}
+            initial="rest"
+            animate="rest"
+            whileHover={enableRichMotion ? 'hover' : undefined}
+            whileTap="tap"
+            className="inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-sm font-semibold tracking-wide text-black visited:text-black active:text-black focus:text-black hover:bg-gray-200 hover:text-black transition-colors duration-300"
+          >
+            Discuss this solution
+            <ArrowUpRight className="w-4 h-4" />
+          </motion.a>
+          <p className="max-w-xl text-sm leading-loose tracking-wide text-gray-500 font-light">
+            The email opens with a short structure so the first discussion starts with the requirement, not a generic sales form.
+          </p>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
+
 const SolutionPanel = ({ solution, isOpen, onToggle, enableRichMotion }) => {
   const mailto = useMemo(
     () => buildMailto(solution.subject, solution.mailBody),
     [solution.subject, solution.mailBody]
   );
-
-  const activeDetailItem = enableRichMotion ? detailItem : staticDetailItem;
 
   return (
     <motion.article
@@ -245,7 +301,9 @@ const SolutionPanel = ({ solution, isOpen, onToggle, enableRichMotion }) => {
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className="w-full text-left p-5 sm:p-8 md:p-10 group relative focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
+        className={`w-full text-left px-5 pt-5 sm:px-8 sm:pt-8 md:px-10 md:pt-10 group relative focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 ${
+          isOpen ? 'pb-4 sm:pb-6 md:pb-8' : 'pb-5 sm:pb-8 md:pb-10'
+        }`}
         variants={panelButtonMotion}
         initial="rest"
         animate="rest"
@@ -299,70 +357,36 @@ const SolutionPanel = ({ solution, isOpen, onToggle, enableRichMotion }) => {
         </div>
       </motion.button>
 
-      <motion.div
-        initial={false}
-        animate={{ height: isOpen ? 'auto' : 0 }}
-        transition={enableRichMotion ? panelTransition : reducedPanelTransition}
-        className="overflow-hidden"
-      >
+      {enableRichMotion ? (
+        <motion.div
+          initial={false}
+          animate={{ height: isOpen ? 'auto' : 0 }}
+          transition={panelTransition}
+          className="overflow-hidden"
+        >
+          <AnimatePresence initial={false} mode="wait">
+            {isOpen && (
+              <DetailContent
+                solution={solution}
+                mailto={mailto}
+                enableRichMotion={enableRichMotion}
+              />
+            )}
+          </AnimatePresence>
+        </motion.div>
+      ) : (
         <AnimatePresence initial={false} mode="wait">
           {isOpen && (
-            <motion.div
-              key={`${solution.id}-details`}
-              variants={enableRichMotion ? detailGroup : undefined}
-              initial={enableRichMotion ? 'hidden' : false}
-              animate={enableRichMotion ? 'visible' : undefined}
-              exit={enableRichMotion ? 'exit' : { opacity: 0 }}
-              className="px-5 sm:px-8 md:px-10 pb-7 sm:pb-8 md:pb-11"
-            >
-              <div className="border-t border-white/10 pt-7 sm:pt-8 md:pt-10">
-                <motion.p
-                  variants={activeDetailItem}
-                  className="max-w-5xl text-base sm:text-lg md:text-2xl leading-loose tracking-wide font-light text-gray-200"
-                >
-                  {solution.continuation}
-                </motion.p>
-
-                <motion.p
-                  variants={activeDetailItem}
-                  className="mt-5 sm:mt-7 max-w-4xl text-sm sm:text-base md:text-lg leading-loose tracking-wide font-light text-gray-400"
-                >
-                  {solution.serviceLine}
-                </motion.p>
-
-                <motion.div
-                  variants={activeDetailItem}
-                  className="mt-8 sm:mt-10 grid lg:grid-cols-2 gap-5 sm:gap-6 md:gap-8 items-stretch"
-                >
-                  <DetailColumn title="Useful when" items={solution.usefulWhen} enableRichMotion={enableRichMotion} />
-                  <DetailColumn title="What DevReCon can build" items={solution.canBuild} enableRichMotion={enableRichMotion} />
-                </motion.div>
-
-                <motion.div
-                  variants={activeDetailItem}
-                  className="mt-8 sm:mt-9 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5"
-                >
-                  <motion.a
-                    href={mailto}
-                    variants={buttonMotion}
-                    initial="rest"
-                    animate="rest"
-                    whileHover={enableRichMotion ? 'hover' : undefined}
-                    whileTap="tap"
-                    className="inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-sm font-semibold tracking-wide text-black visited:text-black active:text-black focus:text-black hover:bg-gray-200 hover:text-black transition-colors duration-300"
-                  >
-                    Discuss this solution
-                    <ArrowUpRight className="w-4 h-4" />
-                  </motion.a>
-                  <p className="max-w-xl text-sm leading-loose tracking-wide text-gray-500 font-light">
-                    The email opens with a short structure so the first discussion starts with the requirement, not a generic sales form.
-                  </p>
-                </motion.div>
-              </div>
-            </motion.div>
+            <div className="overflow-hidden">
+              <DetailContent
+                solution={solution}
+                mailto={mailto}
+                enableRichMotion={enableRichMotion}
+              />
+            </div>
           )}
         </AnimatePresence>
-      </motion.div>
+      )}
     </motion.article>
   );
 };
@@ -409,7 +433,7 @@ const SolutionDeepDive = () => {
         <motion.div
           initial={enableRichMotion ? { opacity: 0, y: shouldReduceMotion ? 0 : 20 } : false}
           whileInView={enableRichMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.25 }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.62, ease }}
           className="mt-9 md:mt-12 rounded-[2rem] border border-gray-100 bg-white/85 backdrop-blur-sm p-7 sm:p-8 md:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 shadow-[0_20px_70px_rgba(0,0,0,0.035)]"
         >

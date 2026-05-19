@@ -1,24 +1,24 @@
 import { useEffect, useState } from 'react';
 
-const MOBILE_SCROLL_MOTION_QUERY = '(max-width: 767px), (hover: none), (pointer: coarse)';
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
-const shouldDisableScrollMotion = () => {
+const shouldReduceMotion = () => {
   if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
     return false;
   }
 
-  return window.matchMedia(MOBILE_SCROLL_MOTION_QUERY).matches;
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
 };
 
 const useScrollMotion = () => {
-  const [enabled, setEnabled] = useState(() => !shouldDisableScrollMotion());
+  const [enabled, setEnabled] = useState(() => !shouldReduceMotion());
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
       return undefined;
     }
 
-    const mediaQuery = window.matchMedia(MOBILE_SCROLL_MOTION_QUERY);
+    const mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY);
     const update = () => setEnabled(!mediaQuery.matches);
 
     update();
