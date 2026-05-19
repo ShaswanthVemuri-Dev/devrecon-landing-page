@@ -58,8 +58,6 @@ const PRODUCT_THEME = {
 
 const PreviewStyles = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
     @keyframes devreconPreviewTide {
       0% { transform: translateX(-3%) translateY(0) scale(1); }
       50% { transform: translateX(3%) translateY(-2%) scale(1.035); }

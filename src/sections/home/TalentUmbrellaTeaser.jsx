@@ -8,31 +8,31 @@ const ease = [0.22, 1, 0.36, 1];
 
 const TalentUmbrellaTeaser = () => {
   return (
-    <section id="talent-umbrella-preview" className="py-16 md:py-28 px-6 bg-[#F5F5F7] relative overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.045]">
+    <section id="talent-umbrella-preview" className="relative overflow-hidden bg-[#F5F5F7] px-6 py-16 md:py-24 xl:py-28">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.045]">
         <motion.div
-          className="absolute top-10 right-10 w-64 h-64 border border-black rounded-full"
+          className="absolute right-8 top-10 h-40 w-40 rounded-full border border-black sm:h-52 sm:w-52 md:right-10 md:h-64 md:w-64"
           animate={{ rotate: 360 }}
           transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
         />
         <motion.div
-          className="absolute bottom-[-50px] left-[-50px] w-96 h-96 border border-black rounded-full"
+          className="absolute bottom-[-50px] left-[-50px] h-64 w-64 rounded-full border border-black sm:h-80 sm:w-80 md:h-96 md:w-96"
           animate={{ rotate: -360 }}
           transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
         />
       </div>
 
-      <div className="max-w-4xl mx-auto text-center relative z-10">
+      <div className="relative z-10 mx-auto max-w-4xl text-center">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.72, ease }}
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 tracking-tight leading-relaxed text-[#111111] text-balance">
+          <h2 className="mb-8 text-3xl font-bold leading-relaxed tracking-tight text-[#111111] text-balance sm:text-4xl xl:text-5xl">
             An umbrella for ethical technical talent.
           </h2>
-          <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-loose tracking-wide font-light">
+          <p className="mx-auto mb-12 max-w-2xl text-base font-light leading-loose tracking-wide text-gray-600 sm:text-lg lg:text-xl">
             Talent Umbrella is DevReCon&apos;s support model for builders, freelancers, founders, and technical people through direction, documentation, development planning, and operational clarity around their work.
           </p>
 
@@ -43,12 +43,12 @@ const TalentUmbrellaTeaser = () => {
               whileTap={{ scale: 0.985 }}
               transition={{ duration: 0.28, ease }}
               style={{ color: '#ffffff', WebkitTapHighlightColor: 'transparent' }}
-              className="group inline-flex items-center gap-2 rounded-full bg-[#111111] px-10 py-5 text-lg font-semibold tracking-wide text-white no-underline shadow-sm outline-none transition-[background-color,box-shadow] duration-300 hover:bg-[#1B1B1B] hover:text-white hover:shadow-xl active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-8 py-5 text-base font-semibold tracking-wide text-white no-underline shadow-sm outline-none transition-[background-color,box-shadow] duration-300 hover:bg-[#1B1B1B] hover:text-white hover:shadow-xl active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none sm:w-auto sm:px-10 sm:text-lg"
             >
               Explore Talent Umbrella
-              <ChevronRight className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-1" />
+              <ChevronRight className="h-5 w-5 transition-transform duration-500 group-hover:translate-x-1" />
             </MotionLink>
-            <p className="text-sm text-gray-500 font-medium tracking-wide max-w-lg">
+            <p className="max-w-lg text-sm font-medium tracking-wide text-gray-500">
               Ownership, support scope, and collaboration terms are handled transparently based on the nature of each project.
             </p>
           </div>

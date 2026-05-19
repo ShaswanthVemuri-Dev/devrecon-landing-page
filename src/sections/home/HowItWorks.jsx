@@ -4,8 +4,8 @@ import { CheckCircle2 } from 'lucide-react';
 
 const HowItWorks = () => {
   return (
-    <section id="how-it-works" className="py-20 md:py-32 bg-[#111111] text-white px-6 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
+    <section id="how-it-works" className="relative overflow-hidden bg-[#111111] px-6 py-20 text-white md:py-28 xl:py-32">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.05]">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="darkGrid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -16,21 +16,21 @@ const HowItWorks = () => {
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 md:gap-24 items-center relative z-10">
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-2 lg:gap-20 xl:gap-24">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-8 leading-relaxed tracking-tight text-balance">
-            Most tech companies charge for confusion. <br className="hidden md:block" />
+          <h2 className="text-3xl font-bold leading-relaxed tracking-tight text-balance sm:text-4xl md:text-5xl xl:text-6xl">
+            Most tech companies charge for confusion. <br className="hidden lg:block" />
             <span className="text-gray-500">We charge for solutions.</span>
           </h2>
         </motion.div>
 
-        <motion.div 
-          className="space-y-10 text-lg md:text-xl text-gray-300 font-light"
+        <motion.div
+          className="space-y-10 text-base font-light text-gray-300 sm:text-lg lg:text-xl"
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -40,25 +40,25 @@ const HowItWorks = () => {
             We believe digitizing lives creates meaningful value. It shouldn&apos;t cost a fortune simply because clients don&apos;t understand the tech. We operate on a model of radical transparency.
           </p>
           <ul className="space-y-6">
-            <li className="flex gap-4 items-start">
-              <CheckCircle2 className="w-6 h-6 text-white shrink-0 mt-1"/>
+            <li className="flex items-start gap-4">
+              <CheckCircle2 className="mt-1 h-6 w-6 shrink-0 text-white" />
               <div>
-                <strong className="block text-white mb-1 tracking-wide">Zero Fluff</strong>
-                <span className="text-gray-400 leading-relaxed tracking-wide">You pay for the work performed. No hidden margins.</span>
+                <strong className="mb-1 block tracking-wide text-white">Zero Fluff</strong>
+                <span className="leading-relaxed tracking-wide text-gray-400">You pay for the work performed. No hidden margins.</span>
               </div>
             </li>
-            <li className="flex gap-4 items-start">
-              <CheckCircle2 className="w-6 h-6 text-white shrink-0 mt-1"/>
+            <li className="flex items-start gap-4">
+              <CheckCircle2 className="mt-1 h-6 w-6 shrink-0 text-white" />
               <div>
-                <strong className="block text-white mb-1 tracking-wide">Tailored Teams</strong>
-                <span className="text-gray-400 leading-relaxed tracking-wide">We assemble the exact expertise needed once we understand the problem.</span>
+                <strong className="mb-1 block tracking-wide text-white">Tailored Teams</strong>
+                <span className="leading-relaxed tracking-wide text-gray-400">We assemble the exact expertise needed once we understand the problem.</span>
               </div>
             </li>
-            <li className="flex gap-4 items-start">
-              <CheckCircle2 className="w-6 h-6 text-white shrink-0 mt-1"/>
+            <li className="flex items-start gap-4">
+              <CheckCircle2 className="mt-1 h-6 w-6 shrink-0 text-white" />
               <div>
-                <strong className="block text-white mb-1 tracking-wide">Complete Transparency</strong>
-                <span className="text-gray-400 leading-relaxed tracking-wide">We show you exactly where resources are spent.</span>
+                <strong className="mb-1 block tracking-wide text-white">Complete Transparency</strong>
+                <span className="leading-relaxed tracking-wide text-gray-400">We show you exactly where resources are spent.</span>
               </div>
             </li>
           </ul>

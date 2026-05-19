@@ -20,12 +20,13 @@ const firstRow = logos.slice(0, 5);
 const secondRow = logos.slice(5);
 
 const LogoItem = ({ logo }) => (
-  <div className="flex h-24 w-48 shrink-0 items-center justify-center rounded-[1.35rem] border border-gray-100 bg-[#F5F5F7]/80 px-7 py-5 sm:h-28 sm:w-60 md:h-32 md:w-72 md:px-9">
+  <div className="flex h-20 w-44 shrink-0 items-center justify-center px-4 sm:h-24 sm:w-56 sm:px-6 md:h-28 md:w-64 lg:h-32 lg:w-72 lg:px-8">
     <img
       src={logo.src}
       alt=""
       aria-hidden="true"
       loading="lazy"
+      decoding="async"
       draggable="false"
       className={`pointer-events-none w-full select-none object-contain ${logo.className}`}
     />
@@ -39,7 +40,7 @@ const LogoMarquee = ({ items, reverse = false }) => {
     <div className="relative overflow-hidden py-2">
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white to-transparent sm:w-32" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white to-transparent sm:w-32" />
-      <div className={`flex w-max gap-4 sm:gap-6 ${reverse ? 'working-with-marquee-reverse' : 'working-with-marquee'}`}>
+      <div className={`flex w-max gap-10 sm:gap-14 md:gap-16 ${reverse ? 'working-with-marquee-reverse' : 'working-with-marquee'}`}>
         {repeatedItems.map((logo, index) => (
           <LogoItem key={`${logo.src}-${index}`} logo={logo} />
         ))}
@@ -50,7 +51,7 @@ const LogoMarquee = ({ items, reverse = false }) => {
 
 const WorkingWith = () => {
   return (
-    <section id="working-with" className="relative overflow-hidden bg-white px-6 py-16 md:py-28">
+    <section id="working-with" className="relative overflow-hidden bg-white px-6 pt-10 pb-16 md:pt-12 md:pb-24 xl:pt-14 xl:pb-28">
       <style>{`
         @keyframes workingWithMarquee {
           from { transform: translateX(0); }
@@ -78,28 +79,20 @@ const WorkingWith = () => {
         }
       `}</style>
 
-      <div className="pointer-events-none absolute inset-0 opacity-[0.035]">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="workingWithGrid" width="72" height="72" patternUnits="userSpaceOnUse">
-              <path d="M 72 0 L 0 0 0 72" fill="none" stroke="black" strokeWidth="1" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#workingWithGrid)" />
-        </svg>
-      </div>
-
       <div className="relative z-10 mx-auto max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.34 }}
           transition={{ duration: 0.78, ease }}
-          className="mb-10 max-w-3xl md:mb-14"
+          className="mb-14 max-w-3xl md:mb-16 lg:mb-20"
         >
-          <h2 className="text-3xl font-bold leading-[1.08] tracking-tighter text-[#111111] text-balance sm:text-5xl md:text-6xl">
+          <h2 className="text-3xl font-bold leading-[1.08] tracking-tighter text-[#111111] text-balance sm:text-5xl xl:text-6xl">
             Working across products, teams, and systems.
           </h2>
+          <p className="mt-6 text-lg font-light leading-relaxed tracking-wide text-gray-500 md:text-xl">
+            We bring products, research, and execution into one clearer path so technical work moves with structure instead of noise.
+          </p>
         </motion.div>
 
         <motion.div
@@ -107,7 +100,7 @@ const WorkingWith = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.76, ease, delay: 0.04 }}
-          className="grid gap-3 md:gap-4"
+          className="grid gap-4 md:gap-5"
         >
           <LogoMarquee items={firstRow} />
           <LogoMarquee items={secondRow} reverse />
