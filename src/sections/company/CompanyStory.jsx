@@ -19,7 +19,7 @@ const CompanyStory = () => {
               Our Story
             </p>
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tighter leading-[1.08] text-[#111111] text-balance">
-              Engineering Clarity begins where development, research, and consultation work together.
+              Technology works better when the thinking behind it is clear.
             </h2>
           </motion.div>
 
