@@ -2,23 +2,23 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
-import useScrollMotion from '../../hooks/useScrollMotion.js';
+import { useRevealMotion } from '../../hooks/useScrollMotion.js';
 
 const ease = [0.22, 1, 0.36, 1];
 
 const FounderProfile = () => {
   const enableHoverMotion = useDesktopInteraction();
-  const enableScrollMotion = useScrollMotion();
+  const reveal = useRevealMotion({ desktopInitial: { y: 22 }, duration: 0.72 });
 
   return (
     <section id="founder-profile" className="relative scroll-mt-28 px-6 py-14 md:scroll-mt-32 md:py-20 lg:py-24">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={enableScrollMotion ? { opacity: 0, y: 22 } : false}
-          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
+          initial={reveal.initial}
+          whileInView={reveal.whileInView}
           whileHover={enableHoverMotion ? { y: -4 } : undefined}
-          viewport={{ once: true, amount: 0.08 }}
-          transition={{ duration: 0.72, ease }}
+          viewport={reveal.viewport}
+          transition={reveal.transition}
           className={`rounded-[2rem] border border-gray-100 bg-[#F5F5F7] p-4 shadow-[0_22px_72px_rgba(17,17,17,0.045)] transition-shadow duration-500 md:p-5 ${enableHoverMotion ? 'hover:shadow-[0_30px_90px_rgba(17,17,17,0.075)]' : ''}`}
         >
           <div className="grid gap-5 lg:grid-cols-[0.38fr_0.62fr] lg:items-stretch">

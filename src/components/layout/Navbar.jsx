@@ -26,7 +26,7 @@ const mobileOverlayVariants = {
     scale: 0.985,
     filter: 'blur(5px)',
     transition: {
-      duration: 0.48,
+      duration: 0.34,
       ease,
     },
   },
@@ -36,11 +36,11 @@ const mobileOverlayVariants = {
     scale: 1,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.54,
+      duration: 0.38,
       ease,
       when: 'beforeChildren',
-      staggerChildren: 0.055,
-      delayChildren: 0.08,
+      staggerChildren: 0.04,
+      delayChildren: 0.055,
     },
   },
 };
@@ -50,7 +50,7 @@ const mobileItemVariants = {
     opacity: 0,
     y: 12,
     transition: {
-      duration: 0.2,
+      duration: 0.14,
       ease,
     },
   },
@@ -58,7 +58,7 @@ const mobileItemVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.42,
+      duration: 0.3,
       ease,
     },
   },
@@ -204,7 +204,7 @@ const Navbar = () => {
               initial={{ opacity: 0, rotate: mobileMenuOpen ? -28 : 28, scale: 0.92 }}
               animate={{ opacity: 1, rotate: 0, scale: 1 }}
               exit={{ opacity: 0, rotate: mobileMenuOpen ? 28 : -28, scale: 0.92 }}
-              transition={{ duration: 0.24, ease }}
+              transition={{ duration: 0.17, ease }}
               className="absolute inset-0 flex items-center justify-center"
             >
               {mobileMenuOpen ? <X /> : <Menu />}

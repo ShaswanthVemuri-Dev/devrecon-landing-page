@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Cpu, Code2, Globe2, ArrowRight } from 'lucide-react';
-import useScrollMotion from '../../hooks/useScrollMotion.js';
+import { useRevealMotion } from '../../hooks/useScrollMotion.js';
 import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
 
 const slowEase = [0.16, 1, 0.3, 1];
@@ -28,12 +28,15 @@ const cards = [
   },
 ];
 
-const ServiceCard = ({ icon: Icon, title, desc, to, index, enableScrollMotion, enableHoverMotion }) => (
+const ServiceCard = ({ icon: Icon, title, desc, to, index, enableHoverMotion }) => {
+  const reveal = useRevealMotion({ desktopInitial: { y: 26 }, duration: 0.8, delay: index * 0.12, ease: slowEase });
+
+  return (
   <motion.div
-    initial={enableScrollMotion ? { opacity: 0, y: 26 } : false}
-    whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-    viewport={{ once: true, amount: 0.08 }}
-    transition={{ duration: 0.8, delay: enableScrollMotion ? index * 0.12 : 0, ease: slowEase }}
+    initial={reveal.initial}
+    whileInView={reveal.whileInView}
+    viewport={reveal.viewport}
+    transition={reveal.transition}
     whileHover={enableHoverMotion ? { y: -8 } : undefined}
     className="group relative flex h-full flex-col justify-start overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 transition-all duration-500 hover:border-gray-200 hover:shadow-xl sm:p-7 lg:p-8"
   >
@@ -61,20 +64,21 @@ const ServiceCard = ({ icon: Icon, title, desc, to, index, enableScrollMotion, e
       <ArrowRight className="h-4 w-4 transition-transform duration-[600ms] group-hover:translate-x-1" />
     </Link>
   </motion.div>
-);
+  );
+};
 
 const SolutionsPreview = () => {
-  const enableScrollMotion = useScrollMotion();
   const enableHoverMotion = useDesktopInteraction();
+  const headingReveal = useRevealMotion({ desktopInitial: { y: 24 }, duration: 0.85, ease: slowEase });
 
   return (
     <section id="solutions-preview" className="relative px-6 pt-20 pb-8 md:pt-28 md:pb-10 xl:pt-32 xl:pb-12">
       <div className="mx-auto max-w-7xl">
         <motion.div
-          initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
-          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.08 }}
-          transition={{ duration: 0.85, ease: slowEase }}
+          initial={headingReveal.initial}
+          whileInView={headingReveal.whileInView}
+          viewport={headingReveal.viewport}
+          transition={headingReveal.transition}
           className="mb-14 max-w-2xl md:mb-20 xl:mb-24"
         >
           <h3 className="text-3xl font-bold leading-relaxed tracking-tighter text-[#111111] text-balance sm:text-5xl xl:text-6xl">The Solution Landscape.</h3>
@@ -85,7 +89,7 @@ const SolutionsPreview = () => {
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((card, index) => (
-            <ServiceCard key={card.title} {...card} index={index} enableScrollMotion={enableScrollMotion} enableHoverMotion={enableHoverMotion} />
+            <ServiceCard key={card.title} {...card} index={index} enableHoverMotion={enableHoverMotion} />
           ))}
         </div>
       </div>

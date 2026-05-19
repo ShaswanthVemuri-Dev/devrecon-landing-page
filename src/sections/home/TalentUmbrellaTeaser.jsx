@@ -2,14 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
-import useScrollMotion from '../../hooks/useScrollMotion.js';
+import { useRevealMotion } from '../../hooks/useScrollMotion.js';
 import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
 
 const MotionLink = motion(Link);
 const ease = [0.22, 1, 0.36, 1];
 
 const TalentUmbrellaTeaser = () => {
-  const enableScrollMotion = useScrollMotion();
+  const reveal = useRevealMotion({ desktopInitial: { y: 24 }, duration: 0.72 });
   const enableHoverMotion = useDesktopInteraction();
 
   return (
@@ -29,10 +29,10 @@ const TalentUmbrellaTeaser = () => {
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
         <motion.div
-          initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
-          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.08 }}
-          transition={{ duration: 0.72, ease }}
+          initial={reveal.initial}
+          whileInView={reveal.whileInView}
+          viewport={reveal.viewport}
+          transition={reveal.transition}
         >
           <h2 className="mb-8 text-3xl font-bold leading-relaxed tracking-tight text-[#111111] text-balance sm:text-4xl xl:text-5xl">
             An umbrella for ethical technical talent.

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import useScrollMotion from '../../hooks/useScrollMotion.js';
+import { useRevealMotion } from '../../hooks/useScrollMotion.js';
 
 const ease = [0.22, 1, 0.36, 1];
 
@@ -51,7 +51,8 @@ const LogoMarquee = ({ items, reverse = false }) => {
 };
 
 const WorkingWith = () => {
-  const enableScrollMotion = useScrollMotion();
+  const headingReveal = useRevealMotion({ desktopInitial: { y: 24 }, duration: 0.78 });
+  const marqueeReveal = useRevealMotion({ desktopInitial: { y: 22 }, duration: 0.76, delay: 0.04 });
 
   return (
     <section id="working-with" className="relative overflow-hidden bg-white px-6 pt-10 pb-16 md:pt-12 md:pb-24 xl:pt-14 xl:pb-28">
@@ -84,10 +85,10 @@ const WorkingWith = () => {
 
       <div className="relative z-10 mx-auto max-w-7xl">
         <motion.div
-          initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
-          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.08 }}
-          transition={{ duration: 0.78, ease }}
+          initial={headingReveal.initial}
+          whileInView={headingReveal.whileInView}
+          viewport={headingReveal.viewport}
+          transition={headingReveal.transition}
           className="mb-14 max-w-3xl md:mb-16 lg:mb-20"
         >
           <h2 className="text-3xl font-bold leading-[1.08] tracking-tighter text-[#111111] text-balance sm:text-5xl xl:text-6xl">
@@ -99,10 +100,10 @@ const WorkingWith = () => {
         </motion.div>
 
         <motion.div
-          initial={enableScrollMotion ? { opacity: 0, y: 22 } : false}
-          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.08 }}
-          transition={{ duration: 0.76, ease, delay: 0.04 }}
+          initial={marqueeReveal.initial}
+          whileInView={marqueeReveal.whileInView}
+          viewport={marqueeReveal.viewport}
+          transition={marqueeReveal.transition}
           className="grid gap-4 md:gap-5"
         >
           <LogoMarquee items={firstRow} />

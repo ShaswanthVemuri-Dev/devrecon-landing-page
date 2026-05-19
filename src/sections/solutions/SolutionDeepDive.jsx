@@ -3,12 +3,18 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { mixedInquiry, solutions } from '../../data/solutions.js';
+import { useRevealMotion } from '../../hooks/useScrollMotion.js';
 
 const ease = [0.22, 1, 0.36, 1];
 const softEase = [0.2, 0.95, 0.25, 1];
 
-const panelTransition = {
+const desktopPanelTransition = {
   duration: 0.82,
+  ease: softEase,
+};
+
+const mobilePanelTransition = {
+  duration: 0.46,
   ease: softEase,
 };
 
@@ -166,8 +172,6 @@ const collapsedTextMask = {
 };
 
 const TextRun = ({ preview, continuation, isOpen, enableRichMotion }) => {
-  if (!enableRichMotion && isOpen) return null;
-
   return (
     <motion.div
       className="relative max-w-5xl overflow-hidden"
@@ -178,7 +182,7 @@ const TextRun = ({ preview, continuation, isOpen, enableRichMotion }) => {
         marginTop: isOpen ? 0 : 20,
       }}
       transition={{
-        duration: enableRichMotion ? (isOpen ? 0.44 : 0.52) : 0.22,
+        duration: enableRichMotion ? (isOpen ? 0.44 : 0.52) : 0.26,
         ease,
         delay: enableRichMotion && !isOpen ? 0.12 : 0,
       }}
@@ -228,10 +232,10 @@ const DetailContent = ({ solution, mailto, enableRichMotion }) => {
     <motion.div
       key={`${solution.id}-details`}
       variants={enableRichMotion ? detailGroup : undefined}
-      initial={enableRichMotion ? 'hidden' : { opacity: 0, y: 8 }}
-      animate={enableRichMotion ? 'visible' : { opacity: 1, y: 0 }}
-      exit={enableRichMotion ? 'exit' : { opacity: 0, y: 4 }}
-      transition={enableRichMotion ? undefined : { duration: 0.28, ease }}
+      initial={enableRichMotion ? 'hidden' : { opacity: 0 }}
+      animate={enableRichMotion ? 'visible' : { opacity: 1 }}
+      exit={enableRichMotion ? 'exit' : { opacity: 0 }}
+      transition={enableRichMotion ? undefined : { duration: 0.3, ease }}
       className="px-5 sm:px-8 md:px-10 pb-7 sm:pb-8 md:pb-11"
     >
       <div className="border-t border-white/10 pt-6 sm:pt-8 md:pt-10">
@@ -357,36 +361,22 @@ const SolutionPanel = ({ solution, isOpen, onToggle, enableRichMotion }) => {
         </div>
       </motion.button>
 
-      {enableRichMotion ? (
-        <motion.div
-          initial={false}
-          animate={{ height: isOpen ? 'auto' : 0 }}
-          transition={panelTransition}
-          className="overflow-hidden"
-        >
-          <AnimatePresence initial={false} mode="wait">
-            {isOpen && (
-              <DetailContent
-                solution={solution}
-                mailto={mailto}
-                enableRichMotion={enableRichMotion}
-              />
-            )}
-          </AnimatePresence>
-        </motion.div>
-      ) : (
-        <AnimatePresence initial={false} mode="wait">
+      <motion.div
+        initial={false}
+        animate={{ height: isOpen ? 'auto' : 0 }}
+        transition={enableRichMotion ? desktopPanelTransition : mobilePanelTransition}
+        className="overflow-hidden"
+      >
+        <AnimatePresence initial={false}>
           {isOpen && (
-            <div className="overflow-hidden">
-              <DetailContent
-                solution={solution}
-                mailto={mailto}
-                enableRichMotion={enableRichMotion}
-              />
-            </div>
+            <DetailContent
+              solution={solution}
+              mailto={mailto}
+              enableRichMotion={enableRichMotion}
+            />
           )}
         </AnimatePresence>
-      )}
+      </motion.div>
     </motion.article>
   );
 };
@@ -394,6 +384,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle, enableRichMotion }) => {
 const SolutionDeepDive = () => {
   const shouldReduceMotion = useReducedMotion();
   const supportsDesktopInteraction = useDesktopInteraction();
+  const mixedReveal = useRevealMotion({ desktopInitial: { y: shouldReduceMotion ? 0 : 20 }, duration: 0.62, ease });
   const enableRichMotion = supportsDesktopInteraction && !shouldReduceMotion;
   const location = useLocation();
   const [openId, setOpenId] = useState('');
@@ -431,10 +422,10 @@ const SolutionDeepDive = () => {
         </motion.div>
 
         <motion.div
-          initial={enableRichMotion ? { opacity: 0, y: shouldReduceMotion ? 0 : 20 } : false}
-          whileInView={enableRichMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.08 }}
-          transition={{ duration: 0.62, ease }}
+          initial={mixedReveal.initial}
+          whileInView={mixedReveal.whileInView}
+          viewport={mixedReveal.viewport}
+          transition={mixedReveal.transition}
           className="mt-9 md:mt-12 rounded-[2rem] border border-gray-100 bg-white/85 backdrop-blur-sm p-7 sm:p-8 md:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 shadow-[0_20px_70px_rgba(0,0,0,0.035)]"
         >
           <div className="max-w-3xl">

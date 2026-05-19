@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
-import useScrollMotion from '../../hooks/useScrollMotion.js';
+import { useMotionProfile, useRevealMotion } from '../../hooks/useScrollMotion.js';
 
 const ease = [0.22, 1, 0.36, 1];
 
@@ -23,30 +23,33 @@ const nameParts = [
   },
 ];
 
-const itemMotion = {
-  hidden: { opacity: 0, y: 22 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.68,
-      ease,
-    },
-  },
-};
-
 const NameModel = () => {
   const enableHoverMotion = useDesktopInteraction();
-  const enableScrollMotion = useScrollMotion();
+  const motionProfile = useMotionProfile();
+  const headingReveal = useRevealMotion({ desktopInitial: { y: 24 }, duration: 0.72 });
+  const cardContainerMotion = useMemo(() => ({
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: motionProfile.useSimpleMobileMotion ? 0.035 : 0.09,
+      },
+    },
+  }), [motionProfile.useSimpleMobileMotion]);
+  const itemMotion = useMemo(() => ({
+    hidden: motionProfile.useSimpleMobileMotion ? { opacity: 0 } : { opacity: 0, y: 22 },
+    visible: motionProfile.useSimpleMobileMotion
+      ? { opacity: 1, transition: { duration: 0.32, ease } }
+      : { opacity: 1, y: 0, transition: { duration: 0.68, ease } },
+  }), [motionProfile.useSimpleMobileMotion]);
 
   return (
     <section className="relative px-6 py-12 md:py-20">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
-          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.08 }}
-          transition={{ duration: 0.72, ease }}
+          initial={headingReveal.initial}
+          whileInView={headingReveal.whileInView}
+          viewport={headingReveal.viewport}
+          transition={headingReveal.transition}
           className="max-w-4xl"
         >
           <p className="mb-6 text-xs font-bold uppercase tracking-[0.25em] text-gray-400">
@@ -61,9 +64,10 @@ const NameModel = () => {
         </motion.div>
 
         <motion.div
-          initial={enableScrollMotion ? 'hidden' : false}
-          whileInView={enableScrollMotion ? 'visible' : undefined}
-          viewport={{ once: true, amount: 0.08 }}
+          variants={cardContainerMotion}
+          initial={motionProfile.enableMotion ? 'hidden' : false}
+          whileInView={motionProfile.enableMotion ? 'visible' : undefined}
+          viewport={{ once: true, amount: motionProfile.useSimpleMobileMotion ? 0.01 : 0.08, margin: motionProfile.useSimpleMobileMotion ? '0px 0px -6% 0px' : undefined }}
           className="mt-10 grid gap-5 md:grid-cols-3"
         >
           {nameParts.map((part, index) => (

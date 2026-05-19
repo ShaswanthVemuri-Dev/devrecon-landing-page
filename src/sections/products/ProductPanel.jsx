@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import MyMedicalsPreview from './previews/MyMedicalsPreview.jsx';
 import MasterMentorPreview from './previews/MasterMentorPreview.jsx';
-import useScrollMotion from '../../hooks/useScrollMotion.js';
+import { useRevealMotion } from '../../hooks/useScrollMotion.js';
 import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
 
 const ease = [0.16, 1, 0.3, 1];
@@ -14,15 +14,21 @@ const ProductDiagram = ({ product }) => {
 };
 
 const ProductPanel = ({ product, reverse, index }) => {
-  const enableScrollMotion = useScrollMotion();
   const enableHoverMotion = useDesktopInteraction();
+  const reveal = useRevealMotion({
+    desktopInitial: { y: 34 },
+    duration: 0.78,
+    delay: index * 0.08,
+    ease,
+    margin: '0px 0px 10% 0px',
+  });
 
   return (
     <motion.article
-      initial={enableScrollMotion ? { opacity: 0, y: 34 } : false}
-      whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-      viewport={{ once: true, amount: 0.08, margin: '0px 0px 10% 0px' }}
-      transition={{ duration: 0.78, delay: enableScrollMotion ? index * 0.08 : 0, ease }}
+      initial={reveal.initial}
+      whileInView={reveal.whileInView}
+      viewport={reveal.viewport}
+      transition={reveal.transition}
       className="grid items-center gap-10 min-[800px]:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] min-[800px]:gap-10 min-[1100px]:gap-14 min-[1280px]:grid-cols-2 min-[1280px]:gap-20 2xl:gap-24"
     >
       <div className={reverse ? 'min-w-0 min-[800px]:order-2' : 'min-w-0'}>

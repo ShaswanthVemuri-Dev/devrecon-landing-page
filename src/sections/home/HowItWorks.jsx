@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
-import useScrollMotion from '../../hooks/useScrollMotion.js';
+import { useRevealMotion } from '../../hooks/useScrollMotion.js';
 
 const HowItWorks = () => {
-  const enableScrollMotion = useScrollMotion();
+  const titleReveal = useRevealMotion({ desktopInitial: { x: -8 }, desktopVisible: { x: 0 }, duration: 0.6 });
+  const contentReveal = useRevealMotion({ desktopInitial: { x: 8 }, desktopVisible: { x: 0 }, duration: 0.6, delay: 0.2 });
 
   return (
     <section id="how-it-works" className="relative overflow-hidden bg-[#111111] px-6 py-20 text-white md:py-28 xl:py-32">
@@ -21,10 +22,10 @@ const HowItWorks = () => {
 
       <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 min-[900px]:grid-cols-2 min-[900px]:gap-16 lg:gap-20 xl:gap-24">
         <motion.div
-          initial={enableScrollMotion ? { opacity: 0, x: -8 } : false}
-          whileInView={enableScrollMotion ? { opacity: 1, x: 0 } : undefined}
-          viewport={{ once: true, amount: 0.08 }}
-          transition={{ duration: 0.6 }}
+          initial={titleReveal.initial}
+          whileInView={titleReveal.whileInView}
+          viewport={titleReveal.viewport}
+          transition={titleReveal.transition}
         >
           <h2 className="text-3xl font-bold leading-relaxed tracking-tight text-balance sm:text-4xl md:text-5xl min-[900px]:text-[3.15rem] lg:text-[3.4rem] xl:text-6xl">
             Most tech companies charge for confusion. <br className="hidden lg:block" />
@@ -34,10 +35,10 @@ const HowItWorks = () => {
 
         <motion.div
           className="space-y-10 text-base font-light text-gray-300 sm:text-lg lg:text-xl"
-          initial={enableScrollMotion ? { opacity: 0, x: 8 } : false}
-          whileInView={enableScrollMotion ? { opacity: 1, x: 0 } : undefined}
-          viewport={{ once: true, amount: 0.08 }}
-          transition={{ duration: 0.6, delay: enableScrollMotion ? 0.2 : 0 }}
+          initial={contentReveal.initial}
+          whileInView={contentReveal.whileInView}
+          viewport={contentReveal.viewport}
+          transition={contentReveal.transition}
         >
           <p className="leading-loose tracking-wide">
             We believe digitizing lives creates meaningful value. It shouldn&apos;t cost a fortune simply because clients don&apos;t understand the tech. We operate on a model of radical transparency.

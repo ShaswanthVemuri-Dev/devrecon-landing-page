@@ -1,21 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import useScrollMotion from '../../hooks/useScrollMotion.js';
+import { useRevealMotion } from '../../hooks/useScrollMotion.js';
 
 const ease = [0.22, 1, 0.36, 1];
 
 const CompanyStory = () => {
-  const enableScrollMotion = useScrollMotion();
+  const headingReveal = useRevealMotion({ desktopInitial: { y: 24 }, duration: 0.74 });
+  const bodyReveal = useRevealMotion({ desktopInitial: { y: 26 }, duration: 0.74, delay: 0.06 });
 
   return (
     <section id="story" className="relative px-6 py-14 md:py-24">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 items-start">
           <motion.div
-            initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
-            whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-            viewport={{ once: true, amount: 0.08 }}
-            transition={{ duration: 0.74, ease }}
+            initial={headingReveal.initial}
+            whileInView={headingReveal.whileInView}
+            viewport={headingReveal.viewport}
+            transition={headingReveal.transition}
             className="max-w-2xl"
           >
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-gray-400 mb-6">
@@ -27,10 +28,10 @@ const CompanyStory = () => {
           </motion.div>
 
           <motion.div
-            initial={enableScrollMotion ? { opacity: 0, y: 26 } : false}
-            whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
-            viewport={{ once: true, amount: 0.08 }}
-            transition={{ duration: 0.74, ease, delay: 0.06 }}
+            initial={bodyReveal.initial}
+            whileInView={bodyReveal.whileInView}
+            viewport={bodyReveal.viewport}
+            transition={bodyReveal.transition}
             className="grid gap-7 text-lg md:text-xl text-gray-600 font-light leading-loose tracking-wide"
           >
             <p>
