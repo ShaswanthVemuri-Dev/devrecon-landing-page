@@ -20,6 +20,15 @@ const PREVIEW_ASSETS = {
   phoneHero: '/product-previews/mymedicals/phone-hero.png',
 };
 
+const MYMEDICALS_MENU_ITEMS = [
+  'Consultation',
+  'Shared access',
+  'Lab request',
+  'Reminders',
+  'Adherence',
+  'Medical prescriptions',
+];
+
 const MiniMenuButton = ({ open, onClick }) => (
   <button
     type="button"
@@ -58,7 +67,12 @@ const MyMedicalsBrand = ({ website }) => (
     className="flex min-w-0 items-center gap-2.5 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A90E2]/50"
   >
     <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#1C1C1E] shadow-lg">
-      <img src={PREVIEW_ASSETS.logo} alt="MyMedicals logo" className="colour-logo h-full w-full object-contain" draggable={false} />
+      <img
+        src={PREVIEW_ASSETS.logo}
+        alt="MyMedicals logo"
+        className="colour-logo h-full w-full object-contain"
+        draggable={false}
+      />
     </div>
     <span className="truncate text-[0.8rem] font-semibold leading-none tracking-[0.18em] text-white sm:text-sm">
       MyMedicals
@@ -67,24 +81,29 @@ const MyMedicalsBrand = ({ website }) => (
 );
 
 const MyMedicalsMiniNav = ({ open, setOpen, product }) => {
-  const closeWhenClickingBackdrop = (event) => {
+  const closeFromEmptyArea = (event) => {
     if (!open) return;
-    if (event.target instanceof Element && event.target.closest('a, button')) return;
+    if (event.target.closest('a, button')) return;
     setOpen(false);
   };
 
   return (
     <div
-      data-preview-menu="true"
-      onClick={closeWhenClickingBackdrop}
       className={[
         'absolute inset-x-0 top-0 z-40 overflow-hidden border-b border-white/5 backdrop-blur-xl transition-[height,background-color] duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)]',
         open ? 'h-full bg-black/94' : 'h-20 bg-black/70',
       ].join(' ')}
+      onClick={closeFromEmptyArea}
+      data-preview-menu="true"
     >
       <div className="relative z-20 flex h-20 items-center justify-between px-5 sm:px-6">
         <MyMedicalsBrand website={product.website} />
-        <MiniMenuButton open={open} onClick={() => setOpen((value) => !value)} />
+        <div className="flex items-center gap-3">
+          <MiniMenuButton
+            open={open}
+            onClick={() => setOpen((value) => !value)}
+          />
+        </div>
       </div>
 
       <div
@@ -96,16 +115,13 @@ const MyMedicalsMiniNav = ({ open, setOpen, product }) => {
       >
         <div className="flex h-full flex-col justify-center px-6 pb-8">
           <div className="mx-auto w-full max-w-2xl space-y-6">
-            {['Consultation', 'Shared access', 'Lab request', 'Reminders', 'Adherence', 'Medical prescriptions'].map((item, index) => (
+            {MYMEDICALS_MENU_ITEMS.map((item, index) => (
               <a
                 key={item}
                 href={product.website}
                 target="_blank"
                 rel="noreferrer"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setOpen(false);
-                }}
+                onClick={() => setOpen(false)}
                 className="mini-mobile-menu-item block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A90E2]/50"
                 style={{ '--d': `${260 + index * 115}ms` }}
               >
@@ -127,20 +143,26 @@ const MyMedicalsMiniNav = ({ open, setOpen, product }) => {
 
 const MyMedicalsPhone = () => (
   <motion.div
-    className="relative mx-auto h-[324px] w-[156px] rounded-[1.72rem] border-[5px] border-[#2C2C2C] bg-[#050505] shadow-[0_30px_80px_rgba(0,0,0,0.48)] ring-1 ring-white/10 sm:h-[350px] sm:w-[168px] sm:rounded-[1.9rem]"
+    className="mymedicals-phone"
     aria-hidden="true"
   >
-    <div className="relative h-full overflow-hidden rounded-[1.36rem] bg-[#050505] sm:rounded-[1.5rem]">
-      <img src={PREVIEW_ASSETS.phoneHero} alt="" className="native-colour-stage absolute inset-0 h-full w-full object-cover" draggable={false} />
+    <div className="relative h-full overflow-hidden rounded-[1.1rem] bg-[#050505] min-[740px]:rounded-[1.26rem] min-[900px]:rounded-[1.36rem] min-[1280px]:rounded-[1.5rem]">
+      <img
+        src={PREVIEW_ASSETS.phoneHero}
+        alt=""
+        className="native-colour-stage absolute inset-0 h-full w-full object-cover"
+        draggable={false}
+      />
       <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent" />
       <div className="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06),inset_0_-40px_60px_rgba(0,0,0,0.48)]" />
-      <div className="absolute left-1/2 top-[7px] z-30 flex w-full -translate-x-1/2 justify-center px-2">
-        <div className="flex h-[29.6px] w-[160px] items-center overflow-hidden rounded-full bg-black shadow-[0_5px_16px_rgba(0,0,0,0.42)] sm:h-[31px] sm:w-[170px]">
-          <div className="flex w-full items-center gap-[6px] px-[8px]">
-            <span className="flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-full bg-white/10">
-              <CheckCircle2 className="native-colour-stage h-[11px] w-[11px] text-[#66C72A]" />
+
+      <div className="absolute left-1/2 top-[7px] z-30 flex w-full -translate-x-1/2 justify-center px-3">
+        <div className="flex h-[22px] w-[96px] items-center justify-center overflow-hidden rounded-full bg-black shadow-[0_5px_16px_rgba(0,0,0,0.42)] min-[740px]:h-[25.5px] min-[740px]:w-[122px] min-[900px]:h-[27.8px] min-[900px]:w-[136px] min-[1280px]:h-[29.1px] min-[1280px]:w-[145px]">
+          <div className="flex min-w-0 items-center justify-center gap-[5px] px-2">
+            <span className="flex h-[15px] w-[15px] shrink-0 items-center justify-center rounded-full bg-white/10">
+              <CheckCircle2 className="native-colour-stage h-[10.5px] w-[10.5px] text-[#66C72A]" />
             </span>
-            <span className="min-w-0 flex-1 whitespace-nowrap text-left text-[7.2px] font-normal leading-none tracking-normal text-white/92 [word-spacing:1px] sm:text-[7.5px]">
+            <span className="max-w-[72px] truncate text-[5.45px] font-bold leading-none tracking-[-0.025em] text-white/90 min-[740px]:max-w-[95px] min-[740px]:text-[6.45px] min-[900px]:max-w-[106px] min-[900px]:text-[6.95px] min-[1280px]:max-w-[114px] min-[1280px]:text-[7.25px]">
               Anura took medication, B12
             </span>
           </div>
@@ -157,8 +179,8 @@ const MyMedicalsPreview = ({ product }) => {
     <ProductPreviewFrame product={product} open={open} variant="mymedicals">
       <MyMedicalsMiniNav open={open} setOpen={setOpen} product={product} />
 
-      <div className="relative z-10 grid min-h-[560px] items-center gap-5 px-5 pb-7 pt-24 text-white sm:px-7 md:grid-cols-[1fr_0.74fr] md:px-8">
-        <div className="relative max-w-[365px]">
+      <div className="product-preview-layout mymedicals-preview-layout text-white">
+        <div className="product-preview-copy mymedicals-preview-copy">
           <motion.div
             className="native-colour-stage absolute -left-10 -top-10 h-32 w-32 rounded-full bg-[#4A90E2]/18 blur-3xl"
             animate={{ opacity: [0.4, 0.78, 0.45], scale: [1, 1.08, 1] }}
@@ -171,17 +193,17 @@ const MyMedicalsPreview = ({ product }) => {
                 ['Privacy first', ShieldCheck, '#4A90E2'],
                 ['Family sync', Users, '#66C72A'],
               ].map(([label, Icon, color]) => (
-                <span key={label} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-2 text-[9px] font-bold uppercase tracking-[0.16em] text-[#A1A1AA] transition duration-500 group-hover:text-white/86">
-                  <Icon className="native-colour-stage h-3.5 w-3.5" style={{ color }} />
+                <span key={label} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-2 text-[9px] font-bold uppercase tracking-[0.16em] text-[#A1A1AA] transition duration-500">
+                  <Icon className="h-3.5 w-3.5 native-colour-stage" style={{ color }} />
                   {label}
                 </span>
               ))}
             </div>
 
-            <h3 className="max-w-[360px] text-[2.08rem] font-semibold leading-[1.04] tracking-tight text-white sm:text-[2.55rem]">
+            <h3 className="product-preview-title mymedicals-preview-title text-white">
               Medication adherence, built for families.
             </h3>
-            <p className="preview-hover-text-light mt-5 max-w-[335px] text-sm font-normal leading-[1.62] tracking-wide text-[#A1A1AA] transition-colors duration-500">
+            <p className="product-preview-description preview-hover-text-light max-w-[335px] font-normal tracking-wide text-[#A1A1AA] transition duration-500">
               Stay on track. Stay in control. A privacy-first ecosystem for you and your loved ones.
             </p>
 
@@ -190,29 +212,29 @@ const MyMedicalsPreview = ({ product }) => {
                 href={product.website}
                 target="_blank"
                 rel="noreferrer"
-                className="product-hover-lift native-colour-stage inline-flex items-center gap-2 rounded-full bg-[#4A90E2] px-5 py-3 text-[10px] font-bold uppercase tracking-[0.14em] text-white visited:text-white active:text-white focus:text-white hover:text-white shadow-[0_12px_32px_rgba(74,144,226,0.20)] transition-[transform,background-color] duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A90E2]/50"
+                className="native-colour-stage inline-flex items-center gap-2 rounded-full bg-[#4A90E2] px-5 py-3 text-[10px] font-bold uppercase tracking-[0.14em] text-white visited:text-white active:text-white focus:text-white hover:text-white shadow-[0_12px_32px_rgba(74,144,226,0.20)] transition duration-500 hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A90E2]/50"
               >
                 View site
                 <ArrowRight className="h-3.5 w-3.5" />
               </a>
             </div>
 
-            <div className="mt-7 grid max-w-[340px] grid-cols-3 gap-2.5">
+            <div className="product-preview-feature-grid">
               {[
                 ['Doctor', Stethoscope, '#4A90E2'],
                 ['Alerts', BellRing, '#FFBA43'],
                 ['Adherence', Activity, '#66C72A'],
               ].map(([label, Icon, color]) => (
-                <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.035] p-3">
-                  <Icon className="native-colour-stage h-4 w-4" style={{ color }} />
-                  <p className="mt-2.5 text-[8.5px] font-bold uppercase tracking-[0.15em] text-white/58">{label}</p>
+                <div key={label} className="mymedicals-feature-card">
+                  <Icon className="native-colour-stage h-3.5 w-3.5 min-[1200px]:h-4 min-[1200px]:w-4" style={{ color }} />
+                  <p className="mt-2 text-[6.8px] font-bold uppercase tracking-[0.1em] text-white/58 min-[1200px]:mt-2.5 min-[1200px]:text-[8.5px] min-[1200px]:tracking-[0.15em]">{label}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="relative hidden justify-center md:flex">
+        <div className="product-preview-side mymedicals-device-slot">
           <div className="native-colour-stage absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#4A90E2]/16 blur-3xl" />
           <MyMedicalsPhone />
         </div>

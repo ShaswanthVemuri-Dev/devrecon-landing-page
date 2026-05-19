@@ -46,15 +46,11 @@
   will-change: opacity;
 }
 
+.product-preview-card:hover::after,
+.product-preview-card[data-menu-open="true"]::after,
 .product-preview-card[data-colour-active="true"]::after,
 .product-preview-card:focus-within::after {
   opacity: 0;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .product-preview-card:hover::after {
-    opacity: 0;
-  }
 }
 
 .product-preview-card .native-colour-stage {
@@ -81,44 +77,25 @@
   opacity: 0;
 }
 
+.product-preview-card:hover .mastermentor-logo-bw,
+.product-preview-card[data-menu-open="true"] .mastermentor-logo-bw,
 .product-preview-card[data-colour-active="true"] .mastermentor-logo-bw,
 .product-preview-card:focus-within .mastermentor-logo-bw {
   opacity: 0;
 }
 
+.product-preview-card:hover .mastermentor-logo-colour,
+.product-preview-card[data-menu-open="true"] .mastermentor-logo-colour,
 .product-preview-card[data-colour-active="true"] .mastermentor-logo-colour,
 .product-preview-card:focus-within .mastermentor-logo-colour {
   opacity: 1;
 }
 
+.product-preview-card:hover .preview-hover-text-light,
+.product-preview-card[data-menu-open="true"] .preview-hover-text-light,
 .product-preview-card[data-colour-active="true"] .preview-hover-text-light,
 .product-preview-card:focus-within .preview-hover-text-light {
   color: rgba(255,255,255,0.86);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .product-preview-card:hover .mastermentor-logo-bw {
-    opacity: 0;
-  }
-
-  .product-preview-card:hover .mastermentor-logo-colour {
-    opacity: 1;
-  }
-
-  .product-preview-card:hover .preview-hover-text-light {
-    color: rgba(255,255,255,0.86);
-  }
-}
-
-@media (hover: none), (pointer: coarse) {
-  .product-preview-card:hover::after {
-    opacity: 1;
-  }
-
-  .product-preview-card[data-colour-active="true"]::after,
-  .product-preview-card:focus-within::after {
-    opacity: 0;
-  }
 }
 
 .mini-mymed-nav-pill::before {
@@ -151,7 +128,328 @@
   transform: translateY(-1px) scale(1.012);
 }
 
-@media (hover: none), (pointer: coarse) {
+.product-preview-layout {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  min-height: 560px;
+  align-items: center;
+  gap: 1rem;
+  padding: 6rem 1.25rem 1.75rem;
+}
+
+.product-preview-copy {
+  position: relative;
+  min-width: 0;
+}
+
+.mymedicals-preview-copy { max-width: 365px; }
+.mastermentor-preview-copy { max-width: 390px; }
+
+.product-preview-side {
+  position: relative;
+  display: none;
+  min-width: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-preview-title {
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+
+.mymedicals-preview-title {
+  max-width: 360px;
+  font-size: clamp(1.78rem, 7vw, 2.08rem);
+  font-weight: 600;
+}
+
+.mastermentor-preview-title {
+  font-size: clamp(1.78rem, 7vw, 2.05rem);
+  font-weight: 700;
+  line-height: 1.06;
+}
+
+.product-preview-description {
+  margin-top: 1.25rem;
+  font-size: 13px;
+  line-height: 1.58;
+}
+
+.product-preview-feature-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  max-width: 340px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.mymedicals-feature-card {
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.035);
+  padding: 0.5rem;
+}
+
+.mastermentor-feature-card {
+  min-height: 62px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid rgb(226 232 240);
+  background: #fff;
+  padding: 0.5rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+
+.mymedicals-phone {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 112px;
+  height: 232px;
+  border-radius: 1.42rem;
+  border: 4px solid #2C2C2C;
+  background: #050505;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.46);
+}
+
+.mastermentor-wireframe {
+  position: relative;
+  width: 180px;
+  max-width: 100%;
+  border-radius: 18px;
+  border: 1px solid rgb(226 232 240);
+  background: #fff;
+  padding: 0.625rem;
+  box-shadow: 0 14px 34px rgba(15,23,42,0.08);
+}
+
+.mastermentor-mini-card {
+  border-radius: 12px;
+  border: 1px solid rgb(226 232 240);
+  background: #fff;
+  padding: 0.5rem;
+  box-shadow: 0 8px 24px rgba(15,23,42,0.04);
+}
+
+.mastermentor-small-tile {
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+
+@media (min-width: 600px) and (max-width: 799px) {
+  .product-preview-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(104px, 0.36fr);
+    gap: 0.75rem;
+    padding-inline: 1.65rem;
+  }
+
+  .product-preview-side {
+    display: flex;
+  }
+
+  .mymedicals-phone {
+    width: clamp(112px, 17.5vw, 140px);
+    height: calc(clamp(112px, 17.5vw, 140px) * 2.08);
+  }
+
+  .mastermentor-wireframe {
+    width: clamp(168px, 28vw, 224px);
+    padding: clamp(0.625rem, 1.25vw, 0.875rem);
+  }
+
+  .product-preview-feature-grid {
+    gap: clamp(0.45rem, 1.2vw, 0.65rem);
+  }
+
+  .mymedicals-preview-title {
+    font-size: clamp(1.78rem, 4.7vw, 2.18rem);
+  }
+
+  .mastermentor-preview-title {
+    font-size: clamp(1.74rem, 4.6vw, 2.12rem);
+  }
+}
+
+@media (min-width: 800px) and (max-width: 959px) {
+  .product-preview-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-inline: 1.25rem;
+  }
+
+  .product-preview-side {
+    display: none;
+  }
+
+  .mymedicals-preview-title,
+  .mastermentor-preview-title {
+    font-size: clamp(1.55rem, 2.65vw, 1.86rem);
+  }
+
+  .product-preview-description {
+    max-width: 100%;
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+
+  .product-preview-feature-grid {
+    max-width: 100%;
+    gap: 0.45rem;
+  }
+
+  .mymedicals-feature-card,
+  .mastermentor-feature-card {
+    padding: 0.48rem;
+  }
+}
+
+@media (min-width: 960px) and (max-width: 1199px) {
+  .product-preview-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 0.36fr);
+    gap: 0.7rem;
+    padding-inline: 1.35rem;
+  }
+
+  .product-preview-side {
+    display: flex;
+  }
+
+  .mymedicals-phone {
+    width: clamp(118px, 12.4vw, 148px);
+    height: calc(clamp(118px, 12.4vw, 148px) * 2.08);
+  }
+
+  .mastermentor-wireframe {
+    width: clamp(174px, 18.8vw, 226px);
+    padding: clamp(0.625rem, 1.05vw, 0.875rem);
+  }
+
+  .mymedicals-preview-title,
+  .mastermentor-preview-title {
+    font-size: clamp(1.55rem, 2.15vw, 2.05rem);
+  }
+
+  .product-preview-description {
+    font-size: 12.8px;
+    line-height: 1.56;
+  }
+
+  .product-preview-feature-grid {
+    gap: 0.48rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .product-preview-layout {
+    gap: 1.25rem;
+    padding-inline: 2rem;
+  }
+
+  .mymedicals-preview-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.74fr);
+  }
+
+  .mastermentor-preview-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.83fr);
+    gap: 1.5rem;
+  }
+
+  .product-preview-side {
+    display: flex;
+  }
+
+  .mymedicals-phone {
+    width: 156px;
+    height: 324px;
+    border-width: 5px;
+    border-radius: 1.72rem;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.48);
+  }
+
+  .mastermentor-wireframe {
+    width: 270px;
+    border-radius: 22px;
+    padding: 0.875rem;
+    box-shadow: 0 16px 40px rgba(15,23,42,0.08);
+  }
+
+  .mymedicals-preview-title {
+    font-size: 2.08rem;
+  }
+
+  .mastermentor-preview-title {
+    font-size: 2.05rem;
+  }
+
+  .product-preview-description {
+    font-size: 14px;
+    line-height: 1.62;
+  }
+
+  .product-preview-feature-grid {
+    margin-top: 1.75rem;
+    gap: 0.625rem;
+  }
+
+  .mymedicals-feature-card {
+    padding: 0.75rem;
+  }
+
+  .mastermentor-feature-card {
+    min-height: 76px;
+    padding: 0.75rem;
+  }
+
+  .mastermentor-mini-card {
+    border-radius: 14px;
+    padding: 0.75rem;
+  }
+
+  .mastermentor-small-tile {
+    border-radius: 14px;
+    padding: 0.75rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .mymedicals-phone {
+    width: 168px;
+    height: 350px;
+    border-radius: 1.9rem;
+  }
+
+  .mastermentor-wireframe {
+    width: 300px;
+    border-radius: 24px;
+    padding: 1rem;
+  }
+
+  .mymedicals-preview-title {
+    font-size: 2.55rem;
+  }
+
+  .mastermentor-preview-title {
+    font-size: 2.48rem;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .product-preview-card:hover::after {
+    opacity: 1;
+  }
+
+  .product-preview-card[data-menu-open="true"]::after,
+  .product-preview-card[data-colour-active="true"]::after,
+  .product-preview-card:focus-within::after {
+    opacity: 0;
+  }
+
   .product-hover-lift:active {
     transform: scale(0.992);
   }

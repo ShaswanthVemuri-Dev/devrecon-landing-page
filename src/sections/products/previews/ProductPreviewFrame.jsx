@@ -31,8 +31,8 @@ const ShellGlow = ({ productId }) => {
     return (
       <>
         <div className="absolute inset-0 bg-[#000000]" />
-        <div className="native-colour-stage devrecon-tide absolute top-[8%] -left-[34%] h-[62%] w-[120%] rounded-full opacity-[0.16] blur-[98px]" style={{ background: PRODUCT_THEME.mymedicals.soft }} />
-        <div className="native-colour-stage devrecon-tide-delayed absolute bottom-[-7%] -right-[30%] h-[62%] w-[90%] rounded-full opacity-[0.15] blur-[92px]" style={{ background: PRODUCT_THEME.mymedicals.lower }} />
+        <div className="native-colour-stage absolute top-[8%] -left-[34%] h-[62%] w-[120%] rounded-full opacity-[0.16] blur-[98px] devrecon-tide" style={{ background: PRODUCT_THEME.mymedicals.soft }} />
+        <div className="native-colour-stage absolute bottom-[-7%] -right-[30%] h-[62%] w-[90%] rounded-full opacity-[0.15] blur-[92px] devrecon-tide-delayed" style={{ background: PRODUCT_THEME.mymedicals.lower }} />
         <div className="native-colour-stage absolute inset-0 bg-[radial-gradient(circle_at_52%_38%,rgba(74,144,226,0.52),transparent_56%)] opacity-60" />
         <div className="absolute inset-[1px] rounded-[2.45rem] border border-white/[0.06]" />
       </>
@@ -57,6 +57,7 @@ const ShellGlow = ({ productId }) => {
 const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }) => {
   const tapStart = useRef(null);
   const [colourActive, setColourActive] = useState(false);
+  const [hoverActive, setHoverActive] = useState(false);
 
   const handlePointerDown = (event) => {
     if (event.pointerType === 'mouse' || isInteractiveTarget(event.target)) {
@@ -94,13 +95,18 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
   return (
     <motion.div
       data-menu-open={open ? 'true' : 'false'}
-      data-colour-active={open || colourActive ? 'true' : 'false'}
+      data-colour-active={open || colourActive || hoverActive ? 'true' : 'false'}
       className="product-preview-card group relative overflow-hidden rounded-[2.5rem] border border-[#242424] bg-[#0E0E10] shadow-[0_30px_92px_rgba(0,0,0,0.24)]"
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-12% 0px -12% 0px' }}
       transition={{ duration: 0.74, ease }}
       aria-label={`${product.name} miniature homepage preview`}
+      onMouseEnter={() => setHoverActive(true)}
+      onMouseLeave={() => {
+        setHoverActive(false);
+        handlePointerCancel();
+      }}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerCancel}
