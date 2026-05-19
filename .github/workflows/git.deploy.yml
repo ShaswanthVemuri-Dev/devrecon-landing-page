@@ -17,6 +17,7 @@ jobs:
   build-and-deploy:
     name: Build and deploy website
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repository
@@ -27,29 +28,30 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: package-lock.json
           registry-url: https://registry.npmjs.org/
 
-      - name: Force npm public registry
-        run: |
-          npm config set registry https://registry.npmjs.org/
-          npm config set fetch-retries 5
-          npm config set fetch-retry-mintimeout 20000
-          npm config set fetch-retry-maxtimeout 120000
-          npm config set fetch-timeout 300000
-          npm config get registry
-
       - name: Install dependencies
-        run: npm ci --registry=https://registry.npmjs.org/ --no-audit --fund=false
+        timeout-minutes: 3
+        run: npm ci --prefer-offline --no-audit --no-fund --progress=false
 
       - name: Build website
+        timeout-minutes: 3
         run: npm run build
+
+      - name: Verify build output
+        run: |
+          test -d dist
+          test -f dist/index.html
+          du -sh dist
 
       - name: Deploy dist folder to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        timeout-minutes: 5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: dist/
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          server-dir: ./
           dangerous-clean-slate: false
