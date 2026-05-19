@@ -2,18 +2,20 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
+import useScrollMotion from '../../hooks/useScrollMotion.js';
 
 const ease = [0.22, 1, 0.36, 1];
 
 const FounderProfile = () => {
   const enableHoverMotion = useDesktopInteraction();
+  const enableScrollMotion = useScrollMotion();
 
   return (
     <section id="founder-profile" className="relative scroll-mt-28 px-6 py-14 md:scroll-mt-32 md:py-20 lg:py-24">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={enableScrollMotion ? { opacity: 0, y: 22 } : false}
+          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
           whileHover={enableHoverMotion ? { y: -4 } : undefined}
           viewport={{ once: true, amount: 0.24 }}
           transition={{ duration: 0.72, ease }}

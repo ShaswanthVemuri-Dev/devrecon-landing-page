@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
+import useScrollMotion from '../../hooks/useScrollMotion.js';
 
 const ease = [0.22, 1, 0.36, 1];
 
@@ -36,13 +37,14 @@ const itemMotion = {
 
 const NameModel = () => {
   const enableHoverMotion = useDesktopInteraction();
+  const enableScrollMotion = useScrollMotion();
 
   return (
     <section className="relative px-6 py-12 md:py-20">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
+          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.72, ease }}
           className="max-w-4xl"
@@ -59,8 +61,8 @@ const NameModel = () => {
         </motion.div>
 
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={enableScrollMotion ? 'hidden' : false}
+          whileInView={enableScrollMotion ? 'visible' : undefined}
           viewport={{ once: true, amount: 0.18 }}
           className="mt-10 grid gap-5 md:grid-cols-3"
         >

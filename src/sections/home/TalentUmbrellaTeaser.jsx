@@ -2,11 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
+import useScrollMotion from '../../hooks/useScrollMotion.js';
+import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
 
 const MotionLink = motion(Link);
 const ease = [0.22, 1, 0.36, 1];
 
 const TalentUmbrellaTeaser = () => {
+  const enableScrollMotion = useScrollMotion();
+  const enableHoverMotion = useDesktopInteraction();
+
   return (
     <section id="talent-umbrella-preview" className="relative overflow-hidden bg-[#F5F5F7] px-6 py-16 md:py-24 xl:py-28">
       <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.045]">
@@ -24,8 +29,8 @@ const TalentUmbrellaTeaser = () => {
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
+          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.72, ease }}
         >
@@ -39,7 +44,7 @@ const TalentUmbrellaTeaser = () => {
           <div className="flex flex-col items-center gap-6">
             <MotionLink
               to="/company#talent-umbrella"
-              whileHover={{ y: -3, scale: 1.012 }}
+              whileHover={enableHoverMotion ? { y: -3, scale: 1.012 } : undefined}
               whileTap={{ scale: 0.985 }}
               transition={{ duration: 0.28, ease }}
               style={{ color: '#ffffff', WebkitTapHighlightColor: 'transparent' }}

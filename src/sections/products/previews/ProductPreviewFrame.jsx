@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import useScrollMotion from '../../../hooks/useScrollMotion.js';
+import useDesktopInteraction from '../../../hooks/useDesktopInteraction.js';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -58,6 +60,8 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
   const tapStart = useRef(null);
   const [colourActive, setColourActive] = useState(false);
   const [hoverActive, setHoverActive] = useState(false);
+  const enableScrollMotion = useScrollMotion();
+  const enableHoverMotion = useDesktopInteraction();
 
   const handlePointerDown = (event) => {
     if (event.pointerType === 'mouse' || isInteractiveTarget(event.target)) {
@@ -97,12 +101,14 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
       data-menu-open={open ? 'true' : 'false'}
       data-colour-active={open || colourActive || hoverActive ? 'true' : 'false'}
       className="product-preview-card group relative overflow-hidden rounded-[2.5rem] border border-[#242424] bg-[#0E0E10] shadow-[0_30px_92px_rgba(0,0,0,0.24)]"
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={enableScrollMotion ? { opacity: 0, y: 28 } : false}
+      whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
       viewport={{ once: true, margin: '-12% 0px -12% 0px' }}
       transition={{ duration: 0.74, ease }}
       aria-label={`${product.name} miniature homepage preview`}
-      onMouseEnter={() => setHoverActive(true)}
+      onMouseEnter={() => {
+        if (enableHoverMotion) setHoverActive(true);
+      }}
       onMouseLeave={() => {
         setHoverActive(false);
         handlePointerCancel();

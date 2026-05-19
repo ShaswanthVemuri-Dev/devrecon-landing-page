@@ -407,8 +407,8 @@ const SolutionDeepDive = () => {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={enableRichMotion ? { opacity: 0, y: shouldReduceMotion ? 0 : 20 } : false}
+          whileInView={enableRichMotion ? { opacity: 1, y: 0 } : undefined}
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.62, ease }}
           className="mt-9 md:mt-12 rounded-[2rem] border border-gray-100 bg-white/85 backdrop-blur-sm p-7 sm:p-8 md:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 shadow-[0_20px_70px_rgba(0,0,0,0.035)]"

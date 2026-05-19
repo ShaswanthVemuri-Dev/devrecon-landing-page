@@ -116,11 +116,9 @@ const MyMedicalsMiniNav = ({ open, setOpen, product }) => {
         <div className="flex h-full flex-col justify-center px-6 pb-8">
           <div className="mx-auto w-full max-w-2xl space-y-6">
             {MYMEDICALS_MENU_ITEMS.map((item, index) => (
-              <a
+              <button
                 key={item}
-                href={product.website}
-                target="_blank"
-                rel="noreferrer"
+                type="button"
                 onClick={() => setOpen(false)}
                 className="mini-mobile-menu-item block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A90E2]/50"
                 style={{ '--d': `${260 + index * 115}ms` }}
@@ -132,7 +130,7 @@ const MyMedicalsMiniNav = ({ open, setOpen, product }) => {
                   <span className="h-2 w-2 shrink-0 rounded-full bg-[#4A90E2] shadow-[0_0_14px_rgba(74,144,226,0.55)]" />
                 </div>
                 <div className="mt-4 h-px w-full bg-gradient-to-r from-white/0 via-white/10 to-white/0" />
-              </a>
+              </button>
             ))}
           </div>
         </div>

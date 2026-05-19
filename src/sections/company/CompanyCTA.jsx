@@ -2,18 +2,20 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
+import useScrollMotion from '../../hooks/useScrollMotion.js';
 
 const ease = [0.22, 1, 0.36, 1];
 
 const CompanyCTA = () => {
   const enableHoverMotion = useDesktopInteraction();
+  const enableScrollMotion = useScrollMotion();
 
   return (
     <section className="relative px-6 pt-8 pb-20 md:pb-28">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
+          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
           viewport={{ once: true, amount: 0.28 }}
           transition={{ duration: 0.76, ease }}
           className="grid items-center gap-8 rounded-[2rem] border border-gray-100 bg-[#F5F5F7] p-8 md:rounded-[2.5rem] md:p-12 lg:grid-cols-[1fr_auto] lg:gap-12 lg:p-14"

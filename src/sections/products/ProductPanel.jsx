@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import MyMedicalsPreview from './previews/MyMedicalsPreview.jsx';
 import MasterMentorPreview from './previews/MasterMentorPreview.jsx';
+import useScrollMotion from '../../hooks/useScrollMotion.js';
+import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -12,12 +14,15 @@ const ProductDiagram = ({ product }) => {
 };
 
 const ProductPanel = ({ product, reverse, index }) => {
+  const enableScrollMotion = useScrollMotion();
+  const enableHoverMotion = useDesktopInteraction();
+
   return (
     <motion.article
-      initial={{ opacity: 0, y: 34 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={enableScrollMotion ? { opacity: 0, y: 34 } : false}
+      whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
       viewport={{ once: true, margin: '-12% 0px -12% 0px' }}
-      transition={{ duration: 0.78, delay: index * 0.08, ease }}
+      transition={{ duration: 0.78, delay: enableScrollMotion ? index * 0.08 : 0, ease }}
       className="grid items-center gap-10 min-[800px]:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] min-[800px]:gap-10 min-[1100px]:gap-14 min-[1280px]:grid-cols-2 min-[1280px]:gap-20 2xl:gap-24"
     >
       <div className={reverse ? 'min-w-0 min-[800px]:order-2' : 'min-w-0'}>
@@ -44,7 +49,7 @@ const ProductPanel = ({ product, reverse, index }) => {
             href={product.website}
             target="_blank"
             rel="noreferrer"
-            className="product-hover-lift group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-5 py-4 text-center text-sm font-semibold tracking-wide text-white visited:text-white active:text-white focus:text-white hover:text-white transition-transform duration-300 ease-out hover:scale-[1.012] hover:bg-[#1B1B1B] focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4"
+            className={`group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-5 py-4 text-center text-sm font-semibold tracking-wide text-white visited:text-white active:text-white focus:text-white hover:text-white transition-transform duration-300 ease-out hover:bg-[#1B1B1B] focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 ${enableHoverMotion ? 'product-hover-lift hover:scale-[1.012]' : ''}`}
           >
             {product.visitLabel}
             <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -52,7 +57,7 @@ const ProductPanel = ({ product, reverse, index }) => {
 
           <a
             href={product.contactHref}
-            className="product-hover-lift inline-flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 bg-white/70 px-5 py-4 text-center text-sm font-semibold tracking-wide text-[#111111] visited:text-[#111111] active:text-[#111111] focus:text-[#111111] hover:text-[#111111] transition-transform duration-300 ease-out hover:scale-[1.012] hover:border-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4"
+            className={`inline-flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 bg-white/70 px-5 py-4 text-center text-sm font-semibold tracking-wide text-[#111111] visited:text-[#111111] active:text-[#111111] focus:text-[#111111] hover:text-[#111111] transition-transform duration-300 ease-out hover:border-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 ${enableHoverMotion ? 'product-hover-lift hover:scale-[1.012]' : ''}`}
           >
             Discuss a similar system
           </a>

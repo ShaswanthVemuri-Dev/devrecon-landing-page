@@ -46,7 +46,6 @@
   will-change: opacity;
 }
 
-.product-preview-card:hover::after,
 .product-preview-card[data-menu-open="true"]::after,
 .product-preview-card[data-colour-active="true"]::after,
 .product-preview-card:focus-within::after {
@@ -77,25 +76,49 @@
   opacity: 0;
 }
 
-.product-preview-card:hover .mastermentor-logo-bw,
 .product-preview-card[data-menu-open="true"] .mastermentor-logo-bw,
 .product-preview-card[data-colour-active="true"] .mastermentor-logo-bw,
 .product-preview-card:focus-within .mastermentor-logo-bw {
   opacity: 0;
 }
 
-.product-preview-card:hover .mastermentor-logo-colour,
 .product-preview-card[data-menu-open="true"] .mastermentor-logo-colour,
 .product-preview-card[data-colour-active="true"] .mastermentor-logo-colour,
 .product-preview-card:focus-within .mastermentor-logo-colour {
   opacity: 1;
 }
 
-.product-preview-card:hover .preview-hover-text-light,
 .product-preview-card[data-menu-open="true"] .preview-hover-text-light,
 .product-preview-card[data-colour-active="true"] .preview-hover-text-light,
 .product-preview-card:focus-within .preview-hover-text-light {
   color: rgba(255,255,255,0.86);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .product-preview-card:hover::after {
+    opacity: 0;
+  }
+
+  .product-preview-card:hover .mastermentor-logo-bw {
+    opacity: 0;
+  }
+
+  .product-preview-card:hover .mastermentor-logo-colour {
+    opacity: 1;
+  }
+
+  .product-preview-card:hover .preview-hover-text-light {
+    color: rgba(255,255,255,0.86);
+  }
+
+  .mini-mymed-nav-pill:hover::before,
+  .mini-mymed-nav-pill:focus-visible::before {
+    opacity: 1;
+  }
+
+  .product-hover-lift:hover {
+    transform: translateY(-1px) scale(1.012);
+  }
 }
 
 .mini-mymed-nav-pill::before {
@@ -109,11 +132,6 @@
   background: radial-gradient(120px circle at var(--mx, 50%) var(--my, 50%), rgba(74,144,226,0.24), rgba(74,144,226,0.10) 35%, transparent 70%);
 }
 
-.mini-mymed-nav-pill:hover::before,
-.mini-mymed-nav-pill:focus-visible::before {
-  opacity: 1;
-}
-
 .mini-mobile-menu[data-open="true"] .mini-mobile-menu-item {
   animation: devreconMiniNavItemIn 850ms cubic-bezier(.22,1,.36,1) both;
   animation-delay: var(--d, 0ms);
@@ -123,10 +141,6 @@
 .devrecon-progress-pulse { animation: devreconProgressPulse 4.8s ease-in-out infinite; }
 .devrecon-tide { animation: devreconPreviewTide 26s ease-in-out infinite; }
 .devrecon-tide-delayed { animation: devreconPreviewTideDelayed 30s ease-in-out infinite; }
-
-.product-hover-lift:hover {
-  transform: translateY(-1px) scale(1.012);
-}
 
 .product-preview-layout {
   position: relative;

@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Cpu, Code2, Globe2, ArrowRight } from 'lucide-react';
+import useScrollMotion from '../../hooks/useScrollMotion.js';
+import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
 
 const slowEase = [0.16, 1, 0.3, 1];
 
@@ -26,13 +28,13 @@ const cards = [
   },
 ];
 
-const ServiceCard = ({ icon: Icon, title, desc, to, index }) => (
+const ServiceCard = ({ icon: Icon, title, desc, to, index, enableScrollMotion, enableHoverMotion }) => (
   <motion.div
-    initial={{ opacity: 0, y: 26 }}
-    whileInView={{ opacity: 1, y: 0 }}
+    initial={enableScrollMotion ? { opacity: 0, y: 26 } : false}
+    whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
     viewport={{ once: true, amount: 0.3 }}
-    transition={{ duration: 0.8, delay: index * 0.12, ease: slowEase }}
-    whileHover={{ y: -8 }}
+    transition={{ duration: 0.8, delay: enableScrollMotion ? index * 0.12 : 0, ease: slowEase }}
+    whileHover={enableHoverMotion ? { y: -8 } : undefined}
     className="group relative flex h-full flex-col justify-start overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 transition-all duration-500 hover:border-gray-200 hover:shadow-xl sm:p-7 lg:p-8"
   >
     <div className="absolute right-0 top-0 p-4 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
@@ -40,7 +42,7 @@ const ServiceCard = ({ icon: Icon, title, desc, to, index }) => (
     </div>
 
     <motion.div
-      whileHover={{ rotate: -4, scale: 1.04 }}
+      whileHover={enableHoverMotion ? { rotate: -4, scale: 1.04 } : undefined}
       transition={{ type: 'spring', stiffness: 95, damping: 16, mass: 0.9 }}
       className="relative z-10 mb-7 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gray-50 transition-colors duration-500 group-hover:bg-black group-hover:text-white lg:mb-8 lg:h-14 lg:w-14"
     >
@@ -62,12 +64,15 @@ const ServiceCard = ({ icon: Icon, title, desc, to, index }) => (
 );
 
 const SolutionsPreview = () => {
+  const enableScrollMotion = useScrollMotion();
+  const enableHoverMotion = useDesktopInteraction();
+
   return (
     <section id="solutions-preview" className="relative px-6 pt-20 pb-8 md:pt-28 md:pb-10 xl:pt-32 xl:pb-12">
       <div className="mx-auto max-w-7xl">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
+          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.85, ease: slowEase }}
           className="mb-14 max-w-2xl md:mb-20 xl:mb-24"
@@ -80,7 +85,7 @@ const SolutionsPreview = () => {
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((card, index) => (
-            <ServiceCard key={card.title} {...card} index={index} />
+            <ServiceCard key={card.title} {...card} index={index} enableScrollMotion={enableScrollMotion} enableHoverMotion={enableHoverMotion} />
           ))}
         </div>
       </div>

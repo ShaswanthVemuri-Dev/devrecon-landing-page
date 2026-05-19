@@ -120,10 +120,8 @@ const MasterMentorMenu = ({ open, setOpen, product }) => (
     <div className="flex h-full flex-col justify-center px-6 pb-8" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif' }}>
       <div className="mx-auto w-full max-w-[340px] space-y-3.5">
         {MASTER_MENTOR_MENU_ITEMS.map((item, index) => (
-          <a
-            href={product.website}
-            target="_blank"
-            rel="noreferrer"
+          <button
+            type="button"
             key={item}
             onClick={() => setOpen(false)}
             className="mini-mobile-menu-item flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-[12px] font-semibold text-slate-900 opacity-100 shadow-[0_8px_24px_rgba(15,23,42,0.04)] transition-[border-color,background-color] duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)] hover:border-[#2563EB]/35 hover:bg-[#EFF6FF]"
@@ -131,7 +129,7 @@ const MasterMentorMenu = ({ open, setOpen, product }) => (
           >
             <span>{item}</span>
             <ChevronRight className="h-4 w-4 text-[#2563EB]" />
-          </a>
+          </button>
         ))}
 
         <a

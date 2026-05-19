@@ -1,16 +1,19 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import useScrollMotion from '../../hooks/useScrollMotion.js';
 
 const ease = [0.22, 1, 0.36, 1];
 
 const CompanyStory = () => {
+  const enableScrollMotion = useScrollMotion();
+
   return (
     <section id="story" className="relative px-6 py-14 md:py-24">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 items-start">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
+            whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.74, ease }}
             className="max-w-2xl"
@@ -24,8 +27,8 @@ const CompanyStory = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 26 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={enableScrollMotion ? { opacity: 0, y: 26 } : false}
+            whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
             viewport={{ once: true, amount: 0.28 }}
             transition={{ duration: 0.74, ease, delay: 0.06 }}
             className="grid gap-7 text-lg md:text-xl text-gray-600 font-light leading-loose tracking-wide"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
@@ -31,6 +31,7 @@ const Underline = ({ active = false, mobile = false }) => (
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === '/';
 
   useEffect(() => {
@@ -62,6 +63,17 @@ const Navbar = () => {
   }, [location.pathname, location.hash]);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  const handleMobileNavigation = (event, to) => {
+    event.preventDefault();
+    setMobileMenuOpen(false);
+
+    if (`${location.pathname}${location.hash}` === to) return;
+
+    window.setTimeout(() => {
+      navigate(to);
+    }, 260);
+  };
 
   const desktopNavClassName = ({ isActive }) =>
     `group relative inline-flex items-center text-sm font-medium tracking-wide no-underline transition-colors duration-300 ${
@@ -123,21 +135,21 @@ const Navbar = () => {
           {mobileMenuOpen ? <X /> : <Menu />}
         </button>
 
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {mobileMenuOpen && (
             <motion.div
               id="mobile-navigation"
               initial={{ opacity: 0, y: -18 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -18 }}
-              transition={{ duration: 0.34, ease }}
+              transition={{ duration: 0.36, ease }}
               className="fixed inset-0 z-50 flex min-h-[100dvh] flex-col items-center justify-center gap-8 bg-white px-6 md:hidden"
             >
               {mobileNavLinks.map((link) => (
                 <NavLink
                   key={link.name}
                   to={link.to}
-                  onClick={closeMobileMenu}
+                  onClick={(event) => handleMobileNavigation(event, link.to)}
                   className={mobileNavClassName}
                 >
                   {({ isActive }) => (

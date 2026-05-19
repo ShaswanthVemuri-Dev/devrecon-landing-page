@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import useScrollMotion from '../../hooks/useScrollMotion.js';
 
 const ease = [0.22, 1, 0.36, 1];
 
@@ -50,6 +51,8 @@ const LogoMarquee = ({ items, reverse = false }) => {
 };
 
 const WorkingWith = () => {
+  const enableScrollMotion = useScrollMotion();
+
   return (
     <section id="working-with" className="relative overflow-hidden bg-white px-6 pt-10 pb-16 md:pt-12 md:pb-24 xl:pt-14 xl:pb-28">
       <style>{`
@@ -81,8 +84,8 @@ const WorkingWith = () => {
 
       <div className="relative z-10 mx-auto max-w-7xl">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={enableScrollMotion ? { opacity: 0, y: 24 } : false}
+          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
           viewport={{ once: true, amount: 0.34 }}
           transition={{ duration: 0.78, ease }}
           className="mb-14 max-w-3xl md:mb-16 lg:mb-20"
@@ -96,8 +99,8 @@ const WorkingWith = () => {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={enableScrollMotion ? { opacity: 0, y: 22 } : false}
+          whileInView={enableScrollMotion ? { opacity: 1, y: 0 } : undefined}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.76, ease, delay: 0.04 }}
           className="grid gap-4 md:gap-5"
