@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { mixedInquiry, solutions } from '../../data/solutions.js';
 
 const ease = [0.22, 1, 0.36, 1];
@@ -10,6 +11,44 @@ const panelTransition = {
   duration: 0.82,
   ease: softEase,
 };
+
+const reducedPanelTransition = {
+  duration: 0.58,
+  ease: softEase,
+};
+
+
+const useDesktopInteraction = () => {
+  const [enabled, setEnabled] = useState(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return false;
+    }
+
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const update = () => setEnabled(mediaQuery.matches);
+
+    update();
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', update);
+      return () => mediaQuery.removeEventListener('change', update);
+    }
+
+    mediaQuery.addListener(update);
+    return () => mediaQuery.removeListener(update);
+  }, []);
+
+  return enabled;
+};
+
 
 const hoverTransition = {
   duration: 0.48,
@@ -120,12 +159,18 @@ const detailItem = {
   },
 };
 
+const staticDetailItem = {
+  hidden: { opacity: 1, y: 0 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.28, ease } },
+  exit: { opacity: 0, y: 0, transition: { duration: 0.24, ease } },
+};
+
 const collapsedTextMask = {
   WebkitMaskImage: 'linear-gradient(to right, #000 0%, #000 76%, rgba(0,0,0,0.3) 89%, transparent 100%)',
   maskImage: 'linear-gradient(to right, #000 0%, #000 76%, rgba(0,0,0,0.3) 89%, transparent 100%)',
 };
 
-const TextRun = ({ preview, continuation, isOpen }) => {
+const TextRun = ({ preview, continuation, isOpen, enableRichMotion }) => {
   return (
     <motion.div
       className="relative max-w-5xl overflow-hidden"
@@ -136,9 +181,9 @@ const TextRun = ({ preview, continuation, isOpen }) => {
         marginTop: isOpen ? 0 : 20,
       }}
       transition={{
-        duration: isOpen ? 0.44 : 0.52,
+        duration: enableRichMotion ? (isOpen ? 0.44 : 0.52) : (isOpen ? 0.34 : 0.42),
         ease,
-        delay: isOpen ? 0 : 0.12,
+        delay: enableRichMotion && !isOpen ? 0.12 : 0.03,
       }}
     >
       <p
@@ -151,10 +196,11 @@ const TextRun = ({ preview, continuation, isOpen }) => {
   );
 };
 
-const DetailColumn = ({ title, items }) => {
+const DetailColumn = ({ title, items, enableRichMotion }) => {
+  const detailVariant = enableRichMotion ? detailItem : staticDetailItem;
   return (
     <motion.div
-      variants={detailItem}
+      variants={detailVariant}
       className="h-full rounded-[1.35rem] sm:rounded-[1.55rem] border border-white/10 bg-white/[0.035] p-5 sm:p-6 md:p-7"
     >
       <h3 className="text-[0.68rem] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.22em] text-gray-500 mb-5 sm:mb-6">
@@ -165,10 +211,10 @@ const DetailColumn = ({ title, items }) => {
         {items.map((item) => (
           <motion.p
             key={item}
-            variants={detailItem}
-            whileHover={{ x: 4 }}
+            variants={detailVariant}
+            whileHover={enableRichMotion ? { x: 4 } : undefined}
             transition={{ duration: 0.32, ease }}
-            className="flex items-start min-h-[4.6rem] text-sm sm:text-base md:text-lg leading-loose tracking-wide text-gray-300 font-light border-l border-white/20 pl-4 sm:pl-5"
+            className="flex items-start sm:min-h-[4.6rem] text-sm sm:text-base md:text-lg leading-loose tracking-wide text-gray-300 font-light border-l border-white/20 pl-4 sm:pl-5"
           >
             {item}
           </motion.p>
@@ -178,20 +224,22 @@ const DetailColumn = ({ title, items }) => {
   );
 };
 
-const SolutionPanel = ({ solution, isOpen, onToggle }) => {
+const SolutionPanel = ({ solution, isOpen, onToggle, enableRichMotion }) => {
   const mailto = useMemo(
     () => buildMailto(solution.subject, solution.mailBody),
     [solution.subject, solution.mailBody]
   );
 
+  const activeDetailItem = enableRichMotion ? detailItem : staticDetailItem;
+
   return (
     <motion.article
       id={solution.id}
       variants={panelMotion}
-      initial="hidden"
-      animate="visible"
-      whileHover="hover"
-      className="scroll-mt-28 md:scroll-mt-32 rounded-[1.75rem] sm:rounded-[2.15rem] bg-[#111111] text-white overflow-hidden border border-black shadow-[0_24px_70px_rgba(0,0,0,0.08)] will-change-transform"
+      initial={enableRichMotion ? 'hidden' : false}
+      animate={enableRichMotion ? 'visible' : undefined}
+      whileHover={enableRichMotion ? 'hover' : undefined}
+      className="scroll-mt-28 md:scroll-mt-32 rounded-[1.75rem] sm:rounded-[2.15rem] bg-[#111111] text-white overflow-hidden border border-black shadow-[0_24px_70px_rgba(0,0,0,0.08)] lg:will-change-transform"
     >
       <motion.button
         type="button"
@@ -201,7 +249,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
         variants={panelButtonMotion}
         initial="rest"
         animate="rest"
-        whileHover="hover"
+        whileHover={enableRichMotion ? 'hover' : undefined}
         whileTap="tap"
       >
         <div className="flex flex-col lg:flex-row lg:items-start gap-5 sm:gap-7 lg:gap-12">
@@ -210,7 +258,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
               {solution.index}
             </span>
             <motion.span
-              className="lg:hidden flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white text-black shadow-[0_0_0_0_rgba(255,255,255,0)] group-hover:shadow-[0_0_0_7px_rgba(255,255,255,0.06)] transition-shadow duration-500"
+              className="lg:hidden flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white text-black shadow-[0_0_0_0_rgba(255,255,255,0)] motion-safe:lg:group-hover:shadow-[0_0_0_7px_rgba(255,255,255,0.06)] transition-shadow duration-500"
               animate={{ rotate: isOpen ? 180 : 0 }}
               transition={{ duration: 0.52, ease }}
             >
@@ -220,7 +268,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
 
           <div className="min-w-0 flex-1">
             <motion.div
-              animate={{ y: isOpen ? -2 : 0 }}
+              animate={{ y: enableRichMotion && isOpen ? -2 : 0 }}
               transition={{ duration: 0.46, ease }}
               className="flex flex-col gap-2 sm:gap-3"
             >
@@ -236,13 +284,14 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
               preview={solution.preview}
               continuation={solution.continuation}
               isOpen={isOpen}
+              enableRichMotion={enableRichMotion}
             />
           </div>
 
           <motion.span
-            className="hidden lg:flex h-12 w-12 items-center justify-center rounded-full bg-white text-black shrink-0 shadow-[0_0_0_0_rgba(255,255,255,0)] group-hover:shadow-[0_0_0_8px_rgba(255,255,255,0.06)] transition-shadow duration-500"
+            className="hidden lg:flex h-12 w-12 items-center justify-center rounded-full bg-white text-black shrink-0 shadow-[0_0_0_0_rgba(255,255,255,0)] motion-safe:lg:group-hover:shadow-[0_0_0_8px_rgba(255,255,255,0.06)] transition-shadow duration-500"
             animate={{ rotate: isOpen ? 180 : 0 }}
-            whileHover={{ y: -1 }}
+            whileHover={enableRichMotion ? { y: -1 } : undefined}
             transition={{ duration: 0.52, ease }}
           >
             <ChevronDown className="w-5 h-5" />
@@ -253,44 +302,44 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
       <motion.div
         initial={false}
         animate={{ height: isOpen ? 'auto' : 0 }}
-        transition={panelTransition}
+        transition={enableRichMotion ? panelTransition : reducedPanelTransition}
         className="overflow-hidden"
       >
         <AnimatePresence initial={false} mode="wait">
           {isOpen && (
             <motion.div
               key={`${solution.id}-details`}
-              variants={detailGroup}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+              variants={enableRichMotion ? detailGroup : undefined}
+              initial={enableRichMotion ? 'hidden' : false}
+              animate={enableRichMotion ? 'visible' : undefined}
+              exit={enableRichMotion ? 'exit' : { opacity: 0 }}
               className="px-5 sm:px-8 md:px-10 pb-7 sm:pb-8 md:pb-11"
             >
               <div className="border-t border-white/10 pt-7 sm:pt-8 md:pt-10">
                 <motion.p
-                  variants={detailItem}
+                  variants={activeDetailItem}
                   className="max-w-5xl text-base sm:text-lg md:text-2xl leading-loose tracking-wide font-light text-gray-200"
                 >
                   {solution.continuation}
                 </motion.p>
 
                 <motion.p
-                  variants={detailItem}
+                  variants={activeDetailItem}
                   className="mt-5 sm:mt-7 max-w-4xl text-sm sm:text-base md:text-lg leading-loose tracking-wide font-light text-gray-400"
                 >
                   {solution.serviceLine}
                 </motion.p>
 
                 <motion.div
-                  variants={detailItem}
+                  variants={activeDetailItem}
                   className="mt-8 sm:mt-10 grid lg:grid-cols-2 gap-5 sm:gap-6 md:gap-8 items-stretch"
                 >
-                  <DetailColumn title="Useful when" items={solution.usefulWhen} />
-                  <DetailColumn title="What DevReCon can build" items={solution.canBuild} />
+                  <DetailColumn title="Useful when" items={solution.usefulWhen} enableRichMotion={enableRichMotion} />
+                  <DetailColumn title="What DevReCon can build" items={solution.canBuild} enableRichMotion={enableRichMotion} />
                 </motion.div>
 
                 <motion.div
-                  variants={detailItem}
+                  variants={activeDetailItem}
                   className="mt-8 sm:mt-9 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5"
                 >
                   <motion.a
@@ -298,9 +347,9 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
                     variants={buttonMotion}
                     initial="rest"
                     animate="rest"
-                    whileHover="hover"
+                    whileHover={enableRichMotion ? 'hover' : undefined}
                     whileTap="tap"
-                    className="inline-flex items-center justify-center gap-3 rounded-full bg-white text-black px-6 py-4 text-sm font-semibold tracking-wide hover:bg-gray-200 transition-colors duration-300"
+                    className="inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-sm font-semibold tracking-wide text-black visited:text-black active:text-black focus:text-black hover:bg-gray-200 hover:text-black transition-colors duration-300"
                   >
                     Discuss this solution
                     <ArrowUpRight className="w-4 h-4" />
@@ -320,11 +369,22 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
 
 const SolutionDeepDive = () => {
   const shouldReduceMotion = useReducedMotion();
+  const supportsDesktopInteraction = useDesktopInteraction();
+  const enableRichMotion = supportsDesktopInteraction && !shouldReduceMotion;
+  const location = useLocation();
   const [openId, setOpenId] = useState('');
   const mixedMailto = useMemo(
     () => buildMailto(mixedInquiry.subject, mixedInquiry.mailBody),
     []
   );
+
+  useEffect(() => {
+    const hashId = decodeURIComponent(location.hash.replace('#', ''));
+
+    if (solutions.some((solution) => solution.id === hashId)) {
+      setOpenId(hashId);
+    }
+  }, [location.hash]);
 
   return (
     <section className="px-6 pb-20 md:pb-32">
@@ -341,6 +401,7 @@ const SolutionDeepDive = () => {
               solution={solution}
               isOpen={openId === solution.id}
               onToggle={() => setOpenId((current) => (current === solution.id ? '' : solution.id))}
+              enableRichMotion={enableRichMotion}
             />
           ))}
         </motion.div>
@@ -366,9 +427,9 @@ const SolutionDeepDive = () => {
             variants={buttonMotion}
             initial="rest"
             animate="rest"
-            whileHover="hover"
+            whileHover={enableRichMotion ? 'hover' : undefined}
             whileTap="tap"
-            className="inline-flex items-center justify-center gap-3 rounded-full bg-[#111111] text-white px-7 py-4 text-sm font-semibold tracking-wide hover:bg-gray-800 transition-colors duration-300 shrink-0"
+            className="inline-flex items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm font-semibold tracking-wide text-white visited:text-white active:text-white focus:text-white hover:bg-gray-800 hover:text-white transition-colors duration-300 shrink-0"
           >
             Discuss your specific requirement
             <ArrowUpRight className="w-4 h-4" />

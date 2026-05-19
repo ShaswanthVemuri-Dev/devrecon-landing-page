@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { solutions } from '../../data/solutions.js';
 
@@ -26,6 +26,38 @@ const rise = {
   },
 };
 
+
+const useDesktopInteraction = () => {
+  const [enabled, setEnabled] = useState(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return false;
+    }
+
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const update = () => setEnabled(mediaQuery.matches);
+
+    update();
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', update);
+      return () => mediaQuery.removeEventListener('change', update);
+    }
+
+    mediaQuery.addListener(update);
+    return () => mediaQuery.removeListener(update);
+  }, []);
+
+  return enabled;
+};
+
 const chipMotion = {
   rest: { y: 0, scale: 1 },
   hover: {
@@ -40,6 +72,8 @@ const chipMotion = {
 };
 
 const SolutionsHero = () => {
+  const enableHoverMotion = useDesktopInteraction();
+
   return (
     <section className="relative px-6 pt-32 md:pt-40 pb-12 md:pb-16 overflow-hidden">
       <motion.div
@@ -57,7 +91,7 @@ const SolutionsHero = () => {
 
         <motion.h1
           variants={rise}
-          className="max-w-6xl text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.08] text-[#111111] text-balance [word-spacing:0.12em] sm:[word-spacing:0.14em] md:[word-spacing:0.14em]"
+          className="max-w-6xl text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.08] text-[#111111] text-balance [word-spacing:normal] lg:[word-spacing:0.12em] xl:[word-spacing:0.14em]"
         >
           Systems for technical work that needs more than a template.
         </motion.h1>
@@ -80,9 +114,9 @@ const SolutionsHero = () => {
               variants={chipMotion}
               initial="rest"
               animate="rest"
-              whileHover="hover"
+              whileHover={enableHoverMotion ? 'hover' : undefined}
               whileTap="tap"
-              className="rounded-full border border-gray-200 bg-white/75 px-4 py-2.5 text-xs sm:px-5 sm:py-3 sm:text-sm font-semibold tracking-wide text-gray-700 backdrop-blur-sm hover:border-black hover:bg-black hover:text-white transition-colors duration-300"
+              className="rounded-full border border-gray-200 bg-white/75 px-4 py-2.5 text-xs sm:px-5 sm:py-3 sm:text-sm font-semibold tracking-wide text-gray-700 backdrop-blur-sm motion-safe:hover:border-black motion-safe:hover:bg-black motion-safe:hover:text-white transition-colors duration-300"
             >
               {solution.label}
             </motion.a>

@@ -15,7 +15,7 @@ const Hero = () => {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="max-w-6xl"
         >
-          <h1 className="mb-6 text-[clamp(3rem,14vw,5.4rem)] font-bold uppercase leading-[1.06] tracking-[0.16em] text-[#111111] text-balance sm:tracking-[0.18em] md:mb-8 md:text-7xl md:leading-[1.08] lg:text-8xl xl:text-9xl xl:leading-[1.1] xl:tracking-widest">
+          <h1 className="mb-6 text-[clamp(2.8rem,13vw,5.4rem)] font-bold uppercase leading-[1.04] tracking-[0.055em] text-[#111111] text-balance sm:tracking-[0.09em] md:mb-8 md:text-7xl md:leading-[1.08] md:tracking-[0.12em] lg:text-8xl lg:tracking-[0.16em] xl:text-9xl xl:leading-[1.1] xl:tracking-widest">
             Engineering Clarity.
           </h1>
           <p className="max-w-2xl text-base font-light leading-loose tracking-wide text-gray-500 sm:text-lg md:text-xl lg:text-2xl">

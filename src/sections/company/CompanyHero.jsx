@@ -43,7 +43,7 @@ const CompanyHero = () => {
 
         <motion.h1
           variants={rise}
-          className="max-w-6xl text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.08] text-[#111111] text-balance [word-spacing:0.12em] sm:[word-spacing:0.14em] md:[word-spacing:0.14em]"
+          className="max-w-6xl text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.08] text-[#111111] text-balance [word-spacing:normal] lg:[word-spacing:0.12em] xl:[word-spacing:0.14em]"
         >
           Technology works better when the thinking behind it is clear.
         </motion.h1>

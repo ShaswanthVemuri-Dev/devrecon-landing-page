@@ -16,14 +16,14 @@ const HowItWorks = () => {
         </svg>
       </div>
 
-      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-2 lg:gap-20 xl:gap-24">
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 min-[900px]:grid-cols-2 min-[900px]:gap-16 lg:gap-20 xl:gap-24">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl font-bold leading-relaxed tracking-tight text-balance sm:text-4xl md:text-5xl xl:text-6xl">
+          <h2 className="text-3xl font-bold leading-relaxed tracking-tight text-balance sm:text-4xl md:text-5xl min-[900px]:text-[3.15rem] lg:text-[3.4rem] xl:text-6xl">
             Most tech companies charge for confusion. <br className="hidden lg:block" />
             <span className="text-gray-500">We charge for solutions.</span>
           </h2>
