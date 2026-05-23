@@ -18,6 +18,7 @@ const isInteractiveTarget = (target) => {
   return Boolean(target.closest('a, button, input, select, textarea, [role="button"], [data-preview-interactive="true"], [data-preview-menu="true"]'));
 };
 
+
 const ShellGlow = ({ productId }) => {
   if (productId === 'mymedicals') {
     return (
@@ -56,6 +57,7 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
       return;
     }
 
+    setHoverActive(false);
     tapStart.current = {
       pointerId: event.pointerId,
       x: event.clientX,
@@ -82,6 +84,20 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
     tapStart.current = null;
   };
 
+  const activateDesktopHover = (event) => {
+    if (event.pointerType === 'mouse') {
+      setColourActive(false);
+      setHoverActive(true);
+    }
+  };
+
+  const clearDesktopHover = (event) => {
+    if (!event || event.pointerType === 'mouse') {
+      setHoverActive(false);
+    }
+    handlePointerCancel();
+  };
+
   const isColourActive = open || colourActive || hoverActive;
 
   return (
@@ -91,15 +107,11 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
       data-hover-active={hoverActive ? 'true' : 'false'}
       className="product-preview-card group relative overflow-hidden rounded-[2.5rem] border border-[#242424] bg-[#0E0E10] shadow-[0_30px_92px_rgba(0,0,0,0.24)]"
       aria-label={`${product.name} miniature homepage preview`}
-      onMouseEnter={() => setHoverActive(true)}
-      onMouseLeave={() => {
-        setHoverActive(false);
-        handlePointerCancel();
-      }}
+      onPointerEnter={activateDesktopHover}
+      onPointerLeave={clearDesktopHover}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerCancel}
-      onPointerLeave={handlePointerCancel}
     >
       <ShellGlow productId={variant} />
       <div className="product-preview-viewport relative z-10 min-h-[560px] overflow-hidden rounded-[2.5rem]">

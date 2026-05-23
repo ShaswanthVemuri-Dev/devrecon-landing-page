@@ -13,7 +13,7 @@
   --duration-underline: 320ms;
   --duration-reveal: 720ms;
   --duration-reveal-mobile: 460ms;
-  --duration-page-enter: 560ms;
+  --duration-page-enter: 760ms;
   --duration-menu: 460ms;
   --duration-accordion: 420ms;
 }
@@ -74,6 +74,15 @@ img {
   background: rgba(255, 255, 255, 0.86);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  contain: paint;
+}
+
+@media (max-width: 767px), (hover: none), (pointer: coarse) {
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 .text-balance {
@@ -98,7 +107,7 @@ img {
 
 @media (max-width: 767px), (hover: none), (pointer: coarse) {
   .page-transition {
-    animation-duration: 420ms;
+    animation-duration: 620ms;
   }
   @keyframes devreconPageEnter {
     0% {
@@ -109,6 +118,32 @@ img {
       opacity: 1;
       transform: translate3d(0, 0, 0) scale(1);
     }
+  }
+}
+
+
+.solution-detail-shell {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--duration-accordion) var(--ease-soft),
+    opacity 280ms var(--ease-soft);
+}
+
+.solution-detail-shell.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.solution-detail-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+  .solution-detail-shell {
+    transition-duration: 360ms, 240ms;
   }
 }
 
@@ -194,7 +229,7 @@ img {
   border-color: rgba(17,17,17,0.12);
 }
 
-@media (any-hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .motion-button:hover,
   .motion-pill:hover {
     transform: translate3d(0, -3px, 0) scale(1.024);
@@ -246,7 +281,7 @@ img {
   transition: transform var(--duration-button) var(--ease-bubble);
 }
 
-@media (any-hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .motion-underline-action:hover {
     transform: translate3d(0, -2px, 0) scale(1.012);
   }
@@ -396,6 +431,13 @@ a:focus {
 
 .devrecon-ring-slower {
   animation: devreconRingCounter 54s linear infinite;
+}
+
+@media (max-width: 767px), (hover: none), (pointer: coarse) {
+  .devrecon-ring-slow,
+  .devrecon-ring-slower {
+    animation-play-state: paused;
+  }
 }
 
 .solution-preview-text::after {

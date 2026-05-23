@@ -1,14 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUp } from 'lucide-react';
+
+const VISIBILITY_OFFSET = 500;
 
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const visibleRef = useRef(false);
+  const frameRef = useRef(null);
 
   useEffect(() => {
-    const toggleVisibility = () => setIsVisible(window.scrollY > 500);
-    toggleVisibility();
-    window.addEventListener('scroll', toggleVisibility, { passive: true });
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    const updateVisibility = () => {
+      frameRef.current = null;
+      const nextVisible = window.scrollY > VISIBILITY_OFFSET;
+
+      if (visibleRef.current !== nextVisible) {
+        visibleRef.current = nextVisible;
+        setIsVisible(nextVisible);
+      }
+    };
+
+    const scheduleUpdate = () => {
+      if (frameRef.current !== null) return;
+      frameRef.current = window.requestAnimationFrame(updateVisibility);
+    };
+
+    updateVisibility();
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+
+    return () => {
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    };
   }, []);
 
   const scrollToTop = () => {

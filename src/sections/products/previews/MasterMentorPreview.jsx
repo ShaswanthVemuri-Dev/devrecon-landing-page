@@ -75,7 +75,7 @@ const MasterMentorMenu = ({ open, setOpen, product }) => (
   <div
     data-open={open ? 'true' : 'false'}
     className={[
-      'mini-mobile-menu absolute inset-0 z-30 bg-white/96 pt-20 backdrop-blur-xl transition-opacity duration-[720ms] ease-[cubic-bezier(.22,1,.36,1)] [backface-visibility:hidden] [transform:translateZ(0)] will-change-[opacity]',
+      'mini-mobile-menu absolute inset-0 z-30 bg-white/96 pt-20 backdrop-blur-xl transition-opacity duration-[480ms] ease-[cubic-bezier(.22,1,.36,1)] [backface-visibility:hidden] [transform:translateZ(0)] will-change-[opacity]',
       open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0',
     ].join(' ')}
     onClick={(event) => {
@@ -91,8 +91,8 @@ const MasterMentorMenu = ({ open, setOpen, product }) => (
             type="button"
             key={item}
             onClick={() => setOpen(false)}
-            className="mini-mobile-menu-item flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-[12px] font-semibold text-slate-900 opacity-100 shadow-[0_8px_24px_rgba(15,23,42,0.04)] transition-[border-color,background-color] duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)] hover:border-[#2563EB]/35 hover:bg-[#EFF6FF]"
-            style={{ '--d': `${260 + index * 90}ms` }}
+            className="mini-mobile-menu-item flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-[12px] font-semibold text-slate-900 opacity-100 shadow-[0_8px_24px_rgba(15,23,42,0.04)] transition-[border-color,background-color] duration-[320ms] ease-[cubic-bezier(.22,1,.36,1)] hover:border-[#2563EB]/35 hover:bg-[#EFF6FF]"
+            style={{ '--d': `${140 + index * 55}ms` }}
           >
             <span>{item}</span>
             <ChevronRight className="h-4 w-4 text-[#2563EB]" />
@@ -104,8 +104,8 @@ const MasterMentorMenu = ({ open, setOpen, product }) => (
           target="_blank"
           rel="noreferrer"
           onClick={() => setOpen(false)}
-          className="mt-2 flex w-full items-center justify-center rounded-full bg-[#2563EB] px-5 py-3 text-[12px] font-semibold text-white visited:text-white active:text-white focus:text-white hover:text-white opacity-100 shadow-[0_6px_20px_rgba(37,99,235,0.25)] transition-colors duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)] hover:bg-[#1D4ED8]"
-          style={{ '--d': `${260 + MASTER_MENTOR_MENU_ITEMS.length * 90}ms` }}
+          className="mt-2 flex w-full items-center justify-center rounded-full bg-[#2563EB] px-5 py-3 text-[12px] font-semibold text-white visited:text-white active:text-white focus:text-white hover:text-white opacity-100 shadow-[0_6px_20px_rgba(37,99,235,0.25)] transition-colors duration-[320ms] ease-[cubic-bezier(.22,1,.36,1)] hover:bg-[#1D4ED8]"
+          style={{ '--d': `${140 + MASTER_MENTOR_MENU_ITEMS.length * 55}ms` }}
         >
           View Full Website
         </a>

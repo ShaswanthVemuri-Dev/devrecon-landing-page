@@ -1,12 +1,15 @@
 import publicAsset from './assetPaths.js';
 
-const PRELOAD_ASSETS = [
+const ROUTE_CRITICAL_ASSETS = [
   '/founder/shaswanth-vemuri.webp',
   '/product-previews/mymedicals/logo.png',
   '/product-previews/mymedicals/phone-hero.png',
   '/product-previews/mastermentor/logo.png',
   '/product-logos/mastermentor-mark-bw.png',
   '/product-logos/mymedicals-mark-bw.png',
+];
+
+const DECORATIVE_LOGO_ASSETS = [
   '/working-with/logo-01.png',
   '/working-with/logo-02.png',
   '/working-with/logo-03.png',
@@ -22,11 +25,36 @@ const PRELOAD_ASSETS = [
 let hasPreloaded = false;
 const retainedImages = [];
 
+const getConnection = () => (
+  typeof navigator === 'undefined'
+    ? null
+    : navigator.connection || navigator.mozConnection || navigator.webkitConnection || null
+);
+
+const shouldAvoidDecorativePreload = () => {
+  const connection = getConnection();
+  if (!connection) return false;
+
+  const slowTypes = new Set(['slow-2g', '2g', '3g']);
+  return Boolean(connection.saveData || slowTypes.has(connection.effectiveType));
+};
+
 const preloadImage = (src) => {
   const image = new Image();
   image.decoding = 'async';
+  image.loading = 'eager';
   image.src = publicAsset(src);
   retainedImages.push(image);
+};
+
+const runIdle = (callback, timeout = 1600) => {
+  if ('requestIdleCallback' in window) {
+    const idleId = window.requestIdleCallback(callback, { timeout });
+    return () => window.cancelIdleCallback?.(idleId);
+  }
+
+  const timeoutId = window.setTimeout(callback, Math.min(timeout, 900));
+  return () => window.clearTimeout(timeoutId);
 };
 
 export const preloadRouteAssets = () => {
@@ -35,18 +63,19 @@ export const preloadRouteAssets = () => {
   }
 
   hasPreloaded = true;
+  const cleanups = [];
 
-  const run = () => {
-    PRELOAD_ASSETS.forEach(preloadImage);
-  };
+  cleanups.push(runIdle(() => {
+    ROUTE_CRITICAL_ASSETS.forEach(preloadImage);
+  }, 1400));
 
-  if ('requestIdleCallback' in window) {
-    const idleId = window.requestIdleCallback(run, { timeout: 1800 });
-    return () => window.cancelIdleCallback?.(idleId);
+  if (!shouldAvoidDecorativePreload()) {
+    cleanups.push(runIdle(() => {
+      DECORATIVE_LOGO_ASSETS.forEach(preloadImage);
+    }, 3600));
   }
 
-  const timeoutId = window.setTimeout(run, 900);
-  return () => window.clearTimeout(timeoutId);
+  return () => cleanups.forEach((cleanup) => cleanup?.());
 };
 
 export default preloadRouteAssets;

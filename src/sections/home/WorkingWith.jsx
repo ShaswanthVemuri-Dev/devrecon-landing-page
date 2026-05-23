@@ -90,7 +90,26 @@ const WorkingWith = () => {
         @media (max-width: 640px) {
           .working-with-marquee,
           .working-with-marquee-reverse {
-            animation-duration: 34s;
+            animation-duration: 48s;
+          }
+        }
+
+        @media (hover: none), (pointer: coarse) {
+          .working-with-track {
+            will-change: auto;
+          }
+
+          .working-with-logo-item {
+            opacity: 1;
+            animation: none;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .working-with-marquee,
+          .working-with-marquee-reverse {
+            animation: none;
+            transform: translate3d(0, 0, 0);
           }
         }
       `}</style>

@@ -29,7 +29,7 @@
 .product-preview-card {
   isolation: isolate;
   touch-action: pan-y;
-  transition: border-color 420ms cubic-bezier(.18,.9,.2,1), box-shadow 420ms cubic-bezier(.18,.9,.2,1), transform 420ms cubic-bezier(.18,.9,.2,1);
+  transition: border-color 420ms cubic-bezier(.18,.9,.2,1), transform 420ms cubic-bezier(.18,.9,.2,1);
 }
 
 .product-preview-viewport {
@@ -41,7 +41,12 @@
   border-color: rgba(255,255,255,0.24);
 }
 
-.product-preview-card[data-colour-active="true"] .product-preview-viewport {
+.product-preview-card[data-hover-active="true"] {
+  transform: translate3d(0, -5px, 0) scale(1.012);
+}
+
+.product-preview-card[data-colour-active="true"] .product-preview-viewport,
+.product-preview-card[data-hover-active="true"] .product-preview-viewport {
   transform: translate3d(0, -2px, 0) scale(1.004);
 }
 
@@ -92,28 +97,34 @@
 
 .product-preview-card[data-menu-open="true"] .mastermentor-logo-bw,
 .product-preview-card[data-colour-active="true"] .mastermentor-logo-bw,
+.product-preview-card[data-hover-active="true"] .mastermentor-logo-bw,
 .product-preview-card:focus-within .mastermentor-logo-bw {
   opacity: 0;
 }
 
 .product-preview-card[data-menu-open="true"] .mastermentor-logo-colour,
 .product-preview-card[data-colour-active="true"] .mastermentor-logo-colour,
+.product-preview-card[data-hover-active="true"] .mastermentor-logo-colour,
 .product-preview-card:focus-within .mastermentor-logo-colour {
   opacity: 1;
 }
 
 .product-preview-card[data-menu-open="true"] .preview-hover-text-light,
 .product-preview-card[data-colour-active="true"] .preview-hover-text-light,
+.product-preview-card[data-hover-active="true"] .preview-hover-text-light,
 .product-preview-card:focus-within .preview-hover-text-light {
   color: rgba(255,255,255,0.86);
 }
 
 .product-preview-card[data-colour-active="true"] .mymedicals-phone,
-.product-preview-card[data-colour-active="true"] .mastermentor-wireframe {
+.product-preview-card[data-colour-active="true"] .mastermentor-wireframe,
+.product-preview-card[data-hover-active="true"] .mymedicals-phone,
+.product-preview-card[data-hover-active="true"] .mastermentor-wireframe {
   transform: translate3d(0, -4px, 0) scale(1.018);
 }
 
-.product-preview-card[data-colour-active="true"] .product-preview-title {
+.product-preview-card[data-colour-active="true"] .product-preview-title,
+.product-preview-card[data-hover-active="true"] .product-preview-title {
   transform: translate3d(0, -1px, 0);
 }
 
@@ -123,10 +134,9 @@
   transition: transform 640ms cubic-bezier(.18,.9,.2,1);
 }
 
-@media (any-hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .product-preview-card:hover {
     transform: translate3d(0, -5px, 0) scale(1.012);
-    box-shadow: 0 42px 118px rgba(0,0,0,0.30);
   }
 
   .product-preview-card:hover .product-preview-viewport {
@@ -182,7 +192,7 @@
 }
 
 .mini-mobile-menu[data-open="true"] .mini-mobile-menu-item {
-  animation: devreconMiniNavItemIn 620ms cubic-bezier(.18,.9,.2,1) both;
+  animation: devreconMiniNavItemIn 460ms cubic-bezier(.18,.9,.2,1) both;
   animation-delay: var(--d, 0ms);
 }
 
@@ -503,6 +513,11 @@
 }
 
 @media (hover: none) and (pointer: coarse) {
+  .product-preview-card:hover,
+  .product-preview-card:hover .product-preview-viewport {
+    transform: none;
+  }
+
   .product-preview-card:hover::after {
     opacity: 1;
   }

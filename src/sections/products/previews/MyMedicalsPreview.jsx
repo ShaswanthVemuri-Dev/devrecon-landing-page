@@ -63,7 +63,7 @@ const MyMedicalsMiniNav = ({ open, setOpen, product }) => {
   return (
     <div
       className={[
-        'absolute inset-x-0 top-0 z-40 overflow-hidden border-b border-white/5 backdrop-blur-xl transition-[height,background-color] duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)]',
+        'absolute inset-x-0 top-0 z-40 overflow-hidden border-b border-white/5 backdrop-blur-xl transition-[height,background-color] duration-[520ms] ease-[cubic-bezier(.22,1,.36,1)]',
         open ? 'h-full bg-black/94' : 'h-20 bg-black/70',
       ].join(' ')}
       onClick={closeFromEmptyArea}
@@ -76,13 +76,13 @@ const MyMedicalsMiniNav = ({ open, setOpen, product }) => {
 
       <div
         data-open={open ? 'true' : 'false'}
-        className={['mini-mobile-menu absolute inset-0 z-10 pt-20 transition-opacity duration-500', open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'].join(' ')}
+        className={['mini-mobile-menu absolute inset-0 z-10 pt-20 transition-opacity duration-[420ms]', open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'].join(' ')}
       >
         <div className="flex h-full flex-col justify-center px-6 pb-8">
           <div className="mx-auto w-full max-w-2xl space-y-6">
             {MYMEDICALS_MENU_ITEMS.map((item, index) => (
-              <button key={item} type="button" onClick={() => setOpen(false)} className="mini-mobile-menu-item block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A90E2]/50" style={{ '--d': `${260 + index * 90}ms` }}>
-                <div className="flex min-w-0 items-center justify-between rounded-full border border-white/0 bg-white/0 px-4 py-3.5 text-[#A1A1AA] transition duration-500 hover:border-white/10 hover:bg-white/5 hover:text-white">
+              <button key={item} type="button" onClick={() => setOpen(false)} className="mini-mobile-menu-item block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A90E2]/50" style={{ '--d': `${140 + index * 55}ms` }}>
+                <div className="flex min-w-0 items-center justify-between rounded-full border border-white/0 bg-white/0 px-4 py-3.5 text-[#A1A1AA] transition duration-[320ms] hover:border-white/10 hover:bg-white/5 hover:text-white">
                   <span className="truncate pr-4 text-[clamp(0.78rem,2.4vw,1rem)] font-semibold uppercase leading-none tracking-[0.14em]">
                     {item}
                   </span>
