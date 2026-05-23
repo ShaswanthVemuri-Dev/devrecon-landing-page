@@ -40,8 +40,11 @@ const ServiceCard = ({ icon: Icon, title, desc, to, index }) => (
     <h4 className="relative z-10 mb-4 text-xl font-bold tracking-tight lg:text-2xl">{title}</h4>
     <p className="relative z-10 mb-8 font-light leading-loose tracking-wide text-gray-600">{desc}</p>
 
-    <Link to={to} className="motion-underline-action relative z-10 mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-black pb-1 text-sm font-semibold tracking-wide text-black hover:border-gray-600 hover:text-gray-600">
-      Explore solution
+    <Link
+      to={to}
+      className="motion-button motion-pill motion-pill-light relative z-10 mt-auto inline-flex w-fit items-center justify-center gap-2 rounded-full border border-gray-200 bg-white/82 px-5 py-3 text-sm font-semibold tracking-wide text-[#111111] no-underline visited:text-[#111111] active:text-[#111111] focus:text-[#111111] hover:border-[#111111] hover:bg-white hover:text-[#111111] focus:outline-none focus-visible:outline-none"
+    >
+      <span>Explore solution</span>
       <ArrowRight className="motion-action-arrow motion-action-arrow-right h-4 w-4" />
     </Link>
   </Reveal>

@@ -113,7 +113,7 @@ const Navbar = () => {
 
           <a
             href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
-            className="motion-button motion-pill motion-pill-dark rounded-full bg-[#111111] px-6 py-2.5 text-sm font-medium tracking-wide text-white no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
+            className="motion-button motion-pill motion-pill-dark rounded-full bg-[#111111] px-6 py-2.5 text-sm font-medium tracking-wide text-white no-underline outline-none hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
           >
             <span>Start a Project</span>
           </a>
@@ -154,7 +154,7 @@ const Navbar = () => {
           <a
             href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
             onClick={closeMobileMenu}
-            className="motion-button motion-pill motion-pill-dark mobile-menu-item mt-4 rounded-full bg-[#111111] px-8 py-4 text-lg font-medium tracking-wide text-white no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
+            className="motion-button motion-pill motion-pill-dark mobile-menu-item mt-4 rounded-full bg-[#111111] px-8 py-4 text-lg font-medium tracking-wide text-white no-underline outline-none hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
             style={{ '--mobile-menu-delay': `${120 + mobileNavLinks.length * 70}ms` }}
           >
             <span>Start a Project</span>

@@ -31,8 +31,12 @@ const Hero = () => {
           </p>
 
           <div className="mt-12 flex flex-col items-start gap-6 sm:flex-row sm:items-center md:mt-16">
-            <a href="#how-it-works" onClick={handleHowItWorksClick} className="motion-underline-action group flex items-center gap-3 border-b-2 border-black pb-1 text-lg font-semibold tracking-wide text-black hover:border-gray-600 hover:text-gray-600">
-              See how it works
+            <a
+              href="#how-it-works"
+              onClick={handleHowItWorksClick}
+              className="motion-button motion-pill motion-pill-light group inline-flex items-center justify-center gap-3 rounded-full border border-gray-200 bg-white/78 px-7 py-4 text-base font-semibold tracking-wide text-[#111111] no-underline shadow-[0_10px_30px_rgba(17,17,17,0.045)] visited:text-[#111111] active:text-[#111111] focus:text-[#111111] hover:border-[#111111] hover:bg-white hover:text-[#111111] focus:outline-none focus-visible:outline-none sm:px-8 sm:text-lg"
+            >
+              <span>See how it works</span>
               <ArrowDown className="motion-action-arrow motion-action-arrow-down h-5 w-5" />
             </a>
           </div>

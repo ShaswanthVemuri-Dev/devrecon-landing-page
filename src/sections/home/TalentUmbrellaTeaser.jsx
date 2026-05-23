@@ -23,7 +23,7 @@ const TalentUmbrellaTeaser = () => {
           <div className="flex flex-col items-center gap-6">
             <Link
               to="/company#talent-umbrella"
-              className="motion-button motion-pill motion-pill-dark group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-8 py-5 text-base font-semibold tracking-wide text-white no-underline shadow-sm outline-none hover:bg-[#1B1B1B] hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none sm:w-auto sm:px-10 sm:text-lg"
+              className="motion-button motion-pill motion-pill-dark group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-8 py-5 text-base font-semibold tracking-wide text-white no-underline outline-none hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none sm:w-auto sm:px-10 sm:text-lg"
             >
               <span>Explore Talent Umbrella</span>
               <ChevronRight className="motion-action-arrow motion-action-arrow-right h-5 w-5" />

@@ -40,7 +40,7 @@ const ProductPanel = ({ product, reverse, index }) => {
             href={product.website}
             target="_blank"
             rel="noreferrer"
-            className="motion-button motion-pill motion-pill-dark group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-5 py-4 text-center text-sm font-semibold tracking-wide text-white visited:text-white active:text-white focus:text-white hover:bg-[#1B1B1B] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4"
+            className="motion-button motion-pill motion-pill-dark group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-5 py-4 text-center text-sm font-semibold tracking-wide text-white visited:text-white active:text-white focus:text-white hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-4"
           >
             <span>{product.visitLabel}</span>
             <ArrowUpRight className="motion-action-arrow h-4 w-4" />
@@ -48,7 +48,7 @@ const ProductPanel = ({ product, reverse, index }) => {
 
           <a
             href={product.contactHref}
-            className="motion-button motion-pill motion-pill-light inline-flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 bg-white/70 px-5 py-4 text-center text-sm font-semibold tracking-wide text-[#111111] visited:text-[#111111] active:text-[#111111] focus:text-[#111111] hover:border-black hover:text-[#111111] focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4"
+            className="motion-button motion-pill motion-pill-light inline-flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 bg-white/70 px-5 py-4 text-center text-sm font-semibold tracking-wide text-[#111111] visited:text-[#111111] active:text-[#111111] focus:text-[#111111] hover:border-[#111111] hover:text-[#111111] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-4"
           >
             <span>Discuss a similar system</span>
           </a>

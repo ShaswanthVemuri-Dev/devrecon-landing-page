@@ -21,7 +21,7 @@ const CompanyCTA = () => {
 
           <a
             href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20DevReCon%20Company%20Page"
-            className="motion-button motion-pill motion-pill-dark inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm font-semibold tracking-wide text-white no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none md:text-base lg:w-auto"
+            className="motion-button motion-pill motion-pill-dark inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm font-semibold tracking-wide text-white no-underline outline-none hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none md:text-base lg:w-auto"
           >
             <span>Start a conversation</span>
             <ArrowUpRight className="motion-action-arrow h-5 w-5" />

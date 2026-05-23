@@ -5,11 +5,11 @@
 :root {
   --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-bubble: cubic-bezier(0.18, 0.88, 0.2, 1.12);
+  --ease-bubble: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-quick: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --duration-tap: 130ms;
+  --duration-tap: 120ms;
   --duration-hover: 320ms;
-  --duration-button: 420ms;
+  --duration-button: 300ms;
   --duration-underline: 320ms;
   --duration-reveal: 820ms;
   --duration-reveal-mobile: 680ms;
@@ -210,7 +210,7 @@ img {
   will-change: auto;
 }
 
-.motion-button,
+ .motion-button,
 .motion-pill,
 .motion-surface,
 .motion-card,
@@ -218,16 +218,24 @@ img {
   transform: translate3d(0, 0, 0) scale(1);
   transition-property: transform, background-color, border-color, color, box-shadow, opacity;
   transition-duration: var(--duration-button);
-  transition-timing-function: var(--ease-bubble);
+  transition-timing-function: var(--ease-soft);
 }
 
 .motion-button,
 .motion-pill {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   isolation: isolate;
   overflow: hidden;
   cursor: pointer;
   touch-action: manipulation;
+  text-decoration: none !important;
+  -webkit-user-select: none;
+  user-select: none;
+  backface-visibility: hidden;
+  transform-origin: 50% 50%;
 }
 
 .motion-button > *,
@@ -236,122 +244,121 @@ img {
   z-index: 2;
 }
 
-.motion-pill::before {
-  content: '';
-  position: absolute;
-  inset: -16px;
-  z-index: 0;
-  border-radius: inherit;
-  background:
-    radial-gradient(60% 110% at 50% -10%, rgba(255,255,255,0.64), rgba(255,255,255,0.18) 42%, transparent 74%),
-    radial-gradient(80% 105% at 50% 115%, rgba(17,17,17,0.16), transparent 70%);
-  opacity: 0;
-  transform: translate3d(0, 16%, 0) scale(0.78);
-  transition: opacity var(--duration-button) var(--ease-soft), transform var(--duration-button) var(--ease-bubble);
-  pointer-events: none;
+a.motion-button,
+a.motion-pill {
+  text-decoration: none !important;
+  -webkit-tap-highlight-color: transparent;
 }
 
+.motion-pill-dark,
+.motion-pill-dark:visited,
+.motion-pill-dark:hover,
+.motion-pill-dark:active,
+.motion-pill-dark:focus {
+  background-color: #111111 !important;
+  border-color: #111111 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff;
+  text-decoration: none !important;
+}
+
+.motion-pill-light,
+.motion-pill-light:visited,
+.motion-pill-light:hover,
+.motion-pill-light:active,
+.motion-pill-light:focus {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111;
+  text-decoration: none !important;
+}
+
+.motion-pill-light:hover {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(17, 17, 17, 0.34) !important;
+}
+
+.motion-pill::before,
 .motion-pill::after {
-  content: '';
-  position: absolute;
-  inset: 1px;
-  z-index: 1;
-  border-radius: inherit;
-  border: 1px solid rgba(255,255,255,0.22);
-  opacity: 0;
-  transform: scaleX(0.72) scaleY(0.82);
-  transition: opacity var(--duration-button) var(--ease-soft), transform var(--duration-button) var(--ease-bubble);
-  pointer-events: none;
+  content: none;
 }
 
-.motion-pill-light::before {
-  background:
-    radial-gradient(72% 130% at 50% -12%, rgba(17,17,17,0.13), rgba(17,17,17,0.045) 42%, transparent 74%),
-    radial-gradient(90% 115% at 50% 120%, rgba(17,17,17,0.09), transparent 68%);
+.motion-button:hover,
+.motion-pill:hover {
+  transform: translate3d(0, -2px, 0) scale(1.014);
+  box-shadow: none;
 }
 
-.motion-pill-light::after {
-  border-color: rgba(17,17,17,0.12);
+.motion-surface:hover,
+.motion-card:hover {
+  transform: translate3d(0, -3px, 0) scale(1.004);
+  box-shadow: 0 16px 48px rgba(17,17,17,0.055);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .motion-button:hover,
-  .motion-pill:hover {
-    transform: translate3d(0, -3px, 0) scale(1.024);
-    box-shadow: 0 16px 38px rgba(17,17,17,0.13);
-  }
-
-  .motion-pill:hover::before {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  .motion-pill:hover::after {
-    opacity: 1;
-    transform: scaleX(1) scaleY(1);
-  }
-
-  .motion-surface:hover,
-  .motion-card:hover {
-    transform: translate3d(0, -5px, 0) scale(1.007);
-    box-shadow: 0 24px 70px rgba(17,17,17,0.09);
-  }
-
-  .motion-icon-card:hover {
-    transform: translate3d(0, -2px, 0) rotate(-3deg) scale(1.055);
-  }
+.motion-icon-card:hover {
+  transform: translate3d(0, -1px, 0) rotate(-2deg) scale(1.025);
 }
 
 .motion-button:active,
 .motion-pill:active {
-  transform: translate3d(0, 0, 0) scale(0.972);
+  transform: translate3d(0, 0, 0) scale(0.986);
   transition-duration: var(--duration-tap);
+}
+
+.motion-button:focus-visible,
+.motion-pill:focus-visible {
+  outline: 2px solid rgba(17, 17, 17, 0.36);
+  outline-offset: 4px;
+  box-shadow: none;
 }
 
 .motion-surface:active,
 .motion-card:active {
-  transform: translate3d(0, -1px, 0) scale(0.992);
+  transform: translate3d(0, -1px, 0) scale(0.994);
   transition-duration: var(--duration-tap);
 }
 
 .motion-underline-action {
   transition-property: color, border-color, gap, transform, opacity;
   transition-duration: var(--duration-button);
-  transition-timing-function: var(--ease-bubble);
+  transition-timing-function: var(--ease-soft);
   transform: translate3d(0, 0, 0) scale(1);
   touch-action: manipulation;
 }
 
 .motion-action-arrow {
-  transition: transform var(--duration-button) var(--ease-bubble);
+  transition: transform var(--duration-button) var(--ease-soft);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .motion-underline-action:hover {
-    transform: translate3d(0, -2px, 0) scale(1.012);
-  }
+.motion-underline-action:hover {
+  transform: translate3d(0, -1px, 0) scale(1.006);
+}
 
-  .motion-underline-action:hover .motion-action-arrow,
-  .motion-button:hover .motion-action-arrow,
-  .motion-pill:hover .motion-action-arrow {
-    transform: translate3d(5px, -5px, 0) scale(1.08);
-  }
+.motion-underline-action:hover .motion-action-arrow,
+.motion-button:hover .motion-action-arrow,
+.motion-pill:hover .motion-action-arrow {
+  transform: translate3d(3px, -3px, 0) scale(1.035);
+}
 
-  .motion-underline-action:hover .motion-action-arrow-right,
-  .motion-button:hover .motion-action-arrow-right,
-  .motion-pill:hover .motion-action-arrow-right {
-    transform: translate3d(6px, 0, 0) scale(1.08);
-  }
+.motion-underline-action:hover .motion-action-arrow-right,
+.motion-button:hover .motion-action-arrow-right,
+.motion-pill:hover .motion-action-arrow-right {
+  transform: translate3d(4px, 0, 0) scale(1.035);
+}
 
-  .motion-underline-action:hover .motion-action-arrow-down,
-  .motion-button:hover .motion-action-arrow-down,
-  .motion-pill:hover .motion-action-arrow-down {
-    transform: translate3d(0, 6px, 0) scale(1.08);
-  }
+.motion-underline-action:hover .motion-action-arrow-down,
+.motion-button:hover .motion-action-arrow-down,
+.motion-pill:hover .motion-action-arrow-down {
+  transform: translate3d(0, 4px, 0) scale(1.035);
+}
+
+.input-mode-touch .motion-surface:hover,
+.input-mode-touch .motion-card:hover,
+.input-mode-touch .motion-icon-card:hover {
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 .motion-underline-action:active {
-  transform: translate3d(0, 0, 0) scale(0.98);
+  transform: translate3d(0, 0, 0) scale(0.988);
   transition-duration: var(--duration-tap);
 }
 

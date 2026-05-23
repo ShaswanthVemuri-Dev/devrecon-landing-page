@@ -45,7 +45,7 @@ const DetailContent = ({ solution, mailto }) => (
       <div className="mt-8 flex flex-col gap-4 sm:mt-9 sm:flex-row sm:items-center sm:gap-5">
         <a
           href={mailto}
-          className="motion-button motion-pill motion-pill-light inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-sm font-semibold tracking-wide text-black transition-colors duration-300 hover:bg-gray-200 hover:text-black active:text-black visited:text-black focus:text-black"
+          className="motion-button motion-pill motion-pill-light inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-sm font-semibold tracking-wide text-[#111111] transition-colors duration-300 hover:bg-white hover:text-[#111111] active:text-[#111111] visited:text-[#111111] focus:text-[#111111]"
         >
           <span>Discuss this solution</span>
           <ArrowUpRight className="motion-action-arrow h-4 w-4" />
@@ -79,7 +79,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle, index }) => {
             <span className="text-xs font-bold tracking-[0.2em] text-gray-500 sm:text-sm md:text-base">
               {solution.index}
             </span>
-            <span className={`flex h-10 w-10 items-center justify-center rounded-full bg-white text-black transition-transform duration-[var(--duration-button)] ease-[var(--ease-bubble)] sm:h-11 sm:w-11 lg:hidden ${isOpen ? 'rotate-180' : ''}`}>
+            <span className={`flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#111111] transition-transform duration-[var(--duration-button)] ease-[var(--ease-bubble)] sm:h-11 sm:w-11 lg:hidden ${isOpen ? 'rotate-180' : ''}`}>
               <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5" />
             </span>
           </div>
@@ -104,7 +104,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle, index }) => {
             </div>
           </div>
 
-          <span className={`hidden h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-black transition-transform duration-[var(--duration-button)] ease-[var(--ease-bubble)] lg:flex ${isOpen ? 'rotate-180' : ''}`}>
+          <span className={`hidden h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-[#111111] transition-transform duration-[var(--duration-button)] ease-[var(--ease-bubble)] lg:flex ${isOpen ? 'rotate-180' : ''}`}>
             <ChevronDown className="h-5 w-5" />
           </span>
         </div>
@@ -158,7 +158,7 @@ const SolutionDeepDive = () => {
 
           <a
             href={mixedMailto}
-            className="motion-button motion-pill motion-pill-dark inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm font-semibold tracking-wide text-white transition-colors duration-300 hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white"
+            className="motion-button motion-pill motion-pill-dark inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm font-semibold tracking-wide text-white transition-colors duration-300 hover:text-white active:text-white visited:text-white focus:text-white"
           >
             <span>Discuss your specific requirement</span>
             <ArrowUpRight className="motion-action-arrow h-4 w-4" />
