@@ -1,7 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
 import CircuitBackground from '../../components/ui/CircuitBackground.jsx';
+import Reveal from '../../components/motion/Reveal.jsx';
 import { scrollToHashTarget } from '../../components/layout/RouteScrollManager.jsx';
 
 const Hero = () => {
@@ -18,16 +18,11 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative w-full min-h-[82svh] overflow-hidden px-6 pt-24 pb-20 sm:min-h-[84svh] md:min-h-[88vh] md:pt-32 md:pb-32 lg:min-h-[90vh]">
+    <section className="relative min-h-[82svh] w-full overflow-hidden px-6 pt-24 pb-20 sm:min-h-[84svh] md:min-h-[88vh] md:pt-32 md:pb-32 lg:min-h-[90vh]">
       <CircuitBackground />
 
       <div className="relative z-10 mx-auto flex min-h-[calc(82svh-11rem)] max-w-7xl flex-col justify-center sm:min-h-[calc(84svh-11rem)] md:min-h-[calc(88vh-16rem)] lg:min-h-[calc(90vh-16rem)]">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.82, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-6xl"
-        >
+        <Reveal className="max-w-6xl" distance={24} duration={0.78}>
           <h1 className="mb-6 max-w-full text-[clamp(2.35rem,11.4vw,5.4rem)] font-bold uppercase leading-[1.08] tracking-[0.02em] text-[#111111] text-balance sm:text-[clamp(3.25rem,10vw,5.4rem)] sm:tracking-[0.075em] md:mb-8 md:text-7xl md:leading-[1.08] md:tracking-[0.12em] lg:text-8xl lg:tracking-[0.16em] xl:text-9xl xl:leading-[1.1] xl:tracking-widest">
             Engineering Clarity.
           </h1>
@@ -41,7 +36,7 @@ const Hero = () => {
               <ArrowDown className="motion-action-arrow motion-action-arrow-down h-5 w-5" />
             </a>
           </div>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

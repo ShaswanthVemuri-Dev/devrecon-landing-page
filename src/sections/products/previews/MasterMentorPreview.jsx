@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
   BookOpen,
@@ -15,11 +14,9 @@ import {
 import ProductPreviewFrame from './ProductPreviewFrame.jsx';
 import publicAsset from '../../../utils/assetPaths.js';
 
-const premiumEase = [0.22, 1, 0.36, 1];
-
 const PREVIEW_ASSETS = {
-  logo: '/product-previews/mastermentor/logo.png',
-  darkLogo: '/product-logos/mastermentor-mark-bw.png',
+  logo: 'product-previews/mastermentor/logo.png',
+  darkLogo: 'product-logos/mastermentor-mark-bw.png',
 };
 
 const MASTER_MENTOR_MENU_ITEMS = [
@@ -36,45 +33,20 @@ const MiniMenuButton = ({ open, onClick }) => (
     aria-label={open ? 'Close Master Mentor sections' : 'Open Master Mentor sections'}
     aria-expanded={open}
     onClick={onClick}
-    className="relative z-50 flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-300 bg-white text-slate-900 shadow-sm transition duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]/40 hover:border-slate-900"
+    className={`mini-preview-menu-button relative z-50 flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-300 bg-white text-slate-900 shadow-sm transition duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]/40 hover:border-slate-900 ${open ? 'is-open' : ''}`}
   >
-    <AnimatePresence>
-      {open ? (
-        <motion.span
-          key="mini-menu-ripple"
-          className="absolute inset-0 rounded-full bg-[#2563EB]"
-          initial={{ scale: 0.35, opacity: 0.18 }}
-          animate={{ scale: 2.2, opacity: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.68, ease: premiumEase }}
-        />
-      ) : null}
-    </AnimatePresence>
-    <motion.span
-      className="relative z-10"
-      animate={{ rotate: open ? 90 : 0, scale: open ? 0.96 : 1 }}
-      transition={{ duration: 0.3, ease: premiumEase }}
-    >
+    <span className="mini-preview-menu-ripple absolute inset-0 rounded-full bg-[#2563EB]" />
+    <span className={`relative z-10 transition-transform duration-[var(--duration-button)] ease-[var(--ease-bubble)] ${open ? 'rotate-90 scale-95' : ''}`}>
       {open ? <X className="h-[17px] w-[17px]" /> : <Menu className="h-[17px] w-[17px]" />}
-    </motion.span>
+    </span>
   </button>
 );
 
 const MasterMentorBrand = ({ website }) => (
   <a href={website} target="_blank" rel="noreferrer" className="flex min-w-0 items-center gap-2.5 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]/40">
     <div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white">
-      <img
-        src={publicAsset(PREVIEW_ASSETS.darkLogo)}
-        alt="Master Mentor logo"
-        className="mastermentor-logo-bw absolute h-[82%] w-[82%] object-contain opacity-100 transition duration-700"
-        draggable={false}
-      />
-      <img
-        src={publicAsset(PREVIEW_ASSETS.logo)}
-        alt=""
-        className="mastermentor-logo-colour absolute h-[78%] w-[78%] object-contain opacity-0 transition duration-700"
-        draggable={false}
-      />
+      <img src={publicAsset(PREVIEW_ASSETS.darkLogo)} alt="Master Mentor logo" className="mastermentor-logo-bw absolute h-[82%] w-[82%] object-contain opacity-100 transition duration-700" draggable={false} />
+      <img src={publicAsset(PREVIEW_ASSETS.logo)} alt="" className="mastermentor-logo-colour absolute h-[78%] w-[78%] object-contain opacity-0 transition duration-700" draggable={false} />
     </div>
     <span className="truncate text-[0.84rem] font-semibold tracking-tight text-slate-900 sm:text-[0.92rem]">
       Master Mentor
@@ -93,13 +65,7 @@ const MasterMentorHeader = ({ open, setOpen, product }) => {
     <div className="absolute inset-x-0 top-0 z-40 border-b border-slate-200/70 bg-white/86 backdrop-blur-xl" onClick={closeFromEmptyHeaderArea} data-preview-menu="true">
       <div className="flex h-20 items-center justify-between px-5 sm:px-6">
         <MasterMentorBrand website={product.website} />
-
-        <div className="flex items-center gap-2.5">
-          <MiniMenuButton
-            open={open}
-            onClick={() => setOpen((value) => !value)}
-          />
-        </div>
+        <MiniMenuButton open={open} onClick={() => setOpen((value) => !value)} />
       </div>
     </div>
   );
@@ -126,7 +92,7 @@ const MasterMentorMenu = ({ open, setOpen, product }) => (
             key={item}
             onClick={() => setOpen(false)}
             className="mini-mobile-menu-item flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-[12px] font-semibold text-slate-900 opacity-100 shadow-[0_8px_24px_rgba(15,23,42,0.04)] transition-[border-color,background-color] duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)] hover:border-[#2563EB]/35 hover:bg-[#EFF6FF]"
-            style={{ '--d': `${260 + index * 115}ms` }}
+            style={{ '--d': `${260 + index * 90}ms` }}
           >
             <span>{item}</span>
             <ChevronRight className="h-4 w-4 text-[#2563EB]" />
@@ -139,7 +105,7 @@ const MasterMentorMenu = ({ open, setOpen, product }) => (
           rel="noreferrer"
           onClick={() => setOpen(false)}
           className="mt-2 flex w-full items-center justify-center rounded-full bg-[#2563EB] px-5 py-3 text-[12px] font-semibold text-white visited:text-white active:text-white focus:text-white hover:text-white opacity-100 shadow-[0_6px_20px_rgba(37,99,235,0.25)] transition-colors duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)] hover:bg-[#1D4ED8]"
-          style={{ '--d': `${260 + MASTER_MENTOR_MENU_ITEMS.length * 115}ms` }}
+          style={{ '--d': `${260 + MASTER_MENTOR_MENU_ITEMS.length * 90}ms` }}
         >
           View Full Website
         </a>
@@ -163,11 +129,7 @@ const ScholarshipMiniCard = ({ accent, soft, widthOne = '80%', widthTwo = '58%',
 );
 
 const MasterMentorWireframe = () => (
-  <motion.div
-    className="native-colour-stage mastermentor-wireframe"
-    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif' }}
-    aria-hidden="true"
-  >
+  <div className="native-colour-stage mastermentor-wireframe" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif' }} aria-hidden="true">
     <div className="relative z-10">
       <div className="mb-3 h-2 w-20 rounded-full bg-slate-200 min-[1200px]:mb-4 min-[1200px]:h-2.5 min-[1200px]:w-28" />
       <div className="grid gap-2 min-[1200px]:gap-3">
@@ -177,16 +139,16 @@ const MasterMentorWireframe = () => (
 
       <div className="mt-2.5 grid grid-cols-2 gap-2 min-[1200px]:mt-3 min-[1200px]:gap-3">
         <div className="mastermentor-small-tile border border-dashed border-slate-300 bg-slate-50">
-          <Upload className="h-3.5 w-3.5 native-colour-stage text-[#2563EB] min-[1200px]:h-4 min-[1200px]:w-4" />
+          <Upload className="native-colour-stage h-3.5 w-3.5 text-[#2563EB] min-[1200px]:h-4 min-[1200px]:w-4" />
           <p className="mt-2 text-[7px] font-semibold uppercase tracking-[0.06em] text-slate-600 min-[1200px]:mt-3 min-[1200px]:text-[9px] min-[1200px]:tracking-[0.08em]">Dropbox</p>
         </div>
         <div className="mastermentor-small-tile border border-slate-200 bg-white">
-          <BookOpen className="h-3.5 w-3.5 native-colour-stage text-[#059669] min-[1200px]:h-4 min-[1200px]:w-4" />
+          <BookOpen className="native-colour-stage h-3.5 w-3.5 text-[#059669] min-[1200px]:h-4 min-[1200px]:w-4" />
           <p className="mt-2 text-[7px] font-semibold uppercase tracking-[0.06em] text-slate-600 min-[1200px]:mt-3 min-[1200px]:text-[9px] min-[1200px]:tracking-[0.08em]">Resources</p>
         </div>
       </div>
     </div>
-  </motion.div>
+  </div>
 );
 
 const MasterMentorPreview = ({ product }) => {
@@ -200,7 +162,7 @@ const MasterMentorPreview = ({ product }) => {
 
       <div className="product-preview-layout mastermentor-preview-layout" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif' }}>
         <div className="product-preview-copy mastermentor-preview-copy">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-2 text-[9px] font-semibold uppercase tracking-[0.08em] text-[#2563EB] native-colour-stage">
+          <div className="native-colour-stage mb-4 inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-2 text-[9px] font-semibold uppercase tracking-[0.08em] text-[#2563EB]">
             <Target className="h-3.5 w-3.5" />
             Structured academic progression
           </div>
@@ -213,12 +175,7 @@ const MasterMentorPreview = ({ product }) => {
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
-            <a
-              href={product.website}
-              target="_blank"
-              rel="noreferrer"
-              className="native-colour-stage inline-flex items-center gap-2 rounded-full bg-[#2563EB] px-5 py-3 text-[10px] font-medium text-white visited:text-white active:text-white focus:text-white hover:text-white shadow-[0_4px_14px_rgba(37,99,235,0.15)] transition duration-500 hover:bg-[#1D4ED8] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]/40"
-            >
+            <a href={product.website} target="_blank" rel="noreferrer" className="native-colour-stage inline-flex items-center gap-2 rounded-full bg-[#2563EB] px-5 py-3 text-[10px] font-medium text-white visited:text-white active:text-white focus:text-white hover:text-white shadow-[0_4px_14px_rgba(37,99,235,0.15)] transition duration-500 hover:bg-[#1D4ED8] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]/40">
               View Full Website
               <ArrowRight className="h-3.5 w-3.5" />
             </a>

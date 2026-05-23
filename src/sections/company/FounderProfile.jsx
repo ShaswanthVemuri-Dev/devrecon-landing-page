@@ -1,34 +1,17 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
-import { useRevealMotion } from '../../hooks/useScrollMotion.js';
-
-const ease = [0.22, 1, 0.36, 1];
+import Reveal from '../../components/motion/Reveal.jsx';
+import publicAsset from '../../utils/assetPaths.js';
 
 const FounderProfile = () => {
-  const enableHoverMotion = useDesktopInteraction();
-  const reveal = useRevealMotion({ desktopInitial: { y: 22 }, duration: 0.72 });
-
   return (
     <section id="founder-profile" className="relative scroll-mt-28 px-6 py-14 md:scroll-mt-32 md:py-20 lg:py-24">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={reveal.initial}
-          whileInView={reveal.whileInView}
-          whileHover={enableHoverMotion ? { y: -4 } : undefined}
-          viewport={reveal.viewport}
-          transition={reveal.transition}
-          className={`rounded-[2rem] border border-gray-100 bg-[#F5F5F7] p-4 shadow-[0_22px_72px_rgba(17,17,17,0.045)] transition-shadow duration-500 md:p-5 ${enableHoverMotion ? 'hover:shadow-[0_30px_90px_rgba(17,17,17,0.075)]' : ''}`}
-        >
+      <div className="mx-auto max-w-7xl">
+        <Reveal className="motion-surface rounded-[2rem] border border-gray-100 bg-[#F5F5F7] p-4 shadow-[0_22px_72px_rgba(17,17,17,0.045)] transition-shadow duration-500 hover:shadow-[0_30px_90px_rgba(17,17,17,0.075)] md:p-5">
           <div className="grid gap-5 lg:grid-cols-[0.38fr_0.62fr] lg:items-stretch">
-            <motion.div
-              whileHover={enableHoverMotion ? { scale: 1.01 } : undefined}
-              transition={{ duration: 0.5, ease }}
-              className="relative h-[300px] overflow-hidden rounded-[1.6rem] bg-[#111111] sm:h-[340px] md:h-[380px] lg:h-auto lg:min-h-full"
-            >
+            <div className="motion-surface relative h-[300px] overflow-hidden rounded-[1.6rem] bg-[#111111] sm:h-[340px] md:h-[380px] lg:h-auto lg:min-h-full">
               <img
-                src="/founder/shaswanth-vemuri.webp"
+                src={publicAsset('founder/shaswanth-vemuri.webp')}
                 alt="Shaswanth Vemuri, Founder and CEO of DevReCon"
                 className="absolute inset-0 h-full w-full object-cover object-[50%_24%]"
                 loading="lazy"
@@ -37,18 +20,14 @@ const FounderProfile = () => {
                 height="1600"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/34 via-black/0 to-white/5" />
-            </motion.div>
+            </div>
 
-            <motion.div
-              whileHover={enableHoverMotion ? { y: -2 } : undefined}
-              transition={{ duration: 0.45, ease }}
-              className="flex h-full flex-col justify-center rounded-[1.6rem] border border-gray-100 bg-white p-6 md:p-8 lg:p-10"
-            >
+            <div className="motion-surface flex h-full flex-col justify-center rounded-[1.6rem] border border-gray-100 bg-white p-6 md:p-8 lg:p-10">
               <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-gray-400">
                 Founder Profile
               </p>
 
-              <h2 className="max-w-3xl text-3xl font-bold tracking-tighter leading-[1.08] text-[#111111] text-balance md:text-5xl">
+              <h2 className="max-w-3xl text-3xl font-bold leading-[1.08] tracking-tighter text-[#111111] text-balance md:text-5xl">
                 Shaped by a builder&apos;s way of thinking.
               </h2>
 
@@ -74,9 +53,9 @@ const FounderProfile = () => {
                 View LinkedIn
                 <ArrowUpRight className="motion-action-arrow h-4 w-4" />
               </a>
-            </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

@@ -49,9 +49,7 @@ const useMotionProfile = () => {
     update();
     const unsubscribe = mediaQueries.map((mediaQuery) => subscribeToMediaQuery(mediaQuery, update));
 
-    return () => {
-      unsubscribe.forEach((removeListener) => removeListener());
-    };
+    return () => unsubscribe.forEach((removeListener) => removeListener());
   }, []);
 
   return useMemo(() => {

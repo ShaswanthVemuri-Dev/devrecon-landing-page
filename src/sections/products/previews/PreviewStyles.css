@@ -124,6 +124,15 @@
 }
 
 @media (any-hover: hover) {
+  .product-preview-card:hover {
+    transform: translate3d(0, -5px, 0) scale(1.012);
+    box-shadow: 0 42px 118px rgba(0,0,0,0.30);
+  }
+
+  .product-preview-card:hover .product-preview-viewport {
+    transform: translate3d(0, -2px, 0) scale(1.004);
+  }
+
   .product-preview-card:hover::after {
     opacity: 0;
   }
@@ -148,6 +157,17 @@
   .product-hover-lift:hover {
     transform: translateY(-1px) scale(1.012);
   }
+}
+
+.mini-preview-menu-button .mini-preview-menu-ripple {
+  opacity: 0;
+  transform: scale(0.35);
+  transition: opacity 520ms cubic-bezier(.18,.9,.2,1), transform 520ms cubic-bezier(.18,.9,.2,1);
+}
+
+.mini-preview-menu-button.is-open .mini-preview-menu-ripple {
+  opacity: 0.24;
+  transform: scale(2.25);
 }
 
 .mini-mymed-nav-pill::before {
