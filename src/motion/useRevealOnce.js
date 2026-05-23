@@ -2,21 +2,75 @@ import { useEffect, useRef, useState } from 'react';
 import { motionViewport } from './motionTokens.js';
 import useMotionProfile from './useMotionProfile.js';
 
-const scheduleVisible = (callback, delay = 0) => {
-  let firstFrame = 0;
-  let secondFrame = 0;
-  let timer = 0;
+let revealQueue = [];
+let revealFrame = 0;
 
-  firstFrame = window.requestAnimationFrame(() => {
-    secondFrame = window.requestAnimationFrame(() => {
-      timer = window.setTimeout(callback, delay);
-    });
+const flushRevealQueue = () => {
+  revealFrame = 0;
+  const batch = revealQueue.splice(0, 10);
+
+  batch.forEach((item, index) => {
+    if (item.cancelled) return;
+
+    const timeout = window.setTimeout(() => {
+      if (!item.cancelled) item.callback();
+    }, item.delay + index * item.stagger);
+
+    item.timeout = timeout;
   });
 
+  if (revealQueue.length > 0) {
+    revealFrame = window.requestAnimationFrame(flushRevealQueue);
+  }
+};
+
+const enqueueReveal = (callback, { delay = 0, stagger = 34 } = {}) => {
+  const item = {
+    callback,
+    delay,
+    stagger,
+    timeout: 0,
+    cancelled: false,
+  };
+
+  revealQueue.push(item);
+
+  if (!revealFrame) {
+    revealFrame = window.requestAnimationFrame(() => {
+      revealFrame = window.requestAnimationFrame(flushRevealQueue);
+    });
+  }
+
   return () => {
-    window.cancelAnimationFrame(firstFrame);
-    window.cancelAnimationFrame(secondFrame);
-    window.clearTimeout(timer);
+    item.cancelled = true;
+    if (item.timeout) window.clearTimeout(item.timeout);
+  };
+};
+
+const resolveRevealSettings = (profile, rootMargin, threshold) => {
+  if (profile.useSimpleMobileMotion) {
+    return {
+      rootMargin: rootMargin ?? motionViewport.revealMarginMobile,
+      threshold: threshold ?? motionViewport.revealAmountMobile,
+      delay: 46,
+      stagger: 26,
+    };
+  }
+
+  if (profile.useTabletRevealMotion) {
+    return {
+      rootMargin: rootMargin ?? motionViewport.revealMarginTablet,
+      threshold: threshold ?? motionViewport.revealAmountTablet,
+      delay: 34,
+      stagger: 32,
+    };
+  }
+
+  return {
+    rootMargin: rootMargin ?? motionViewport.revealMargin,
+    threshold: threshold ?? motionViewport.revealAmount,
+    delay: 28,
+    stagger: 36,
   };
 };
 
@@ -42,20 +96,23 @@ const useRevealOnce = ({
       return undefined;
     }
 
-    let cancelScheduledReveal = null;
-    const revealDelay = profile.useSimpleMobileMotion ? 110 : 70;
+    let cancelQueuedReveal = null;
+    const settings = resolveRevealSettings(profile, rootMargin, threshold);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
 
         observer.unobserve(entry.target);
-        cancelScheduledReveal = scheduleVisible(() => setIsVisible(true), revealDelay);
+        cancelQueuedReveal = enqueueReveal(() => setIsVisible(true), {
+          delay: settings.delay,
+          stagger: settings.stagger,
+        });
       },
       {
         root,
-        rootMargin: rootMargin ?? (profile.useSimpleMobileMotion ? motionViewport.revealMarginMobile : motionViewport.revealMargin),
-        threshold: threshold ?? (profile.useSimpleMobileMotion ? motionViewport.revealAmountMobile : motionViewport.revealAmount),
+        rootMargin: settings.rootMargin,
+        threshold: settings.threshold,
       }
     );
 
@@ -63,9 +120,9 @@ const useRevealOnce = ({
 
     return () => {
       observer.disconnect();
-      cancelScheduledReveal?.();
+      cancelQueuedReveal?.();
     };
-  }, [disabled, profile.enableMotion, profile.useSimpleMobileMotion, root, rootMargin, threshold]);
+  }, [disabled, profile.enableMotion, profile.useSimpleMobileMotion, profile.useTabletRevealMotion, root, rootMargin, threshold]);
 
   return {
     ref: elementRef,

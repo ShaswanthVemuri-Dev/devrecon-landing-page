@@ -17,11 +17,11 @@ export const motionDuration = {
   hover: 0.32,
   button: 0.42,
   underline: 0.32,
-  reveal: 0.82,
-  revealMobile: 0.68,
+  reveal: 0.84,
+  revealMobile: 0.7,
   pageEnter: 0.86,
   pageEnterMobile: 0.76,
-  menu: 0.72,
+  menu: 0.92,
   menuItem: 0.36,
   accordion: 0.42,
   productColour: 0.72,
@@ -44,8 +44,10 @@ export const motionScale = {
 };
 
 export const motionViewport = {
-  revealAmount: 0.12,
-  revealAmountMobile: 0.08,
-  revealMargin: '0px 0px -12% 0px',
-  revealMarginMobile: '0px 0px -12% 0px',
+  revealAmount: 0.06,
+  revealAmountMobile: 0.04,
+  revealAmountTablet: 0.05,
+  revealMargin: '0px 0px 16% 0px',
+  revealMarginMobile: '0px 0px 20% 0px',
+  revealMarginTablet: '0px 0px 18% 0px',
 };

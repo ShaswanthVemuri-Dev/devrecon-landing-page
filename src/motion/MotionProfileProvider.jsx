@@ -2,7 +2,9 @@ import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 export const MOTION_MEDIA_QUERIES = {
   reduced: '(prefers-reduced-motion: reduce)',
+  phonePortrait: '(max-width: 767px) and (orientation: portrait)',
   smallScreen: '(max-width: 767px)',
+  tabletRange: '(min-width: 768px) and (max-width: 1180px)',
   coarsePointer: '(hover: none), (pointer: coarse)',
   fineHover: '(hover: hover) and (pointer: fine)',
   anyHover: '(any-hover: hover)',
@@ -14,7 +16,9 @@ const readMotionState = () => {
   if (!canMatchMedia()) {
     return {
       prefersReducedMotion: false,
+      isPhonePortrait: false,
       isSmallScreen: false,
+      isTabletRange: false,
       isCoarsePointer: false,
       hasFineHover: false,
       hasAnyHover: false,
@@ -23,7 +27,9 @@ const readMotionState = () => {
 
   return {
     prefersReducedMotion: window.matchMedia(MOTION_MEDIA_QUERIES.reduced).matches,
+    isPhonePortrait: window.matchMedia(MOTION_MEDIA_QUERIES.phonePortrait).matches,
     isSmallScreen: window.matchMedia(MOTION_MEDIA_QUERIES.smallScreen).matches,
+    isTabletRange: window.matchMedia(MOTION_MEDIA_QUERIES.tabletRange).matches,
     isCoarsePointer: window.matchMedia(MOTION_MEDIA_QUERIES.coarsePointer).matches,
     hasFineHover: window.matchMedia(MOTION_MEDIA_QUERIES.fineHover).matches,
     hasAnyHover: window.matchMedia(MOTION_MEDIA_QUERIES.anyHover).matches,
@@ -42,14 +48,20 @@ const subscribeToMediaQuery = (mediaQuery, callback) => {
 
 export const buildMotionProfile = (state) => {
   const enableMotion = !state.prefersReducedMotion;
-  const useSimpleMobileMotion = state.isSmallScreen || state.isCoarsePointer;
+
+  // Touch input should disable hover assumptions, not scroll reveal quality.
+  // Only true narrow phone portrait receives the lighter reveal profile.
+  const useSimpleMobileMotion = state.isPhonePortrait;
 
   return {
     prefersReducedMotion: state.prefersReducedMotion,
+    isPhonePortrait: state.isPhonePortrait,
     isSmallScreen: state.isSmallScreen,
+    isTabletRange: state.isTabletRange,
     isCoarsePointer: state.isCoarsePointer,
     isMobileMotion: useSimpleMobileMotion,
     useSimpleMobileMotion,
+    useTabletRevealMotion: !useSimpleMobileMotion && state.isTabletRange,
     enableMotion,
     enableHoverMotion: enableMotion && (state.hasFineHover || state.hasAnyHover),
     hasFineHover: state.hasFineHover,
