@@ -1,105 +1,56 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 
-export const MOTION_MEDIA_QUERIES = {
-  reduced: '(prefers-reduced-motion: reduce)',
-  phonePortrait: '(max-width: 767px) and (orientation: portrait)',
-  smallScreen: '(max-width: 767px)',
-  tabletRange: '(min-width: 768px) and (max-width: 1180px)',
-  coarsePointer: '(hover: none), (pointer: coarse)',
-  fineHover: '(hover: hover) and (pointer: fine)',
-  anyHover: '(any-hover: hover)',
-};
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
 const canMatchMedia = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function';
 
-const readMotionState = () => {
-  if (!canMatchMedia()) {
-    return {
-      prefersReducedMotion: false,
-      isPhonePortrait: false,
-      isSmallScreen: false,
-      isTabletRange: false,
-      isCoarsePointer: false,
-      hasFineHover: false,
-      hasAnyHover: false,
-    };
-  }
-
-  return {
-    prefersReducedMotion: window.matchMedia(MOTION_MEDIA_QUERIES.reduced).matches,
-    isPhonePortrait: window.matchMedia(MOTION_MEDIA_QUERIES.phonePortrait).matches,
-    isSmallScreen: window.matchMedia(MOTION_MEDIA_QUERIES.smallScreen).matches,
-    isTabletRange: window.matchMedia(MOTION_MEDIA_QUERIES.tabletRange).matches,
-    isCoarsePointer: window.matchMedia(MOTION_MEDIA_QUERIES.coarsePointer).matches,
-    hasFineHover: window.matchMedia(MOTION_MEDIA_QUERIES.fineHover).matches,
-    hasAnyHover: window.matchMedia(MOTION_MEDIA_QUERIES.anyHover).matches,
-  };
+const readReducedMotion = () => {
+  if (!canMatchMedia()) return false;
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
 };
 
-const subscribeToMediaQuery = (mediaQuery, callback) => {
-  if (typeof mediaQuery.addEventListener === 'function') {
-    mediaQuery.addEventListener('change', callback);
-    return () => mediaQuery.removeEventListener('change', callback);
-  }
-
-  mediaQuery.addListener(callback);
-  return () => mediaQuery.removeListener(callback);
-};
-
-export const buildMotionProfile = (state) => {
-  const enableMotion = !state.prefersReducedMotion;
-
-  // Touch input should disable hover assumptions, not scroll reveal quality.
-  // Only true narrow phone portrait receives the lighter reveal profile.
-  const useSimpleMobileMotion = state.isPhonePortrait;
+export const buildMotionProfile = (prefersReducedMotion) => {
+  const enableMotion = !prefersReducedMotion;
 
   return {
-    prefersReducedMotion: state.prefersReducedMotion,
-    isPhonePortrait: state.isPhonePortrait,
-    isSmallScreen: state.isSmallScreen,
-    isTabletRange: state.isTabletRange,
-    isCoarsePointer: state.isCoarsePointer,
-    isMobileMotion: useSimpleMobileMotion,
-    useSimpleMobileMotion,
-    useTabletRevealMotion: !useSimpleMobileMotion && state.isTabletRange,
+    prefersReducedMotion,
     enableMotion,
-    enableHoverMotion: enableMotion && (state.hasFineHover || state.hasAnyHover),
-    hasFineHover: state.hasFineHover,
-    hasAnyHover: state.hasAnyHover,
+    enableHoverMotion: enableMotion,
+
+    // Backward-compatible fields. These intentionally no longer drive reveal behavior.
+    isSmallScreen: false,
+    isCoarsePointer: false,
+    isMobileMotion: false,
+    useSimpleMobileMotion: false,
+    hasFineHover: true,
+    hasAnyHover: true,
   };
 };
 
-export const defaultMotionProfile = buildMotionProfile(readMotionState());
-
+export const defaultMotionProfile = buildMotionProfile(false);
 export const MotionProfileContext = createContext(defaultMotionProfile);
 
 const MotionProfileProvider = ({ children }) => {
-  const [state, setState] = useState(readMotionState);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(readReducedMotion);
 
   useEffect(() => {
     if (!canMatchMedia()) return undefined;
 
-    const mediaQueries = Object.values(MOTION_MEDIA_QUERIES).map((query) => window.matchMedia(query));
-    let frame = 0;
-
-    const update = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(() => {
-        frame = 0;
-        setState(readMotionState());
-      });
-    };
+    const mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+    const update = () => setPrefersReducedMotion(mediaQuery.matches);
 
     update();
-    const unsubscribe = mediaQueries.map((mediaQuery) => subscribeToMediaQuery(mediaQuery, update));
 
-    return () => {
-      unsubscribe.forEach((removeListener) => removeListener());
-      if (frame) window.cancelAnimationFrame(frame);
-    };
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', update);
+      return () => mediaQuery.removeEventListener('change', update);
+    }
+
+    mediaQuery.addListener(update);
+    return () => mediaQuery.removeListener(update);
   }, []);
 
-  const value = useMemo(() => buildMotionProfile(state), [state]);
+  const value = useMemo(() => buildMotionProfile(prefersReducedMotion), [prefersReducedMotion]);
 
   return (
     <MotionProfileContext.Provider value={value}>

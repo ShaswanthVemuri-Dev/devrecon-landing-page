@@ -46,11 +46,10 @@ const Reveal = ({
   variant = 'rise',
   ...props
 }) => {
-  const { ref, isVisible, profile } = useRevealOnce({ disabled, rootMargin, threshold });
-  const resolvedDuration = duration ?? (profile.useSimpleMobileMotion ? motionDuration.revealMobile : motionDuration.reveal);
+  const { ref, isVisible } = useRevealOnce({ disabled, rootMargin, threshold });
   const selectedVariant = revealVariants[variant] ?? revealVariants.rise;
-  const resolvedDistance = distance ?? selectedVariant.distance ?? (profile.useSimpleMobileMotion ? motionDistance.revealMobile : motionDistance.revealDesktop);
-  const resolvedDelay = profile.useSimpleMobileMotion ? Math.min(delay, 0.16) : delay;
+  const resolvedDuration = duration ?? motionDuration.reveal;
+  const resolvedDistance = distance ?? selectedVariant.distance ?? motionDistance.revealDesktop;
 
   return (
     <Component
@@ -58,7 +57,7 @@ const Reveal = ({
       className={`motion-reveal ${isVisible ? 'is-visible' : ''} ${className}`.trim()}
       style={{
         '--motion-reveal-duration': toSeconds(resolvedDuration),
-        '--motion-reveal-delay': toSeconds(resolvedDelay),
+        '--motion-reveal-delay': toSeconds(delay),
         '--motion-reveal-distance': toPixels(resolvedDistance),
         '--motion-reveal-scale': selectedVariant.scale,
         '--motion-reveal-blur': selectedVariant.blur,

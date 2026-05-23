@@ -9,14 +9,9 @@ const desktopNavLinks = [
 ];
 
 const mobileNavLinks = [{ name: 'Home', to: '/' }, ...desktopNavLinks];
-const MOBILE_MENU_SWEEP_MS = 920;
-const MOBILE_MENU_ROUTE_DELAY_MS = 760;
-const MOBILE_MENU_RELEASE_DELAY_MS = MOBILE_MENU_SWEEP_MS + 80;
 
-const normalizePath = (path) => {
-  if (!path || path === '/') return '/';
-  return path.replace(/\/+$/, '');
-};
+const MOBILE_MENU_RELEASE_MS = 700;
+const MOBILE_ROUTE_PUSH_MS = 90;
 
 const Underline = ({ active = false, mobile = false }) => (
   <span
@@ -25,63 +20,49 @@ const Underline = ({ active = false, mobile = false }) => (
   />
 );
 
+const normalizeRoute = (route) => route.replace(/\/$/, '') || '/';
+
 const Navbar = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [keepMobileShell, setKeepMobileShell] = useState(false);
-  const navigationTimerRef = useRef(null);
+  const [menuMounted, setMenuMounted] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const releaseTimerRef = useRef(null);
-  const openFrameRef = useRef(null);
+  const navigateTimerRef = useRef(null);
+  const animationFrameRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
-  const mobileShellActive = mobileMenuOpen || keepMobileShell;
 
-  const clearNavigationTimers = () => {
-    window.clearTimeout(navigationTimerRef.current);
-    navigationTimerRef.current = null;
-  };
-
-  const clearReleaseTimer = () => {
+  const clearTimers = () => {
     window.clearTimeout(releaseTimerRef.current);
+    window.clearTimeout(navigateTimerRef.current);
+    window.cancelAnimationFrame(animationFrameRef.current);
     releaseTimerRef.current = null;
-  };
-
-  const clearOpenFrame = () => {
-    if (openFrameRef.current !== null) {
-      window.cancelAnimationFrame(openFrameRef.current);
-      openFrameRef.current = null;
-    }
-  };
-
-  const releaseMobileShellLater = () => {
-    clearReleaseTimer();
-    releaseTimerRef.current = window.setTimeout(() => {
-      setKeepMobileShell(false);
-      releaseTimerRef.current = null;
-    }, MOBILE_MENU_RELEASE_DELAY_MS);
+    navigateTimerRef.current = null;
+    animationFrameRef.current = null;
   };
 
   const openMobileMenu = () => {
-    clearNavigationTimers();
-    clearReleaseTimer();
-    clearOpenFrame();
-    setKeepMobileShell(true);
-    openFrameRef.current = window.requestAnimationFrame(() => {
-      openFrameRef.current = null;
-      setMobileMenuOpen(true);
+    clearTimers();
+    setMenuMounted(true);
+    animationFrameRef.current = window.requestAnimationFrame(() => {
+      setMenuOpen(true);
+      animationFrameRef.current = null;
     });
   };
 
   const closeMobileMenu = () => {
-    clearOpenFrame();
-    setKeepMobileShell(true);
-    setMobileMenuOpen(false);
-    releaseMobileShellLater();
+    window.clearTimeout(releaseTimerRef.current);
+    window.cancelAnimationFrame(animationFrameRef.current);
+    setMenuOpen(false);
+    setMenuMounted(true);
+    releaseTimerRef.current = window.setTimeout(() => {
+      setMenuMounted(false);
+      releaseTimerRef.current = null;
+    }, MOBILE_MENU_RELEASE_MS);
   };
 
   const toggleMobileMenu = () => {
-    if (mobileShellActive) {
-      clearNavigationTimers();
+    if (menuMounted || menuOpen) {
       closeMobileMenu();
       return;
     }
@@ -89,27 +70,39 @@ const Navbar = () => {
     openMobileMenu();
   };
 
+  const handleMobileRoute = (to) => {
+    window.clearTimeout(navigateTimerRef.current);
+
+    const currentRoute = normalizeRoute(`${location.pathname}${location.hash}`);
+    const nextRoute = normalizeRoute(to);
+
+    closeMobileMenu();
+
+    if (currentRoute === nextRoute) return;
+
+    navigateTimerRef.current = window.setTimeout(() => {
+      navigate(to);
+      navigateTimerRef.current = null;
+    }, MOBILE_ROUTE_PUSH_MS);
+  };
+
   useEffect(() => {
-    return () => {
-      clearNavigationTimers();
-      clearReleaseTimer();
-      clearOpenFrame();
-    };
+    return clearTimers;
   }, []);
 
   useEffect(() => {
-    if (!mobileShellActive) return undefined;
+    if (!menuMounted) return undefined;
 
-    const previousBodyOverflow = document.body.style.overflow;
-    const previousRootOverflow = document.documentElement.style.overflow;
-    const previousTouchAction = document.body.style.touchAction;
-    const previousOverscrollBehavior = document.documentElement.style.overscrollBehavior;
+    const root = document.documentElement;
+    const body = document.body;
+    const previousRootOverflow = root.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+    const previousOverscroll = root.style.overscrollBehavior;
 
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.touchAction = 'none';
-    document.documentElement.style.overscrollBehavior = 'none';
-    document.documentElement.classList.add('mobile-nav-open');
+    root.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    root.style.overscrollBehavior = 'none';
+    root.classList.add('mobile-nav-open');
 
     const closeOnEscape = (event) => {
       if (event.key === 'Escape') closeMobileMenu();
@@ -118,76 +111,31 @@ const Navbar = () => {
     window.addEventListener('keydown', closeOnEscape);
 
     return () => {
-      document.body.style.overflow = previousBodyOverflow;
-      document.documentElement.style.overflow = previousRootOverflow;
-      document.body.style.touchAction = previousTouchAction;
-      document.documentElement.style.overscrollBehavior = previousOverscrollBehavior;
-      document.documentElement.classList.remove('mobile-nav-open');
+      root.style.overflow = previousRootOverflow;
+      body.style.overflow = previousBodyOverflow;
+      root.style.overscrollBehavior = previousOverscroll;
+      root.classList.remove('mobile-nav-open');
       window.removeEventListener('keydown', closeOnEscape);
     };
-  }, [mobileShellActive]);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 768px)');
-    const handleViewportChange = () => {
-      if (!mediaQuery.matches) return;
-      clearNavigationTimers();
-      clearReleaseTimer();
-      clearOpenFrame();
-      setMobileMenuOpen(false);
-      setKeepMobileShell(false);
-    };
-
-    handleViewportChange();
-    mediaQuery.addEventListener?.('change', handleViewportChange);
-    return () => mediaQuery.removeEventListener?.('change', handleViewportChange);
-  }, []);
-
-  useEffect(() => {
-    // Route changes should not instantly tear down the closing shell.
-    // If a mobile route was selected, the shell is already closing and will release itself.
-    clearNavigationTimers();
-    setMobileMenuOpen(false);
-    if (keepMobileShell) releaseMobileShellLater();
-  }, [location.pathname, location.hash]);
-
-  const closeAll = () => {
-    clearNavigationTimers();
-    if (mobileShellActive) {
-      closeMobileMenu();
-      return;
-    }
-    setMobileMenuOpen(false);
-    setKeepMobileShell(false);
-  };
-
-  const handleMobileRouteSelection = (to) => {
-    clearNavigationTimers();
-    const currentDestination = `${location.pathname}${location.hash}`;
-
-    closeMobileMenu();
-
-    if (currentDestination === to || normalizePath(currentDestination) === normalizePath(to)) return;
-
-    navigationTimerRef.current = window.setTimeout(() => {
-      navigate(to);
-      navigationTimerRef.current = null;
-    }, MOBILE_MENU_ROUTE_DELAY_MS);
-  };
+  }, [menuMounted]);
 
   const desktopNavClassName = ({ isActive }) =>
     `group relative inline-flex items-center text-sm font-medium tracking-wide no-underline transition-colors duration-300 ${isActive ? 'text-[#111111]' : 'text-[#111111]/50 hover:text-[#111111]'}`;
 
-  const mobileNavButtonClassName = (isActive) =>
-    `mobile-menu-route-button group relative inline-flex items-center text-2xl font-semibold tracking-wide no-underline transition-colors duration-300 ${isActive ? 'text-[#111111]' : 'text-[#111111]/52 hover:text-[#111111]'}`;
+  const mobileLinkClassName = (active) =>
+    `group relative inline-flex items-center justify-center text-2xl font-semibold tracking-wide no-underline transition-colors duration-300 ${active ? 'text-[#111111]' : 'text-[#111111]/52'}`;
 
   return (
-    <nav className={`fixed inset-x-0 top-0 z-[120] border-b border-gray-100 py-4 transition-all duration-300 glass-nav ${mobileShellActive ? 'is-menu-mounted' : ''} ${mobileMenuOpen ? 'is-menu-open' : ''}`}>
+    <nav className={`devrecon-nav fixed inset-x-0 top-0 z-[1200] border-b py-4 transition-[height,background-color,border-color,backdrop-filter] duration-[var(--duration-menu)] ease-[var(--ease-soft)] ${menuMounted ? 'is-mobile-shell-active h-[100dvh] overflow-hidden border-transparent bg-white' : 'h-auto overflow-visible border-gray-100 glass-nav'}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
         <Link
           to="/"
-          className={`group relative z-[150] inline-flex items-center text-2xl font-bold tracking-tight no-underline transition-colors duration-300 ${isHome ? 'text-[#111111]' : 'text-[#111111]/70 hover:text-[#111111]'}`}
-          onClick={closeAll}
+          className={`group relative z-[1210] inline-flex items-center text-2xl font-bold tracking-tight no-underline transition-colors duration-300 ${isHome ? 'text-[#111111]' : 'text-[#111111]/70 hover:text-[#111111]'}`}
+          onClick={(event) => {
+            if (!menuMounted) return;
+            event.preventDefault();
+            handleMobileRoute('/');
+          }}
           aria-current={isHome ? 'page' : undefined}
         >
           <span>DevReCon</span>
@@ -216,51 +164,53 @@ const Navbar = () => {
 
         <button
           type="button"
-          className="motion-button motion-pill motion-pill-light relative z-[150] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
+          className="motion-button motion-pill motion-pill-light relative z-[1210] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
           onClick={toggleMobileMenu}
-          aria-label={mobileShellActive ? 'Close navigation menu' : 'Open navigation menu'}
-          aria-expanded={mobileShellActive}
+          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={menuOpen}
           aria-controls="mobile-navigation"
         >
-          <span className={`mobile-menu-icon relative z-10 ${mobileShellActive ? 'is-open' : ''}`}>
-            {mobileShellActive ? <X /> : <Menu />}
+          <span className="relative z-10 block h-5 w-5" aria-hidden="true">
+            <Menu className={`mobile-menu-glyph absolute inset-0 h-5 w-5 ${menuOpen ? 'is-hidden' : 'is-visible'}`} />
+            <X className={`mobile-menu-glyph absolute inset-0 h-5 w-5 ${menuOpen ? 'is-visible' : 'is-hidden'}`} />
           </span>
         </button>
+      </div>
 
-        <div
-          id="mobile-navigation"
-          data-open={mobileMenuOpen ? 'true' : 'false'}
-          className={`mobile-menu-shell fixed inset-0 z-[130] flex h-[100dvh] min-h-[100dvh] w-screen flex-col items-center justify-center gap-8 bg-white px-6 md:hidden ${mobileShellActive ? 'is-mounted' : ''} ${mobileMenuOpen ? 'is-open' : ''}`}
-          aria-hidden={!mobileShellActive}
-          role="dialog"
-          aria-modal="true"
-        >
-          {mobileNavLinks.map((link, index) => {
-            const active = normalizePath(link.to) === normalizePath(location.pathname);
+      <div
+        id="mobile-navigation"
+        className={`mobile-menu-shell md:hidden ${menuMounted ? 'is-active' : ''} ${menuOpen ? 'is-open' : ''}`}
+        aria-hidden={!menuMounted}
+      >
+        <div className="flex h-full flex-col items-center justify-center px-6 pb-[calc(2rem+env(safe-area-inset-bottom,0px))] pt-24">
+          <div className="flex w-full max-w-2xl flex-col items-center gap-8 sm:gap-9">
+            {mobileNavLinks.map((link, index) => {
+              const active = normalizeRoute(location.pathname) === normalizeRoute(link.to);
 
-            return (
-              <div key={link.name} className="mobile-menu-item" style={{ '--mobile-menu-delay': `${160 + index * 90}ms` }}>
-                <button
-                  type="button"
-                  onClick={() => handleMobileRouteSelection(link.to)}
-                  className={mobileNavButtonClassName(active)}
-                  aria-current={active ? 'page' : undefined}
-                >
-                  <span>{link.name}</span>
-                  <Underline active={active} mobile />
-                </button>
-              </div>
-            );
-          })}
+              return (
+                <div key={link.name} className="mobile-menu-item" style={{ '--mobile-menu-delay': `${110 + index * 80}ms` }}>
+                  <button
+                    type="button"
+                    onClick={() => handleMobileRoute(link.to)}
+                    className={mobileLinkClassName(active)}
+                    aria-current={active ? 'page' : undefined}
+                  >
+                    <span>{link.name}</span>
+                    <Underline active={active} mobile />
+                  </button>
+                </div>
+              );
+            })}
 
-          <a
-            href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
-            onClick={closeMobileMenu}
-            className="motion-button motion-pill motion-pill-dark mobile-menu-item mt-4 rounded-full bg-[#111111] px-8 py-4 text-lg font-medium tracking-wide text-white no-underline outline-none hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
-            style={{ '--mobile-menu-delay': `${160 + mobileNavLinks.length * 90}ms` }}
-          >
-            <span>Start a Project</span>
-          </a>
+            <a
+              href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
+              onClick={closeMobileMenu}
+              className="motion-button motion-pill motion-pill-dark mobile-menu-item mt-4 rounded-full bg-[#111111] px-8 py-4 text-lg font-medium tracking-wide text-white no-underline outline-none hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
+              style={{ '--mobile-menu-delay': `${110 + mobileNavLinks.length * 80}ms` }}
+            >
+              <span>Start a Project</span>
+            </a>
+          </div>
         </div>
       </div>
     </nav>

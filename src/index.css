@@ -11,12 +11,12 @@
   --duration-hover: 320ms;
   --duration-button: 300ms;
   --duration-underline: 320ms;
-  --duration-reveal: 820ms;
-  --duration-reveal-mobile: 680ms;
-  --duration-page-enter: 860ms;
-  --duration-page-exit: 420ms;
-  --duration-menu: 920ms;
-  --duration-accordion: 420ms;
+  --duration-reveal: 780ms;
+  --duration-reveal-mobile: 780ms;
+  --duration-page-enter: 720ms;
+  --duration-page-exit: 0ms;
+  --duration-menu: 620ms;
+  --duration-accordion: 520ms;
 }
 
 html {
@@ -79,24 +79,9 @@ img {
   overflow: visible;
 }
 
-.glass-nav.is-menu-mounted,
 .glass-nav.is-menu-open {
   background: transparent;
   border-color: transparent;
-}
-
-@media (max-width: 767px) {
-  .glass-nav {
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-
-  .glass-nav.is-menu-mounted,
-  .glass-nav.is-menu-open {
-    background: transparent;
-    border-color: transparent;
-  }
 }
 
 .text-balance {
@@ -147,48 +132,15 @@ img {
   will-change: auto;
 }
 
-@media (max-width: 767px) {
-  .route-transition-shell.is-entering {
-    animation-duration: 760ms;
-  }
-
-  .route-transition-shell.is-exiting {
-    animation-duration: 360ms;
-  }
-
-  @keyframes devreconRouteEnter {
-    0% {
-      opacity: 0;
-      transform: translate3d(0, 14px, 0) scale(0.997);
-    }
-    100% {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-  }
-
-  @keyframes devreconRouteExit {
-    0% {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: translate3d(0, -8px, 0) scale(0.999);
-    }
-  }
-}
-
-
 .solution-detail-shell {
   display: grid;
   grid-template-rows: 0fr;
   opacity: 0;
   transform: translate3d(0, -4px, 0);
   transition:
-    grid-template-rows 520ms var(--ease-soft),
+    grid-template-rows var(--duration-accordion) var(--ease-soft),
     opacity 320ms var(--ease-soft),
-    transform 520ms var(--ease-soft);
+    transform var(--duration-accordion) var(--ease-soft);
 }
 
 .solution-detail-shell.is-open {
@@ -220,10 +172,6 @@ img {
 }
 
 @media (max-width: 767px) {
-  .solution-detail-shell {
-    transition-duration: 460ms, 300ms, 460ms;
-  }
-
   .solution-preview-text {
     margin-top: 1rem;
     max-height: 18rem;
@@ -390,63 +338,68 @@ a.motion-pill {
   transform: translate3d(0, 4px, 0) scale(1.035);
 }
 
-.input-mode-touch .motion-surface:hover,
-.input-mode-touch .motion-card:hover,
-.input-mode-touch .motion-icon-card:hover {
-  transform: translate3d(0, 0, 0) scale(1);
-}
-
 .motion-underline-action:active {
   transform: translate3d(0, 0, 0) scale(0.988);
   transition-duration: var(--duration-tap);
 }
 
-.mobile-menu-icon {
-  display: inline-flex;
-  transition: transform 520ms var(--ease-soft), opacity 300ms var(--ease-soft);
+.mobile-menu-glyph {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.86);
+  transition: opacity 260ms var(--ease-soft), transform 420ms var(--ease-soft);
+}
+
+.mobile-menu-glyph.is-visible {
+  opacity: 1;
   transform: rotate(0deg) scale(1);
 }
 
-.mobile-menu-icon.is-open {
-  transform: rotate(180deg) scale(0.96);
+.mobile-menu-glyph.is-hidden {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.86);
+}
+
+.devrecon-nav.is-mobile-shell-active {
+  background: #ffffff;
+  border-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .mobile-menu-shell {
+  position: absolute;
+  inset: 0;
+  z-index: 1200;
   visibility: hidden;
   opacity: 0;
-  transform: translate3d(0, -18px, 0) scale(0.994);
   pointer-events: none;
+  clip-path: inset(0 0 100% 0);
   transition:
-    opacity 920ms var(--ease-soft),
-    transform 920ms var(--ease-soft),
-    visibility 0s linear 920ms;
-  will-change: opacity, transform;
+    clip-path var(--duration-menu) var(--ease-soft),
+    opacity var(--duration-menu) var(--ease-soft),
+    visibility 0s linear var(--duration-menu);
+  will-change: clip-path, opacity;
   backface-visibility: hidden;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-  touch-action: manipulation;
 }
 
-.mobile-menu-shell.is-mounted {
+.mobile-menu-shell.is-active {
   visibility: visible;
-  transition-delay: 0s;
 }
 
 .mobile-menu-shell.is-open {
   opacity: 1;
-  transform: translate3d(0, 0, 0) scale(1);
   pointer-events: auto;
+  clip-path: inset(0 0 0 0);
+  transition-delay: 0s;
 }
 
-.mobile-menu-route-button {
+.mobile-menu-shell button {
+  -webkit-appearance: none;
   appearance: none;
   border: 0;
   background: transparent;
   padding: 0;
   color: inherit;
-  font: inherit;
-  cursor: pointer;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
@@ -456,7 +409,7 @@ a.motion-pill {
 .mobile-menu-item {
   opacity: 0;
   transform: translate3d(0, 18px, 0);
-  transition: opacity 520ms var(--ease-soft), transform 680ms var(--ease-soft);
+  transition: opacity 480ms var(--ease-soft), transform 520ms var(--ease-soft);
   transition-delay: 0ms;
 }
 
@@ -469,12 +422,11 @@ a.motion-pill {
 .mobile-nav-open .scroll-to-top-button {
   opacity: 0 !important;
   pointer-events: none !important;
-  transform: translate3d(0, 12px, 0) scale(0.9) !important;
+  transform: translate3d(0, 12px, 0) scale(0.84) !important;
 }
 
 .scroll-to-top-button {
-  position: fixed;
-  left: auto !important;
+  left: auto;
   right: calc(1.5rem + env(safe-area-inset-right, 0px));
   bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   display: inline-flex;
@@ -483,17 +435,15 @@ a.motion-pill {
   width: 3.125rem;
   height: 3.125rem;
   padding: 0;
-  border: 1px solid rgba(17, 17, 17, 0.08);
-  box-shadow: inset 0 0 0 0 rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0);
   opacity: 0;
-  transform: translate3d(0, 12px, 0) scale(0.92);
+  transform: translate3d(0, 12px, 0) scale(0.82);
   pointer-events: none;
   transition:
-    opacity 300ms var(--ease-soft),
-    transform 300ms var(--ease-soft),
-    border-color 300ms var(--ease-soft),
-    box-shadow 300ms var(--ease-soft),
-    background-color 300ms var(--ease-soft);
+    opacity 320ms var(--ease-soft),
+    transform 320ms var(--ease-soft),
+    border-color 320ms var(--ease-soft),
+    background-color 320ms var(--ease-soft);
 }
 
 .scroll-to-top-button.is-visible {
@@ -502,48 +452,38 @@ a.motion-pill {
   pointer-events: auto;
 }
 
-.scroll-to-top-button:hover {
-  border-color: rgba(255, 255, 255, 0.96);
-  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.9);
-  transform: translate3d(0, -1px, 0) scale(1.006);
-}
-
-.scroll-to-top-button:active {
-  transform: translate3d(0, 0, 0) scale(0.986);
-  transition-duration: 120ms;
-}
-
+.scroll-to-top-button:hover,
 .scroll-to-top-button:focus-visible {
-  outline: 2px solid rgba(17, 17, 17, 0.28);
-  outline-offset: 4px;
+  border-color: rgba(255, 255, 255, 0.76);
+  outline: none;
+}
+
+.scroll-to-top-icon-shell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .scroll-to-top-icon {
-  transform: scaleY(1);
   transform-origin: 50% 50%;
-  transition: transform 300ms var(--ease-soft);
+  transition: transform 280ms var(--ease-soft);
 }
 
-.scroll-to-top-button:hover .scroll-to-top-icon {
-  transform: scaleY(1.12);
+.scroll-to-top-button:hover .scroll-to-top-icon,
+.scroll-to-top-button:focus-visible .scroll-to-top-icon {
+  transform: scaleY(1.16);
 }
 
-.scroll-to-top-button:active .scroll-to-top-icon {
-  transform: scaleY(0.96);
+.scroll-to-top-button:active {
+  transform: translate3d(0, 0, 0) scale(0.96);
 }
 
 @media (min-width: 768px) {
   .scroll-to-top-button {
-    bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
-    right: calc(1.5rem + env(safe-area-inset-right, 0px));
+    right: max(2rem, calc((100vw - 80rem) / 2));
+    bottom: 2rem;
     width: 3.25rem;
     height: 3.25rem;
-  }
-}
-
-@media (min-width: 1328px) {
-  .scroll-to-top-button {
-    right: calc((100vw - 80rem) / 2 + env(safe-area-inset-right, 0px));
   }
 }
 
@@ -599,12 +539,6 @@ a:focus {
   animation: devreconRingCounter 54s linear infinite;
 }
 
-@media (max-width: 767px) {
-  .devrecon-ring-slow,
-  .devrecon-ring-slower {
-    animation-play-state: paused;
-  }
-}
 
 .solution-preview-text::after {
   content: '';
@@ -615,8 +549,3 @@ a:focus {
   background: linear-gradient(to right, transparent, #111111 85%);
 }
 
-@media (max-width: 767px) {
-  .motion-reveal {
-    transform: translate3d(0, var(--motion-reveal-distance, 10px), 0) scale(var(--motion-reveal-scale, 0.998));
-  }
-}
