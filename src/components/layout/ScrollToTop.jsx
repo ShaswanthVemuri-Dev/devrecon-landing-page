@@ -39,13 +39,13 @@ const ScrollToTop = () => {
   }, []);
 
   const scrollToTop = () => {
-    smoothScrollToY(0, 820);
+    smoothScrollToY(0, 960);
   };
 
   return (
     <button
       onClick={scrollToTop}
-      className={`scroll-to-top-button motion-button motion-pill fixed bottom-8 right-8 z-50 rounded-full bg-[#111111] p-4 text-white shadow-sm hover:bg-[#111111] ${isVisible ? 'is-visible' : ''}`}
+      className={`scroll-to-top-button motion-button motion-pill fixed z-50 rounded-full bg-[#111111] text-white hover:bg-[#111111] ${isVisible ? 'is-visible' : ''}`}
       aria-label="Scroll to top"
       tabIndex={isVisible ? 0 : -1}
     >

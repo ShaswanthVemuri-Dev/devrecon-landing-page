@@ -32,21 +32,24 @@ const LogoItem = ({ logo, index }) => (
   </div>
 );
 
-const LogoMarquee = ({ items, reverse = false }) => {
-  const repeatedItems = [...items, ...items];
+const LogoGroup = ({ items }) => (
+  <div className="working-with-logo-group flex shrink-0 items-center">
+    {items.map((logo, index) => (
+      <LogoItem key={logo.src} logo={logo} index={index} />
+    ))}
+  </div>
+);
 
-  return (
-    <div className="relative overflow-hidden py-2">
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white to-transparent sm:w-32" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white to-transparent sm:w-32" />
-      <div className={`working-with-track flex w-max gap-10 sm:gap-14 md:gap-16 ${reverse ? 'working-with-marquee-reverse' : 'working-with-marquee'}`}>
-        {repeatedItems.map((logo, index) => (
-          <LogoItem key={`${logo.src}-${index}`} logo={logo} index={index % items.length} />
-        ))}
-      </div>
+const LogoMarquee = ({ items, reverse = false }) => (
+  <div className="relative overflow-hidden py-2">
+    <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white to-transparent sm:w-32" />
+    <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white to-transparent sm:w-32" />
+    <div className={`working-with-track flex w-max ${reverse ? 'working-with-marquee-reverse' : 'working-with-marquee'}`} aria-hidden="true">
+      <LogoGroup items={items} />
+      <LogoGroup items={items} />
     </div>
-  );
-};
+  </div>
+);
 
 const WorkingWith = () => {
   return (
@@ -62,21 +65,21 @@ const WorkingWith = () => {
           to { transform: translate3d(0, 0, 0); }
         }
 
-        @keyframes logoSoftIn {
-          from { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.985); }
-          to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-        }
-
         .working-with-track {
+          --working-with-gap: 2.5rem;
           backface-visibility: hidden;
           transform: translate3d(0, 0, 0);
           will-change: transform;
         }
 
+        .working-with-logo-group {
+          gap: var(--working-with-gap);
+          padding-right: var(--working-with-gap);
+        }
+
         .working-with-logo-item {
-          opacity: 0;
-          animation: logoSoftIn 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
-          animation-delay: var(--logo-delay, 0ms);
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
         }
 
         .working-with-marquee {
@@ -85,6 +88,14 @@ const WorkingWith = () => {
 
         .working-with-marquee-reverse {
           animation: workingWithMarqueeReverse 42s linear infinite;
+        }
+
+        @media (min-width: 640px) {
+          .working-with-track { --working-with-gap: 3.5rem; }
+        }
+
+        @media (min-width: 768px) {
+          .working-with-track { --working-with-gap: 4rem; }
         }
 
         @media (max-width: 640px) {
@@ -101,7 +112,6 @@ const WorkingWith = () => {
 
           .working-with-logo-item {
             opacity: 1;
-            animation: none;
           }
         }
 

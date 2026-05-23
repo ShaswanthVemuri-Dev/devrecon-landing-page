@@ -23,29 +23,70 @@ const getHashTarget = (hash) => {
 
 const easeInOutCubic = (value) => (value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2);
 
-export const smoothScrollToY = (targetY, duration = 760) => {
+let activeScrollAnimation = null;
+
+export const cancelSmoothScroll = () => {
+  if (!activeScrollAnimation) return;
+  activeScrollAnimation.cancelled = true;
+  window.cancelAnimationFrame(activeScrollAnimation.frame);
+  activeScrollAnimation.cleanup?.();
+  activeScrollAnimation = null;
+};
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+export const smoothScrollToY = (targetY, duration = 820) => {
   if (typeof window === 'undefined') return;
 
-  const startY = window.scrollY || document.documentElement.scrollTop || 0;
-  const distance = Math.max(Math.round(targetY), 0) - startY;
+  cancelSmoothScroll();
 
-  if (Math.abs(distance) < 2) {
-    window.scrollTo(0, Math.max(Math.round(targetY), 0));
+  const resolvedTarget = Math.max(Math.round(targetY), 0);
+  const startY = window.scrollY || document.documentElement.scrollTop || 0;
+  const distance = resolvedTarget - startY;
+
+  if (prefersReducedMotion() || Math.abs(distance) < 2) {
+    window.scrollTo(0, resolvedTarget);
     return;
   }
 
   const startedAt = window.performance.now();
+  const controller = { cancelled: false, frame: 0, cleanup: null };
+  activeScrollAnimation = controller;
+
+  const cancelOnUserInput = () => cancelSmoothScroll();
+  const userInputEvents = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
+
+  userInputEvents.forEach((eventName) => {
+    window.addEventListener(eventName, cancelOnUserInput, { passive: true, once: true });
+  });
+
+  controller.cleanup = () => {
+    userInputEvents.forEach((eventName) => {
+      window.removeEventListener(eventName, cancelOnUserInput);
+    });
+  };
 
   const step = (now) => {
+    if (controller.cancelled) return;
+
     const elapsed = now - startedAt;
     const progress = Math.min(elapsed / duration, 1);
     const eased = easeInOutCubic(progress);
     window.scrollTo(0, Math.round(startY + distance * eased));
 
-    if (progress < 1) window.requestAnimationFrame(step);
+    if (progress < 1) {
+      controller.frame = window.requestAnimationFrame(step);
+      return;
+    }
+
+    controller.cleanup?.();
+    if (activeScrollAnimation === controller) activeScrollAnimation = null;
   };
 
-  window.requestAnimationFrame(step);
+  controller.frame = window.requestAnimationFrame(step);
 };
 
 const scrollToTarget = (target, behavior = 'smooth') => {
@@ -53,7 +94,7 @@ const scrollToTarget = (target, behavior = 'smooth') => {
   const resolvedTop = Math.max(Math.round(targetTop), 0);
 
   if (behavior === 'smooth') {
-    smoothScrollToY(resolvedTop, 780);
+    smoothScrollToY(resolvedTop, 860);
     return;
   }
 
@@ -98,6 +139,7 @@ const RouteScrollManager = ({ locationOverride = null }) => {
     previousPathnameRef.current = pathname;
 
     const hardScrollTop = () => {
+      cancelSmoothScroll();
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;

@@ -9,6 +9,7 @@ const desktopNavLinks = [
 ];
 
 const mobileNavLinks = [{ name: 'Home', to: '/' }, ...desktopNavLinks];
+const MOBILE_MENU_EXIT_DELAY_MS = 560;
 
 const Underline = ({ active = false, mobile = false }) => (
   <span
@@ -38,6 +39,7 @@ const Navbar = () => {
     document.body.style.overflow = 'hidden';
     document.body.style.touchAction = 'none';
     document.documentElement.style.overscrollBehavior = 'none';
+    document.documentElement.classList.add('mobile-nav-open');
 
     const closeOnEscape = (event) => {
       if (event.key === 'Escape') setMobileMenuOpen(false);
@@ -49,6 +51,7 @@ const Navbar = () => {
       document.body.style.overflow = previousOverflow;
       document.body.style.touchAction = previousTouchAction;
       document.documentElement.style.overscrollBehavior = previousOverscrollBehavior;
+      document.documentElement.classList.remove('mobile-nav-open');
       window.removeEventListener('keydown', closeOnEscape);
     };
   }, [mobileMenuOpen]);
@@ -77,7 +80,7 @@ const Navbar = () => {
 
     navigationTimerRef.current = window.setTimeout(() => {
       navigate(to);
-    }, 220);
+    }, MOBILE_MENU_EXIT_DELAY_MS);
   };
 
   const desktopNavClassName = ({ isActive }) =>
@@ -87,11 +90,11 @@ const Navbar = () => {
     `group relative inline-flex items-center text-2xl font-semibold tracking-wide no-underline transition-colors duration-300 ${isActive ? 'text-[#111111]' : 'text-[#111111]/52 hover:text-[#111111]'}`;
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-[70] border-b border-gray-100 py-4 transition-all duration-300 glass-nav">
+    <nav className={`fixed inset-x-0 top-0 z-[120] border-b border-gray-100 py-4 transition-all duration-300 glass-nav ${mobileMenuOpen ? 'is-menu-open' : ''}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
         <Link
           to="/"
-          className={`group relative z-[90] inline-flex items-center text-2xl font-bold tracking-tight no-underline transition-colors duration-300 ${isHome ? 'text-[#111111]' : 'text-[#111111]/70 hover:text-[#111111]'}`}
+          className={`group relative z-[130] inline-flex items-center text-2xl font-bold tracking-tight no-underline transition-colors duration-300 ${isHome ? 'text-[#111111]' : 'text-[#111111]/70 hover:text-[#111111]'}`}
           onClick={closeMobileMenu}
           aria-current={isHome ? 'page' : undefined}
         >
@@ -121,22 +124,21 @@ const Navbar = () => {
 
         <button
           type="button"
-          className="motion-button motion-pill motion-pill-light relative z-[90] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
+          className="motion-button motion-pill motion-pill-light relative z-[130] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
           onClick={toggleMobileMenu}
           aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-navigation"
         >
-          <span className="relative z-10 transition-transform duration-[var(--duration-button)] ease-[var(--ease-bubble)]">
+          <span className={`mobile-menu-icon relative z-10 ${mobileMenuOpen ? 'is-open' : ''}`}>
             {mobileMenuOpen ? <X /> : <Menu />}
           </span>
         </button>
 
         <div
           id="mobile-navigation"
-          className={`mobile-menu-shell fixed left-0 top-0 z-[80] flex h-[100dvh] min-h-[100dvh] w-screen flex-col items-center justify-center gap-8 bg-white px-6 md:hidden ${mobileMenuOpen ? 'is-open' : ''}`}
+          className={`mobile-menu-shell fixed inset-0 z-[110] flex h-[100dvh] min-h-[100dvh] w-screen flex-col items-center justify-center gap-8 bg-white px-6 md:hidden ${mobileMenuOpen ? 'is-open' : ''}`}
           aria-hidden={!mobileMenuOpen}
-          inert={mobileMenuOpen ? undefined : ''}
         >
           {mobileNavLinks.map((link, index) => (
             <div key={link.name} className="mobile-menu-item" style={{ '--mobile-menu-delay': `${120 + index * 70}ms` }}>
