@@ -2,8 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useRevealMotion } from '../../hooks/useScrollMotion.js';
 
-const ease = [0.22, 1, 0.36, 1];
-
 const logos = [
   { src: '/working-with/logo-01.png', className: 'max-h-16 sm:max-h-20 md:max-h-24' },
   { src: '/working-with/logo-02.png', className: 'max-h-10 sm:max-h-12 md:max-h-14' },
@@ -20,8 +18,30 @@ const logos = [
 const firstRow = logos.slice(0, 5);
 const secondRow = logos.slice(5);
 
-const LogoItem = ({ logo }) => (
-  <div className="flex h-20 w-44 shrink-0 items-center justify-center px-4 sm:h-24 sm:w-56 sm:px-6 md:h-28 md:w-64 lg:h-32 lg:w-72 lg:px-8">
+const logoItemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 12,
+    scale: 0.985,
+  },
+  visible: (index) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.58,
+      delay: Math.min((index % 5) * 0.055, 0.22),
+      ease: [0.18, 0.9, 0.2, 1],
+    },
+  }),
+};
+
+const LogoItem = ({ logo, index }) => (
+  <motion.div
+    custom={index}
+    variants={logoItemVariants}
+    className="working-with-logo-item flex h-20 w-44 shrink-0 items-center justify-center px-4 sm:h-24 sm:w-56 sm:px-6 md:h-28 md:w-64 lg:h-32 lg:w-72 lg:px-8"
+  >
     <img
       src={logo.src}
       alt=""
@@ -31,7 +51,7 @@ const LogoItem = ({ logo }) => (
       draggable="false"
       className={`pointer-events-none w-full select-none object-contain ${logo.className}`}
     />
-  </div>
+  </motion.div>
 );
 
 const LogoMarquee = ({ items, reverse = false }) => {
@@ -41,9 +61,9 @@ const LogoMarquee = ({ items, reverse = false }) => {
     <div className="relative overflow-hidden py-2">
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white to-transparent sm:w-32" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white to-transparent sm:w-32" />
-      <div className={`flex w-max gap-10 sm:gap-14 md:gap-16 ${reverse ? 'working-with-marquee-reverse' : 'working-with-marquee'}`}>
+      <div className={`working-with-track flex w-max gap-10 sm:gap-14 md:gap-16 ${reverse ? 'working-with-marquee-reverse' : 'working-with-marquee'}`}>
         {repeatedItems.map((logo, index) => (
-          <LogoItem key={`${logo.src}-${index}`} logo={logo} />
+          <LogoItem key={`${logo.src}-${index}`} logo={logo} index={index} />
         ))}
       </div>
     </div>
@@ -52,33 +72,38 @@ const LogoMarquee = ({ items, reverse = false }) => {
 
 const WorkingWith = () => {
   const headingReveal = useRevealMotion({ desktopInitial: { y: 24 }, duration: 0.78 });
-  const marqueeReveal = useRevealMotion({ desktopInitial: { y: 22 }, duration: 0.76, delay: 0.04 });
 
   return (
     <section id="working-with" className="relative overflow-hidden bg-white px-6 pt-10 pb-16 md:pt-12 md:pb-24 xl:pt-14 xl:pb-28">
       <style>{`
         @keyframes workingWithMarquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-33.333%); }
+          from { transform: translate3d(0, 0, 0); }
+          to { transform: translate3d(-33.333333%, 0, 0); }
         }
 
         @keyframes workingWithMarqueeReverse {
-          from { transform: translateX(-33.333%); }
-          to { transform: translateX(0); }
+          from { transform: translate3d(-33.333333%, 0, 0); }
+          to { transform: translate3d(0, 0, 0); }
+        }
+
+        .working-with-track {
+          backface-visibility: hidden;
+          transform: translate3d(0, 0, 0);
+          will-change: transform;
         }
 
         .working-with-marquee {
-          animation: workingWithMarquee 38s linear infinite;
+          animation: workingWithMarquee 42s linear infinite;
         }
 
         .working-with-marquee-reverse {
-          animation: workingWithMarqueeReverse 38s linear infinite;
+          animation: workingWithMarqueeReverse 42s linear infinite;
         }
 
         @media (max-width: 640px) {
           .working-with-marquee,
           .working-with-marquee-reverse {
-            animation-duration: 30s;
+            animation-duration: 34s;
           }
         }
       `}</style>
@@ -100,10 +125,10 @@ const WorkingWith = () => {
         </motion.div>
 
         <motion.div
-          initial={marqueeReveal.initial}
-          whileInView={marqueeReveal.whileInView}
-          viewport={marqueeReveal.viewport}
-          transition={marqueeReveal.transition}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.16, margin: '0px 0px -8% 0px' }}
+          transition={{ staggerChildren: 0.035 }}
           className="grid gap-4 md:gap-5"
         >
           <LogoMarquee items={firstRow} />

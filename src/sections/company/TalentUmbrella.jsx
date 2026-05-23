@@ -1,9 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
-import { useRevealMotion } from '../../hooks/useScrollMotion.js';
-
-const ease = [0.22, 1, 0.36, 1];
+import Reveal from '../../components/motion/Reveal.jsx';
 
 const supportPoints = [
   {
@@ -21,22 +17,12 @@ const supportPoints = [
 ];
 
 const TalentUmbrella = () => {
-  const enableHoverMotion = useDesktopInteraction();
-  const textReveal = useRevealMotion({ desktopInitial: { y: 24 }, duration: 0.74 });
-  const cardReveal = useRevealMotion({ desktopInitial: { y: 24 }, duration: 0.76, delay: 0.04 });
-
   return (
     <section id="talent-umbrella" className="relative overflow-hidden px-6 py-14 md:py-24">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
       <div className="max-w-7xl mx-auto">
         <div className="grid items-start gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
-          <motion.div
-            initial={textReveal.initial}
-            whileInView={textReveal.whileInView}
-            viewport={textReveal.viewport}
-            transition={textReveal.transition}
-            className="max-w-2xl"
-          >
+          <Reveal className="max-w-2xl">
             <p className="mb-6 text-xs font-bold uppercase tracking-[0.25em] text-gray-400">
               Talent Umbrella
             </p>
@@ -51,15 +37,9 @@ const TalentUmbrella = () => {
                 DevReCon&apos;s Talent Umbrella is designed as a support model for ethical technical talent. The goal is to help builders shape ideas into clearer systems without taking away the identity of the work. We can help with documentation, technical direction, product structure, development planning, prototype thinking, execution support, and operational clarity. The builder&apos;s idea remains theirs unless a separate written agreement says otherwise.
               </p>
             </div>
-          </motion.div>
+          </Reveal>
 
-          <motion.div
-            initial={cardReveal.initial}
-            whileInView={cardReveal.whileInView}
-            viewport={cardReveal.viewport}
-            transition={cardReveal.transition}
-            className="relative overflow-hidden rounded-[2rem] bg-[#111111] p-6 text-white md:p-8 lg:p-9"
-          >
+          <Reveal className="relative overflow-hidden rounded-[2rem] bg-[#111111] p-6 text-white md:p-8 lg:p-9" delay={0.08}>
             <div className="pointer-events-none absolute inset-0 opacity-[0.08]">
               <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -78,11 +58,12 @@ const TalentUmbrella = () => {
 
               <div className="grid gap-4">
                 {supportPoints.map((point, index) => (
-                  <motion.div
+                  <Reveal
+                    as="article"
                     key={point.title}
-                    whileHover={enableHoverMotion ? { y: -5 } : undefined}
-                    transition={{ duration: 0.42, ease }}
-                    className={`rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-5 transition-colors duration-500 md:p-6 ${enableHoverMotion ? 'hover:border-white/20 hover:bg-white/[0.07]' : ''}`}
+                    delay={0.12 + index * 0.05}
+                    distance={12}
+                    className="motion-card rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-5 transition-colors duration-500 hover:border-white/20 hover:bg-white/[0.07] md:p-6"
                   >
                     <div className="flex items-start gap-4">
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold tracking-[0.18em] text-[#111111]">
@@ -97,11 +78,11 @@ const TalentUmbrella = () => {
                         </p>
                       </div>
                     </div>
-                  </motion.div>
+                  </Reveal>
                 ))}
               </div>
             </div>
-          </motion.div>
+          </Reveal>
         </div>
       </div>
     </section>

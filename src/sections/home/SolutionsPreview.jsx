@@ -38,7 +38,7 @@ const ServiceCard = ({ icon: Icon, title, desc, to, index, enableHoverMotion }) 
     viewport={reveal.viewport}
     transition={reveal.transition}
     whileHover={enableHoverMotion ? { y: -8 } : undefined}
-    className="group relative flex h-full flex-col justify-start overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 transition-all duration-500 hover:border-gray-200 hover:shadow-xl sm:p-7 lg:p-8"
+    className="motion-card group relative flex h-full flex-col justify-start overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 transition-all hover:border-gray-200 hover:shadow-xl sm:p-7 lg:p-8"
   >
     <div className="absolute right-0 top-0 p-4 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
       <Cpu className="h-24 w-24 rotate-12 text-gray-50" />
@@ -58,10 +58,10 @@ const ServiceCard = ({ icon: Icon, title, desc, to, index, enableHoverMotion }) 
 
     <Link
       to={to}
-      className="relative z-10 mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-black pb-1 text-sm font-semibold tracking-wide text-black transition-colors duration-[600ms] hover:border-gray-600 hover:text-gray-600"
+      className="motion-underline-action relative z-10 mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-black pb-1 text-sm font-semibold tracking-wide text-black hover:border-gray-600 hover:text-gray-600"
     >
       Explore solution
-      <ArrowRight className="h-4 w-4 transition-transform duration-[600ms] group-hover:translate-x-1" />
+      <ArrowRight className="motion-action-arrow motion-action-arrow-right h-4 w-4" />
     </Link>
   </motion.div>
   );

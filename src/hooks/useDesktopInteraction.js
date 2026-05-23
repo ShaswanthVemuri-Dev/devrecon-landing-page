@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const DESKTOP_INTERACTION_QUERY = '(hover: hover) and (pointer: fine)';
+const DESKTOP_INTERACTION_QUERY = '(any-hover: hover)';
 
 const canUseDesktopInteraction = () => {
   if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {

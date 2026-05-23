@@ -4,8 +4,10 @@ import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { mixedInquiry, solutions } from '../../data/solutions.js';
 import { useRevealMotion } from '../../hooks/useScrollMotion.js';
+import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
+import Reveal from '../../components/motion/Reveal.jsx';
 
-const ease = [0.22, 1, 0.36, 1];
+const ease = [0.19, 1, 0.22, 1];
 const softEase = [0.2, 0.95, 0.25, 1];
 
 const desktopPanelTransition = {
@@ -19,40 +21,8 @@ const mobilePanelTransition = {
 };
 
 
-const useDesktopInteraction = () => {
-  const [enabled, setEnabled] = useState(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return false;
-    }
-
-    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  });
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return undefined;
-    }
-
-    const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
-    const update = () => setEnabled(mediaQuery.matches);
-
-    update();
-
-    if (typeof mediaQuery.addEventListener === 'function') {
-      mediaQuery.addEventListener('change', update);
-      return () => mediaQuery.removeEventListener('change', update);
-    }
-
-    mediaQuery.addListener(update);
-    return () => mediaQuery.removeListener(update);
-  }, []);
-
-  return enabled;
-};
-
-
 const hoverTransition = {
-  duration: 0.48,
+  duration: 0.34,
   ease,
 };
 
@@ -65,11 +35,12 @@ const buttonMotion = {
   rest: { y: 0 },
   hover: {
     y: -2,
+    scale: 1.012,
     transition: hoverTransition,
   },
   tap: {
     y: 0,
-    scale: 0.992,
+    scale: 0.984,
     transition: tapTransition,
   },
 };
@@ -272,10 +243,10 @@ const DetailContent = ({ solution, mailto, enableRichMotion }) => {
             animate="rest"
             whileHover={enableRichMotion ? 'hover' : undefined}
             whileTap="tap"
-            className="inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-sm font-semibold tracking-wide text-black visited:text-black active:text-black focus:text-black hover:bg-gray-200 hover:text-black transition-colors duration-300"
+            className="motion-button motion-pill inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-sm font-semibold tracking-wide text-black visited:text-black active:text-black focus:text-black hover:bg-gray-200 hover:text-black transition-colors duration-300"
           >
             Discuss this solution
-            <ArrowUpRight className="w-4 h-4" />
+            <ArrowUpRight className="motion-action-arrow w-4 h-4" />
           </motion.a>
           <p className="max-w-xl text-sm leading-loose tracking-wide text-gray-500 font-light">
             The email opens with a short structure so the first discussion starts with the requirement, not a generic sales form.
@@ -296,10 +267,10 @@ const SolutionPanel = ({ solution, isOpen, onToggle, enableRichMotion }) => {
     <motion.article
       id={solution.id}
       variants={panelMotion}
-      initial={enableRichMotion ? 'hidden' : false}
-      animate={enableRichMotion ? 'visible' : undefined}
+      initial="rest"
+      animate="rest"
       whileHover={enableRichMotion ? 'hover' : undefined}
-      className="scroll-mt-28 md:scroll-mt-32 rounded-[1.75rem] sm:rounded-[2.15rem] bg-[#111111] text-white overflow-hidden border border-black shadow-[0_24px_70px_rgba(0,0,0,0.08)] lg:will-change-transform"
+      className="motion-card scroll-mt-28 md:scroll-mt-32 rounded-[1.75rem] sm:rounded-[2.15rem] bg-[#111111] text-white overflow-hidden border border-black shadow-[0_24px_70px_rgba(0,0,0,0.08)] lg:will-change-transform"
     >
       <motion.button
         type="button"
@@ -384,7 +355,6 @@ const SolutionPanel = ({ solution, isOpen, onToggle, enableRichMotion }) => {
 const SolutionDeepDive = () => {
   const shouldReduceMotion = useReducedMotion();
   const supportsDesktopInteraction = useDesktopInteraction();
-  const mixedReveal = useRevealMotion({ desktopInitial: { y: shouldReduceMotion ? 0 : 20 }, duration: 0.62, ease });
   const enableRichMotion = supportsDesktopInteraction && !shouldReduceMotion;
   const location = useLocation();
   const [openId, setOpenId] = useState('');
@@ -404,29 +374,30 @@ const SolutionDeepDive = () => {
   return (
     <section className="px-6 pb-20 md:pb-32">
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          variants={listMotion}
-          initial="hidden"
-          animate="visible"
-          className="space-y-5 md:space-y-6"
-        >
-          {solutions.map((solution) => (
-            <SolutionPanel
+        <div className="space-y-5 md:space-y-6">
+          {solutions.map((solution, index) => (
+            <Reveal
               key={solution.id}
-              solution={solution}
-              isOpen={openId === solution.id}
-              onToggle={() => setOpenId((current) => (current === solution.id ? '' : solution.id))}
-              enableRichMotion={enableRichMotion}
-            />
+              as="div"
+              delay={index * 0.055}
+              variant="lift"
+              threshold={0.08}
+            >
+              <SolutionPanel
+                solution={solution}
+                isOpen={openId === solution.id}
+                onToggle={() => setOpenId((current) => (current === solution.id ? '' : solution.id))}
+                enableRichMotion={enableRichMotion}
+              />
+            </Reveal>
           ))}
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={mixedReveal.initial}
-          whileInView={mixedReveal.whileInView}
-          viewport={mixedReveal.viewport}
-          transition={mixedReveal.transition}
-          className="mt-9 md:mt-12 rounded-[2rem] border border-gray-100 bg-white/85 backdrop-blur-sm p-7 sm:p-8 md:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 shadow-[0_20px_70px_rgba(0,0,0,0.035)]"
+        <Reveal
+          as="div"
+          delay={0.06}
+          variant="soft"
+          className="motion-card mt-9 md:mt-12 rounded-[2rem] border border-gray-100 bg-white/85 backdrop-blur-sm p-7 sm:p-8 md:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 shadow-[0_20px_70px_rgba(0,0,0,0.035)] hover:shadow-[0_28px_76px_rgba(0,0,0,0.06)]"
         >
           <div className="max-w-3xl">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#111111]">
@@ -444,12 +415,12 @@ const SolutionDeepDive = () => {
             animate="rest"
             whileHover={enableRichMotion ? 'hover' : undefined}
             whileTap="tap"
-            className="inline-flex items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm font-semibold tracking-wide text-white visited:text-white active:text-white focus:text-white hover:bg-gray-800 hover:text-white transition-colors duration-300 shrink-0"
+            className="motion-button motion-pill inline-flex items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm font-semibold tracking-wide text-white visited:text-white active:text-white focus:text-white hover:bg-gray-800 hover:text-white transition-colors duration-300 shrink-0"
           >
             Discuss your specific requirement
-            <ArrowUpRight className="w-4 h-4" />
+            <ArrowUpRight className="motion-action-arrow w-4 h-4" />
           </motion.a>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

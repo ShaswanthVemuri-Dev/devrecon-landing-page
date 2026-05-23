@@ -1,9 +1,5 @@
-import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
-import useDesktopInteraction from '../../hooks/useDesktopInteraction.js';
-import { useMotionProfile, useRevealMotion } from '../../hooks/useScrollMotion.js';
-
-const ease = [0.22, 1, 0.36, 1];
+import React from 'react';
+import Reveal from '../../components/motion/Reveal.jsx';
 
 const nameParts = [
   {
@@ -24,34 +20,10 @@ const nameParts = [
 ];
 
 const NameModel = () => {
-  const enableHoverMotion = useDesktopInteraction();
-  const motionProfile = useMotionProfile();
-  const headingReveal = useRevealMotion({ desktopInitial: { y: 24 }, duration: 0.72 });
-  const cardContainerMotion = useMemo(() => ({
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: motionProfile.useSimpleMobileMotion ? 0.035 : 0.09,
-      },
-    },
-  }), [motionProfile.useSimpleMobileMotion]);
-  const itemMotion = useMemo(() => ({
-    hidden: motionProfile.useSimpleMobileMotion ? { opacity: 0 } : { opacity: 0, y: 22 },
-    visible: motionProfile.useSimpleMobileMotion
-      ? { opacity: 1, transition: { duration: 0.32, ease } }
-      : { opacity: 1, y: 0, transition: { duration: 0.68, ease } },
-  }), [motionProfile.useSimpleMobileMotion]);
-
   return (
     <section className="relative px-6 py-12 md:py-20">
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={headingReveal.initial}
-          whileInView={headingReveal.whileInView}
-          viewport={headingReveal.viewport}
-          transition={headingReveal.transition}
-          className="max-w-4xl"
-        >
+        <Reveal className="max-w-4xl">
           <p className="mb-6 text-xs font-bold uppercase tracking-[0.25em] text-gray-400">
             Dev Re Con
           </p>
@@ -61,22 +33,15 @@ const NameModel = () => {
           <p className="mt-7 text-base font-light leading-loose tracking-wide text-gray-500 md:text-lg">
             DevReCon stands for Development, Research, and Consultation. The name was built to reflect how the company works, not just what the company does. Development turns ideas into usable systems. Research keeps decisions grounded in logic, context, and technical reality. Consultation makes the process understandable for the people who need to trust it. Together, they form the foundation of Engineering Clarity.
           </p>
-        </motion.div>
+        </Reveal>
 
-        <motion.div
-          variants={cardContainerMotion}
-          initial={motionProfile.enableMotion ? 'hidden' : false}
-          whileInView={motionProfile.enableMotion ? 'visible' : undefined}
-          viewport={{ once: true, amount: motionProfile.useSimpleMobileMotion ? 0.01 : 0.08, margin: motionProfile.useSimpleMobileMotion ? '0px 0px -6% 0px' : undefined }}
-          className="mt-10 grid gap-5 md:grid-cols-3"
-        >
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
           {nameParts.map((part, index) => (
-            <motion.article
+            <Reveal
+              as="article"
               key={part.short}
-              variants={itemMotion}
-              whileHover={enableHoverMotion ? { y: -7, scale: 1.012 } : undefined}
-              transition={{ duration: 0.42, ease }}
-              className={`rounded-[1.75rem] border border-gray-100 bg-white/82 p-6 shadow-[0_18px_60px_rgba(17,17,17,0.04)] backdrop-blur-sm transition-all duration-500 md:p-7 ${enableHoverMotion ? 'hover:border-gray-200 hover:shadow-[0_26px_76px_rgba(17,17,17,0.08)]' : ''}`}
+              delay={index * 0.07}
+              className="motion-card rounded-[1.75rem] border border-gray-100 bg-white/82 p-6 shadow-[0_18px_60px_rgba(17,17,17,0.04)] backdrop-blur-sm hover:border-gray-200 hover:shadow-[0_26px_76px_rgba(17,17,17,0.08)] md:p-7"
             >
               <div className="flex items-baseline justify-between gap-4">
                 <span className="text-5xl font-bold tracking-tighter text-[#111111] md:text-6xl">
@@ -93,9 +58,9 @@ const NameModel = () => {
               <p className="mt-4 text-sm font-light leading-loose tracking-wide text-gray-500 md:text-base">
                 {part.text}
               </p>
-            </motion.article>
+            </Reveal>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -48,10 +48,10 @@ const TalentUmbrellaTeaser = () => {
               whileTap={{ scale: 0.985 }}
               transition={{ duration: 0.28, ease }}
               style={{ color: '#ffffff', WebkitTapHighlightColor: 'transparent' }}
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-8 py-5 text-base font-semibold tracking-wide text-white no-underline shadow-sm outline-none transition-[background-color,box-shadow] duration-300 hover:bg-[#1B1B1B] hover:text-white hover:shadow-xl active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none sm:w-auto sm:px-10 sm:text-lg"
+              className="motion-button motion-pill group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-8 py-5 text-base font-semibold tracking-wide text-white no-underline shadow-sm outline-none hover:bg-[#1B1B1B] hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none sm:w-auto sm:px-10 sm:text-lg"
             >
               Explore Talent Umbrella
-              <ChevronRight className="h-5 w-5 transition-transform duration-500 group-hover:translate-x-1" />
+              <ChevronRight className="motion-action-arrow motion-action-arrow-right h-5 w-5" />
             </MotionLink>
             <p className="max-w-lg text-sm font-medium tracking-wide text-gray-500">
               Ownership, support scope, and collaboration terms are handled transparently based on the nature of each project.

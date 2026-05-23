@@ -1,7 +1,7 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const HASH_RETRY_TIMEOUT = 1400;
+const HASH_RETRY_TIMEOUT = 900;
 
 const getNavbarOffset = () => {
   const nav = document.querySelector('nav');
@@ -43,11 +43,23 @@ const RouteScrollManager = () => {
   const { pathname, hash } = useLocation();
   const previousPathnameRef = useRef(null);
 
+  useEffect(() => {
+    if (!('scrollRestoration' in window.history)) return undefined;
+
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
+
+    return () => {
+      window.history.scrollRestoration = previousScrollRestoration;
+    };
+  }, []);
+
   useLayoutEffect(() => {
     let animationFrame = 0;
     let cancelled = false;
     const previousPathname = previousPathnameRef.current;
     const isSamePageHashNavigation = previousPathname === pathname;
+    const isNewPathname = previousPathname !== null && previousPathname !== pathname;
     previousPathnameRef.current = pathname;
 
     const cancel = () => {
@@ -56,13 +68,16 @@ const RouteScrollManager = () => {
     };
 
     if (!hash) {
-      animationFrame = window.requestAnimationFrame(() => {
-        if (!cancelled) {
-          window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-        }
-      });
-
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
       return cancel;
+    }
+
+    if (isNewPathname) {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     }
 
     const behavior = isSamePageHashNavigation ? 'smooth' : 'auto';
@@ -74,7 +89,9 @@ const RouteScrollManager = () => {
       if (scrollToHashTarget(hash, behavior)) return;
 
       if (performance.now() - startedAt >= HASH_RETRY_TIMEOUT) {
-        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
         return;
       }
 
@@ -85,9 +102,7 @@ const RouteScrollManager = () => {
       return cancel;
     }
 
-    animationFrame = window.requestAnimationFrame(() => {
-      animationFrame = window.requestAnimationFrame(tryHashScroll);
-    });
+    animationFrame = window.requestAnimationFrame(tryHashScroll);
 
     return cancel;
   }, [pathname, hash]);

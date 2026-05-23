@@ -55,15 +55,15 @@ const ProductPanel = ({ product, reverse, index }) => {
             href={product.website}
             target="_blank"
             rel="noreferrer"
-            className={`group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-5 py-4 text-center text-sm font-semibold tracking-wide text-white visited:text-white active:text-white focus:text-white hover:text-white transition-transform duration-300 ease-out hover:bg-[#1B1B1B] focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 ${enableHoverMotion ? 'product-hover-lift hover:scale-[1.012]' : ''}`}
+            className={`motion-button motion-pill group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] px-5 py-4 text-center text-sm font-semibold tracking-wide text-white visited:text-white active:text-white focus:text-white hover:bg-[#1B1B1B] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 ${enableHoverMotion ? 'product-hover-lift' : ''}`}
           >
             {product.visitLabel}
-            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="motion-action-arrow h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
 
           <a
             href={product.contactHref}
-            className={`inline-flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 bg-white/70 px-5 py-4 text-center text-sm font-semibold tracking-wide text-[#111111] visited:text-[#111111] active:text-[#111111] focus:text-[#111111] hover:text-[#111111] transition-transform duration-300 ease-out hover:border-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 ${enableHoverMotion ? 'product-hover-lift hover:scale-[1.012]' : ''}`}
+            className={`motion-button motion-pill inline-flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 bg-white/70 px-5 py-4 text-center text-sm font-semibold tracking-wide text-[#111111] visited:text-[#111111] active:text-[#111111] focus:text-[#111111] hover:border-black hover:text-[#111111] focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 ${enableHoverMotion ? 'product-hover-lift' : ''}`}
           >
             Discuss a similar system
           </a>

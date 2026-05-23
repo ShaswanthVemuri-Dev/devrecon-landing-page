@@ -13,6 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import ProductPreviewFrame from './ProductPreviewFrame.jsx';
+import publicAsset from '../../../utils/assetPaths.js';
 
 const premiumEase = [0.22, 1, 0.36, 1];
 
@@ -63,13 +64,13 @@ const MasterMentorBrand = ({ website }) => (
   <a href={website} target="_blank" rel="noreferrer" className="flex min-w-0 items-center gap-2.5 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]/40">
     <div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white">
       <img
-        src={PREVIEW_ASSETS.darkLogo}
+        src={publicAsset(PREVIEW_ASSETS.darkLogo)}
         alt="Master Mentor logo"
         className="mastermentor-logo-bw absolute h-[82%] w-[82%] object-contain opacity-100 transition duration-700"
         draggable={false}
       />
       <img
-        src={PREVIEW_ASSETS.logo}
+        src={publicAsset(PREVIEW_ASSETS.logo)}
         alt=""
         className="mastermentor-logo-colour absolute h-[78%] w-[78%] object-contain opacity-0 transition duration-700"
         draggable={false}

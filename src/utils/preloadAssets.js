@@ -1,3 +1,5 @@
+import publicAsset from './assetPaths.js';
+
 const PRELOAD_ASSETS = [
   '/founder/shaswanth-vemuri.webp',
   '/product-previews/mymedicals/logo.png',
@@ -23,7 +25,7 @@ const retainedImages = [];
 const preloadImage = (src) => {
   const image = new Image();
   image.decoding = 'async';
-  image.src = src;
+  image.src = publicAsset(src);
   retainedImages.push(image);
 };
 

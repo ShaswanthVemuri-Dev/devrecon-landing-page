@@ -15,8 +15,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 md:gap-24 w-full md:w-auto">
           <div className="flex flex-col gap-4 text-sm">
             <span className="font-bold text-black uppercase tracking-wider mb-2">Contact</span>
-            <a href="mailto:management@devrecon.in" className="text-gray-600 hover:text-black transition-colors tracking-wide break-all">management@devrecon.in</a>
-            <Link to="/company#founder-profile" className="text-gray-600 hover:text-black transition-colors tracking-wide">
+            <a href="mailto:management@devrecon.in" className="motion-underline-action w-fit border-b border-transparent text-gray-600 tracking-wide hover:border-black hover:text-black break-all">management@devrecon.in</a>
+            <Link to="/company#founder-profile" className="motion-underline-action w-fit border-b border-transparent text-gray-600 tracking-wide hover:border-black hover:text-black">
               Founder&apos;s Profile
             </Link>
           </div>

@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import ProductPreviewFrame from './ProductPreviewFrame.jsx';
+import publicAsset from '../../../utils/assetPaths.js';
 
 const premiumEase = [0.22, 1, 0.36, 1];
 
@@ -68,7 +69,7 @@ const MyMedicalsBrand = ({ website }) => (
   >
     <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#1C1C1E] shadow-lg">
       <img
-        src={PREVIEW_ASSETS.logo}
+        src={publicAsset(PREVIEW_ASSETS.logo)}
         alt="MyMedicals logo"
         className="colour-logo h-full w-full object-contain"
         draggable={false}
@@ -146,7 +147,7 @@ const MyMedicalsPhone = () => (
   >
     <div className="relative h-full overflow-hidden rounded-[1.1rem] bg-[#050505] min-[740px]:rounded-[1.26rem] min-[900px]:rounded-[1.36rem] min-[1280px]:rounded-[1.5rem]">
       <img
-        src={PREVIEW_ASSETS.phoneHero}
+        src={publicAsset(PREVIEW_ASSETS.phoneHero)}
         alt=""
         className="native-colour-stage absolute inset-0 h-full w-full object-cover"
         draggable={false}

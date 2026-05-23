@@ -38,10 +38,10 @@ const CompanyCTA = () => {
             whileTap={{ y: 0, scale: 0.992 }}
             transition={{ duration: 0.28, ease }}
             style={{ color: '#ffffff', WebkitTapHighlightColor: 'transparent' }}
-            className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm font-semibold tracking-wide text-white no-underline outline-none transition-colors hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none md:text-base lg:w-auto"
+            className="motion-button motion-pill inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#111111] px-7 py-4 text-sm font-semibold tracking-wide text-white no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none md:text-base lg:w-auto"
           >
             Start a conversation
-            <ArrowUpRight className="h-5 w-5" />
+            <ArrowUpRight className="motion-action-arrow h-5 w-5" />
           </motion.a>
         </motion.div>
       </div>

@@ -69,10 +69,10 @@ const FounderProfile = () => {
                 href="https://www.linkedin.com/in/shaswanthvemuri"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-7 inline-flex w-fit items-center gap-2 border-b border-[#111111]/25 pb-1 text-sm font-semibold tracking-wide text-[#111111] transition-all duration-300 hover:gap-3 hover:border-[#111111]"
+                className="motion-underline-action mt-7 inline-flex w-fit items-center gap-2 border-b border-[#111111]/25 pb-1 text-sm font-semibold tracking-wide text-[#111111] hover:gap-3 hover:border-[#111111]"
               >
                 View LinkedIn
-                <ArrowUpRight className="h-4 w-4" />
+                <ArrowUpRight className="motion-action-arrow h-4 w-4" />
               </a>
             </motion.div>
           </div>

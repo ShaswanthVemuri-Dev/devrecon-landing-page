@@ -5,60 +5,53 @@ import Navbar from './Navbar.jsx';
 import Footer from './Footer.jsx';
 import ScrollToTop from './ScrollToTop.jsx';
 import RouteScrollManager from './RouteScrollManager.jsx';
-import { useMotionProfile } from '../../hooks/useScrollMotion.js';
+import { motionDuration, motionEase } from '../../motion/motionTokens.js';
+import useMotionProfile from '../../motion/useMotionProfile.js';
 
-const pageEase = [0.22, 1, 0.36, 1];
+const createPageMotion = ({ enableMotion, useSimpleMobileMotion }) => {
+  if (!enableMotion) {
+    return {
+      initial: false,
+      animate: false,
+      exit: false,
+    };
+  }
 
-const createPageMotion = (simpleMobileMotion) => ({
-  initial: simpleMobileMotion
-    ? { opacity: 0 }
-    : {
-        opacity: 0,
-        y: 22,
+  const enterDuration = useSimpleMobileMotion ? motionDuration.pageEnterMobile : motionDuration.pageEnter;
+
+  return {
+    initial: {
+      opacity: 0,
+      y: useSimpleMobileMotion ? 6 : 10,
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: enterDuration,
+        ease: motionEase.soft,
       },
-  animate: simpleMobileMotion
-    ? {
-        opacity: 1,
-        transition: {
-          duration: 0.28,
-          ease: pageEase,
-        },
-      }
-    : {
-        opacity: 1,
-        y: 0,
-        transition: {
-          duration: 0.48,
-          ease: pageEase,
-        },
+    },
+    exit: {
+      opacity: 0,
+      y: useSimpleMobileMotion ? -4 : -6,
+      transition: {
+        duration: motionDuration.pageExit,
+        ease: motionEase.quick,
       },
-  exit: simpleMobileMotion
-    ? {
-        opacity: 0,
-        transition: {
-          duration: 0.18,
-          ease: pageEase,
-        },
-      }
-    : {
-        opacity: 0,
-        y: -18,
-        transition: {
-          duration: 0.3,
-          ease: pageEase,
-        },
-      },
-});
+    },
+  };
+};
 
 const Layout = () => {
   const location = useLocation();
   const outlet = useOutlet();
-  const { useSimpleMobileMotion } = useMotionProfile();
-  const pageMotion = createPageMotion(useSimpleMobileMotion);
+  const motionProfile = useMotionProfile();
+  const pageMotion = createPageMotion(motionProfile);
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="bg-white text-slate-900 overflow-x-hidden">
+      <div className="overflow-x-hidden bg-white text-slate-900">
         <RouteScrollManager />
         <Navbar />
 

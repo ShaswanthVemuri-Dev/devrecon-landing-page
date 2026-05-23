@@ -1,74 +1,15 @@
-import { useEffect, useMemo, useState } from 'react';
-
-const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
-const SIMPLE_MOBILE_MOTION_QUERY = '(max-width: 767px), (hover: none), (pointer: coarse)';
-const revealEase = [0.22, 1, 0.36, 1];
-
-const getMediaState = () => {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-    return {
-      prefersReducedMotion: false,
-      useSimpleMobileMotion: false,
-    };
-  }
-
-  return {
-    prefersReducedMotion: window.matchMedia(REDUCED_MOTION_QUERY).matches,
-    useSimpleMobileMotion: window.matchMedia(SIMPLE_MOBILE_MOTION_QUERY).matches,
-  };
-};
-
-const useMotionProfile = () => {
-  const [state, setState] = useState(getMediaState);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return undefined;
-    }
-
-    const reducedQuery = window.matchMedia(REDUCED_MOTION_QUERY);
-    const mobileQuery = window.matchMedia(SIMPLE_MOBILE_MOTION_QUERY);
-    const update = () => setState(getMediaState());
-
-    update();
-
-    const addListener = (query) => {
-      if (typeof query.addEventListener === 'function') {
-        query.addEventListener('change', update);
-        return () => query.removeEventListener('change', update);
-      }
-
-      query.addListener(update);
-      return () => query.removeListener(update);
-    };
-
-    const removeReduced = addListener(reducedQuery);
-    const removeMobile = addListener(mobileQuery);
-
-    return () => {
-      removeReduced();
-      removeMobile();
-    };
-  }, []);
-
-  return useMemo(
-    () => ({
-      prefersReducedMotion: state.prefersReducedMotion,
-      useSimpleMobileMotion: state.useSimpleMobileMotion,
-      enableMotion: !state.prefersReducedMotion,
-    }),
-    [state.prefersReducedMotion, state.useSimpleMobileMotion]
-  );
-};
+import { useMemo } from 'react';
+import { motionDuration, motionEase, motionDistance, motionViewport } from '../motion/motionTokens.js';
+import useMotionProfile from '../motion/useMotionProfile.js';
 
 export const useRevealMotion = ({
-  desktopInitial = { y: 24 },
+  desktopInitial = { y: motionDistance.revealDesktop },
   desktopVisible = {},
-  amount = 0.08,
+  amount,
   margin,
-  duration = 0.74,
+  duration,
   delay = 0,
-  ease = revealEase,
+  ease = motionEase.soft,
 } = {}) => {
   const profile = useMotionProfile();
 
@@ -86,8 +27,8 @@ export const useRevealMotion = ({
     }
 
     const isSimple = profile.useSimpleMobileMotion;
-    const initial = isSimple ? { opacity: 0 } : { opacity: 0, ...desktopInitial };
-    const visible = isSimple ? { opacity: 1 } : { opacity: 1, ...desktopVisible };
+    const initial = isSimple ? { opacity: 0, y: motionDistance.revealMobile } : { opacity: 0, ...desktopInitial };
+    const visible = isSimple ? { opacity: 1, y: 0 } : { opacity: 1, ...desktopVisible };
 
     return {
       enabled: true,
@@ -97,19 +38,20 @@ export const useRevealMotion = ({
       animate: visible,
       viewport: {
         once: true,
-        amount: isSimple ? 0.01 : amount,
-        margin: isSimple ? '0px 0px -6% 0px' : margin,
+        amount: amount ?? (isSimple ? motionViewport.revealAmountMobile : motionViewport.revealAmount),
+        margin: margin ?? (isSimple ? motionViewport.revealMarginMobile : motionViewport.revealMargin),
       },
       transition: {
-        duration: isSimple ? 0.32 : duration,
-        delay: isSimple ? 0 : delay,
+        duration: duration ?? (isSimple ? motionDuration.revealMobile : motionDuration.reveal),
+        delay: isSimple ? Math.min(delay, 0.06) : delay,
         ease,
       },
     };
   }, [amount, delay, desktopInitial, desktopVisible, duration, ease, margin, profile.enableMotion, profile.useSimpleMobileMotion]);
 };
 
+export { default as useMotionProfile } from '../motion/useMotionProfile.js';
+
 const useScrollMotion = () => useMotionProfile().enableMotion;
 
-export { useMotionProfile };
 export default useScrollMotion;

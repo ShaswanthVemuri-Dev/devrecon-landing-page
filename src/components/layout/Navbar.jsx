@@ -17,7 +17,7 @@ const mobileNavLinks = [
 ];
 
 const underlineBaseClassName =
-  'pointer-events-none absolute left-0 w-full origin-left border-b-2 border-[#111111] opacity-0 transition-[transform,opacity] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 group-hover:opacity-100';
+  'pointer-events-none absolute left-0 w-full origin-left border-b-2 border-[#111111] opacity-0 transition-[transform,opacity] duration-[var(--duration-underline)] ease-[var(--ease-soft)] group-hover:scale-x-100 group-hover:opacity-100';
 
 const mobileOverlayVariants = {
   closed: {
@@ -139,14 +139,10 @@ const Navbar = () => {
   };
 
   const desktopNavClassName = ({ isActive }) =>
-    `group relative inline-flex items-center text-sm font-medium tracking-wide no-underline transition-colors duration-300 ${
-      isActive ? 'text-[#111111]' : 'text-gray-600 hover:text-[#111111]'
-    }`;
+    `group relative inline-flex items-center text-sm font-medium tracking-wide text-[#111111] no-underline transition-colors duration-300`;
 
   const mobileNavClassName = ({ isActive }) =>
-    `group relative inline-flex items-center text-2xl font-semibold tracking-wide no-underline transition-colors duration-300 ${
-      isActive ? 'text-[#111111]' : 'text-gray-500 hover:text-[#111111]'
-    }`;
+    `group relative inline-flex items-center text-2xl font-semibold tracking-wide text-[#111111] no-underline transition-colors duration-300`;
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-gray-100 py-4 transition-all duration-300 glass-nav">
@@ -181,7 +177,7 @@ const Navbar = () => {
             whileTap={{ y: 0, scale: 0.992 }}
             transition={{ duration: 0.28, ease }}
             style={{ color: '#ffffff', WebkitTapHighlightColor: 'transparent' }}
-            className="rounded-full bg-[#111111] px-6 py-2.5 text-sm font-medium tracking-wide text-white no-underline outline-none transition-[background-color,box-shadow] duration-300 hover:bg-gray-800 hover:text-white hover:shadow-lg active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
+            className="motion-button motion-pill rounded-full bg-[#111111] px-6 py-2.5 text-sm font-medium tracking-wide text-white no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
           >
             Start a Project
           </motion.a>
@@ -189,7 +185,7 @@ const Navbar = () => {
 
         <button
           type="button"
-          className="relative z-[60] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
+          className="motion-button relative z-[60] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
           onClick={() => {
             setPendingNavigation(null);
             setMobileMenuOpen((open) => !open);
@@ -245,7 +241,7 @@ const Navbar = () => {
                 onClick={closeMobileMenu}
                 whileTap={{ scale: 0.992 }}
                 style={{ color: '#ffffff', WebkitTapHighlightColor: 'transparent' }}
-                className="mt-4 rounded-full bg-[#111111] px-8 py-4 text-lg font-medium tracking-wide text-white no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
+                className="motion-button motion-pill mt-4 rounded-full bg-[#111111] px-8 py-4 text-lg font-medium tracking-wide text-white no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
               >
                 Start a Project
               </motion.a>

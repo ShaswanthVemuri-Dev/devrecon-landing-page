@@ -1,9 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useRevealMotion } from '../../../hooks/useScrollMotion.js';
 import useDesktopInteraction from '../../../hooks/useDesktopInteraction.js';
-
-const ease = [0.16, 1, 0.3, 1];
+import { motionDuration, motionEase, motionScale } from '../../../motion/motionTokens.js';
 
 const PRODUCT_THEME = {
   mymedicals: {
@@ -61,12 +59,6 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
   const [colourActive, setColourActive] = useState(false);
   const [hoverActive, setHoverActive] = useState(false);
   const enableHoverMotion = useDesktopInteraction();
-  const reveal = useRevealMotion({
-    desktopInitial: { y: 28 },
-    duration: 0.74,
-    ease,
-    margin: '0px 0px 10% 0px',
-  });
 
   const handlePointerDown = (event) => {
     if (event.pointerType === 'mouse' || isInteractiveTarget(event.target)) {
@@ -101,19 +93,19 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
     tapStart.current = null;
   };
 
+  const isColourActive = open || colourActive || hoverActive;
+
   return (
     <motion.div
       data-menu-open={open ? 'true' : 'false'}
-      data-colour-active={open || colourActive || hoverActive ? 'true' : 'false'}
+      data-colour-active={isColourActive ? 'true' : 'false'}
+      data-hover-active={hoverActive ? 'true' : 'false'}
       className="product-preview-card group relative overflow-hidden rounded-[2.5rem] border border-[#242424] bg-[#0E0E10] shadow-[0_30px_92px_rgba(0,0,0,0.24)]"
-      initial={reveal.initial}
-      whileInView={reveal.whileInView}
-      viewport={reveal.viewport}
-      transition={reveal.transition}
+      whileHover={enableHoverMotion ? { y: -4, scale: motionScale.hover, boxShadow: '0 40px 110px rgba(0,0,0,0.28)' } : undefined}
+      whileTap={{ scale: motionScale.softTap }}
+      transition={{ duration: motionDuration.hover, ease: motionEase.soft }}
       aria-label={`${product.name} miniature homepage preview`}
-      onMouseEnter={() => {
-        if (enableHoverMotion) setHoverActive(true);
-      }}
+      onMouseEnter={() => setHoverActive(true)}
       onMouseLeave={() => {
         setHoverActive(false);
         handlePointerCancel();
@@ -124,7 +116,7 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
       onPointerLeave={handlePointerCancel}
     >
       <ShellGlow productId={variant} />
-      <div className="relative z-10 min-h-[560px] overflow-hidden rounded-[2.5rem]">
+      <div className="product-preview-viewport relative z-10 min-h-[560px] overflow-hidden rounded-[2.5rem]">
         {children}
       </div>
     </motion.div>

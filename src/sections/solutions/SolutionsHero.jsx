@@ -124,7 +124,7 @@ const SolutionsHero = () => {
               animate="rest"
               whileHover={enableHoverMotion ? 'hover' : undefined}
               whileTap="tap"
-              className="rounded-full border border-gray-200 bg-white/75 px-4 py-2.5 text-xs sm:px-5 sm:py-3 sm:text-sm font-semibold tracking-wide text-gray-700 backdrop-blur-sm motion-safe:hover:border-black motion-safe:hover:bg-black motion-safe:hover:text-white transition-colors duration-300"
+              className="motion-pill rounded-full border border-gray-200 bg-white/75 px-4 py-2.5 text-xs font-semibold tracking-wide text-gray-700 backdrop-blur-sm motion-safe:hover:border-black motion-safe:hover:bg-black motion-safe:hover:text-white sm:px-5 sm:py-3 sm:text-sm"
             >
               {solution.label}
             </motion.a>
