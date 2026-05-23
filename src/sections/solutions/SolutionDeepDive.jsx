@@ -72,7 +72,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle, index }) => {
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className={`group relative w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 ${isOpen ? 'px-5 pt-5 pb-0 sm:px-8 sm:pt-8 sm:pb-2 md:px-10 md:pt-10 md:pb-4' : 'px-5 pt-5 pb-5 sm:px-8 sm:pt-8 sm:pb-8 md:px-10 md:pt-10 md:pb-10'}`}
+        className={`group relative w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 ${isOpen ? 'px-5 pt-5 pb-2 sm:px-8 sm:pt-8 sm:pb-3 md:px-10 md:pt-10 md:pb-4' : 'px-5 pt-5 pb-5 sm:px-8 sm:pt-8 sm:pb-8 md:px-10 md:pt-10 md:pb-10'}`}
       >
         <div className="flex flex-col gap-5 sm:gap-7 lg:flex-row lg:items-start lg:gap-12">
           <div className="flex shrink-0 items-center justify-between lg:block lg:w-28">
@@ -94,13 +94,11 @@ const SolutionPanel = ({ solution, isOpen, onToggle, index }) => {
               </h2>
             </div>
 
-            {!isOpen && (
-              <div className="solution-preview-text relative mt-5 max-w-5xl overflow-hidden opacity-100 transition-opacity duration-[var(--duration-accordion)] ease-[var(--ease-soft)]">
-                <p className="pr-3 text-sm font-light leading-relaxed tracking-wide text-gray-300 sm:pr-8 sm:text-base md:pr-12 md:text-xl md:leading-loose">
-                  {solution.preview} {solution.continuation}
-                </p>
-              </div>
-            )}
+            <div className={`solution-preview-text relative max-w-5xl overflow-hidden ${isOpen ? 'is-hidden' : ''}`} aria-hidden={isOpen}>
+              <p className="pr-3 text-sm font-light leading-relaxed tracking-wide text-gray-300 sm:pr-8 sm:text-base md:pr-12 md:text-xl md:leading-loose">
+                {solution.preview} {solution.continuation}
+              </p>
+            </div>
           </div>
 
           <span className={`hidden h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-[#111111] transition-transform duration-[var(--duration-button)] ease-[var(--ease-bubble)] lg:flex ${isOpen ? 'rotate-180' : ''}`}>

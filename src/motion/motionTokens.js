@@ -21,7 +21,7 @@ export const motionDuration = {
   revealMobile: 0.68,
   pageEnter: 0.86,
   pageEnterMobile: 0.76,
-  menu: 0.62,
+  menu: 0.72,
   menuItem: 0.36,
   accordion: 0.42,
   productColour: 0.72,

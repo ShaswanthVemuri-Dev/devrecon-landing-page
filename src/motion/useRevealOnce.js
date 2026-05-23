@@ -2,6 +2,24 @@ import { useEffect, useRef, useState } from 'react';
 import { motionViewport } from './motionTokens.js';
 import useMotionProfile from './useMotionProfile.js';
 
+const scheduleVisible = (callback, delay = 0) => {
+  let firstFrame = 0;
+  let secondFrame = 0;
+  let timer = 0;
+
+  firstFrame = window.requestAnimationFrame(() => {
+    secondFrame = window.requestAnimationFrame(() => {
+      timer = window.setTimeout(callback, delay);
+    });
+  });
+
+  return () => {
+    window.cancelAnimationFrame(firstFrame);
+    window.cancelAnimationFrame(secondFrame);
+    window.clearTimeout(timer);
+  };
+};
+
 const useRevealOnce = ({
   root = null,
   rootMargin,
@@ -24,19 +42,15 @@ const useRevealOnce = ({
       return undefined;
     }
 
-    const rect = element.getBoundingClientRect();
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
-
-    if (rect.top < viewportHeight * 0.92 && rect.bottom > viewportHeight * 0.04) {
-      setIsVisible(true);
-      return undefined;
-    }
+    let cancelScheduledReveal = null;
+    const revealDelay = profile.useSimpleMobileMotion ? 110 : 70;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
-        setIsVisible(true);
+
         observer.unobserve(entry.target);
+        cancelScheduledReveal = scheduleVisible(() => setIsVisible(true), revealDelay);
       },
       {
         root,
@@ -47,7 +61,10 @@ const useRevealOnce = ({
 
     observer.observe(element);
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      cancelScheduledReveal?.();
+    };
   }, [disabled, profile.enableMotion, profile.useSimpleMobileMotion, root, rootMargin, threshold]);
 
   return {

@@ -9,7 +9,7 @@ const desktopNavLinks = [
 ];
 
 const mobileNavLinks = [{ name: 'Home', to: '/' }, ...desktopNavLinks];
-const MOBILE_MENU_EXIT_DELAY_MS = 560;
+const MOBILE_MENU_EXIT_DELAY_MS = 780;
 
 const Underline = ({ active = false, mobile = false }) => (
   <span
