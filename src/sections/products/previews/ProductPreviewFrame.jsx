@@ -12,12 +12,19 @@ const PRODUCT_THEME = {
 
 const TAP_MOVE_LIMIT = 8;
 const TAP_TIME_LIMIT = 650;
+const RECENT_TOUCH_WINDOW = 900;
 
 const isInteractiveTarget = (target) => {
   if (!(target instanceof Element)) return false;
   return Boolean(target.closest('a, button, input, select, textarea, [role="button"], [data-preview-interactive="true"], [data-preview-menu="true"]'));
 };
 
+const getNow = () => {
+  if (typeof window !== 'undefined' && window.performance?.now) {
+    return window.performance.now();
+  }
+  return Date.now();
+};
 
 const ShellGlow = ({ productId }) => {
   if (productId === 'mymedicals') {
@@ -48,8 +55,38 @@ const ShellGlow = ({ productId }) => {
 
 const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }) => {
   const tapStart = useRef(null);
+  const recentTouchUntil = useRef(0);
   const [colourActive, setColourActive] = useState(false);
   const [hoverActive, setHoverActive] = useState(false);
+
+  const markTouchInteraction = () => {
+    recentTouchUntil.current = getNow() + RECENT_TOUCH_WINDOW;
+  };
+
+  const isRecentTouchInteraction = () => getNow() < recentTouchUntil.current;
+
+  const activateDesktopHover = () => {
+    if (isRecentTouchInteraction()) return;
+    setColourActive(false);
+    setHoverActive(true);
+  };
+
+  const clearDesktopHover = () => {
+    setHoverActive(false);
+    tapStart.current = null;
+  };
+
+  const handlePointerEnter = (event) => {
+    if (event.pointerType === 'mouse' || event.pointerType === 'pen') {
+      activateDesktopHover();
+    }
+  };
+
+  const handlePointerLeave = (event) => {
+    if (!event.pointerType || event.pointerType === 'mouse' || event.pointerType === 'pen') {
+      clearDesktopHover();
+    }
+  };
 
   const handlePointerDown = (event) => {
     if (event.pointerType === 'mouse' || isInteractiveTarget(event.target)) {
@@ -57,12 +94,13 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
       return;
     }
 
+    markTouchInteraction();
     setHoverActive(false);
     tapStart.current = {
       pointerId: event.pointerId,
       x: event.clientX,
       y: event.clientY,
-      time: window.performance.now(),
+      time: getNow(),
     };
   };
 
@@ -73,7 +111,7 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
 
     const movedX = Math.abs(event.clientX - start.x);
     const movedY = Math.abs(event.clientY - start.y);
-    const elapsed = window.performance.now() - start.time;
+    const elapsed = getNow() - start.time;
 
     if (movedX <= TAP_MOVE_LIMIT && movedY <= TAP_MOVE_LIMIT && elapsed <= TAP_TIME_LIMIT) {
       setColourActive((value) => !value);
@@ -82,20 +120,6 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
 
   const handlePointerCancel = () => {
     tapStart.current = null;
-  };
-
-  const activateDesktopHover = (event) => {
-    if (event.pointerType === 'mouse') {
-      setColourActive(false);
-      setHoverActive(true);
-    }
-  };
-
-  const clearDesktopHover = (event) => {
-    if (!event || event.pointerType === 'mouse') {
-      setHoverActive(false);
-    }
-    handlePointerCancel();
   };
 
   const isColourActive = open || colourActive || hoverActive;
@@ -107,8 +131,10 @@ const ProductPreviewFrame = ({ product, open, variant = 'mymedicals', children }
       data-hover-active={hoverActive ? 'true' : 'false'}
       className="product-preview-card group relative overflow-hidden rounded-[2.5rem] border border-[#242424] bg-[#0E0E10] shadow-[0_30px_92px_rgba(0,0,0,0.24)]"
       aria-label={`${product.name} miniature homepage preview`}
-      onPointerEnter={activateDesktopHover}
-      onPointerLeave={clearDesktopHover}
+      onMouseEnter={activateDesktopHover}
+      onMouseLeave={clearDesktopHover}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerCancel}

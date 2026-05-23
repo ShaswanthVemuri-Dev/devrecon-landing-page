@@ -17,11 +17,11 @@ export const motionDuration = {
   hover: 0.32,
   button: 0.42,
   underline: 0.32,
-  reveal: 0.72,
-  revealMobile: 0.46,
-  pageEnter: 0.76,
-  pageEnterMobile: 0.62,
-  menu: 0.46,
+  reveal: 0.82,
+  revealMobile: 0.68,
+  pageEnter: 0.86,
+  pageEnterMobile: 0.76,
+  menu: 0.62,
   menuItem: 0.36,
   accordion: 0.42,
   productColour: 0.72,
@@ -31,7 +31,7 @@ export const motionDuration = {
 
 export const motionDistance = {
   revealDesktop: 22,
-  revealMobile: 10,
+  revealMobile: 14,
   hoverLift: -2,
   cardLift: -5,
 };
@@ -47,5 +47,5 @@ export const motionViewport = {
   revealAmount: 0.12,
   revealAmountMobile: 0.08,
   revealMargin: '0px 0px -12% 0px',
-  revealMarginMobile: '0px 0px -8% 0px',
+  revealMarginMobile: '0px 0px -12% 0px',
 };

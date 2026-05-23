@@ -19,28 +19,28 @@ const Underline = ({ active = false, mobile = false }) => (
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileMenuMounted, setMobileMenuMounted] = useState(false);
-  const [pendingNavigation, setPendingNavigation] = useState(null);
-  const closeTimerRef = useRef(null);
+  const navigationTimerRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
 
   useEffect(() => {
-    return () => window.clearTimeout(closeTimerRef.current);
+    return () => window.clearTimeout(navigationTimerRef.current);
   }, []);
 
   useEffect(() => {
-    if (!mobileMenuMounted) return undefined;
+    if (!mobileMenuOpen) return undefined;
 
     const previousOverflow = document.body.style.overflow;
     const previousTouchAction = document.body.style.touchAction;
+    const previousOverscrollBehavior = document.documentElement.style.overscrollBehavior;
 
     document.body.style.overflow = 'hidden';
     document.body.style.touchAction = 'none';
+    document.documentElement.style.overscrollBehavior = 'none';
 
     const closeOnEscape = (event) => {
-      if (event.key === 'Escape') closeMobileMenu();
+      if (event.key === 'Escape') setMobileMenuOpen(false);
     };
 
     window.addEventListener('keydown', closeOnEscape);
@@ -48,69 +48,50 @@ const Navbar = () => {
     return () => {
       document.body.style.overflow = previousOverflow;
       document.body.style.touchAction = previousTouchAction;
+      document.documentElement.style.overscrollBehavior = previousOverscrollBehavior;
       window.removeEventListener('keydown', closeOnEscape);
     };
-  }, [mobileMenuMounted]);
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     setMobileMenuOpen(false);
-    window.clearTimeout(closeTimerRef.current);
-    closeTimerRef.current = window.setTimeout(() => setMobileMenuMounted(false), 480);
+    window.clearTimeout(navigationTimerRef.current);
   }, [location.pathname, location.hash]);
 
-  const openMobileMenu = () => {
-    window.clearTimeout(closeTimerRef.current);
-    setPendingNavigation(null);
-    setMobileMenuMounted(true);
-    window.requestAnimationFrame(() => setMobileMenuOpen(true));
-  };
-
   const closeMobileMenu = () => {
-    setPendingNavigation(null);
+    window.clearTimeout(navigationTimerRef.current);
     setMobileMenuOpen(false);
-    window.clearTimeout(closeTimerRef.current);
-    closeTimerRef.current = window.setTimeout(() => setMobileMenuMounted(false), 480);
   };
 
   const toggleMobileMenu = () => {
-    if (mobileMenuMounted && mobileMenuOpen) {
-      closeMobileMenu();
-      return;
-    }
-    openMobileMenu();
+    setMobileMenuOpen((open) => !open);
   };
 
   const handleMobileNavigation = (event, to) => {
     event.preventDefault();
     const currentDestination = `${location.pathname}${location.hash}`;
 
-    if (currentDestination === to) {
-      closeMobileMenu();
-      return;
-    }
+    closeMobileMenu();
 
-    setPendingNavigation(to);
-    setMobileMenuOpen(false);
-    window.clearTimeout(closeTimerRef.current);
-    closeTimerRef.current = window.setTimeout(() => {
-      setMobileMenuMounted(false);
+    if (currentDestination === to) return;
+
+    navigationTimerRef.current = window.setTimeout(() => {
       navigate(to);
-      setPendingNavigation(null);
-    }, 360);
+    }, 220);
   };
 
-  const desktopNavClassName = () =>
-    'group relative inline-flex items-center text-sm font-medium tracking-wide text-[#111111] no-underline transition-colors duration-300';
+  const desktopNavClassName = ({ isActive }) =>
+    `group relative inline-flex items-center text-sm font-medium tracking-wide no-underline transition-colors duration-300 ${isActive ? 'text-[#111111]' : 'text-[#111111]/50 hover:text-[#111111]'}`;
 
-  const mobileNavClassName = () =>
-    'group relative inline-flex items-center text-2xl font-semibold tracking-wide text-[#111111] no-underline transition-colors duration-300';
+  const mobileNavClassName = ({ isActive }) =>
+    `group relative inline-flex items-center text-2xl font-semibold tracking-wide no-underline transition-colors duration-300 ${isActive ? 'text-[#111111]' : 'text-[#111111]/52 hover:text-[#111111]'}`;
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-gray-100 py-4 transition-all duration-300 glass-nav">
+    <nav className="fixed inset-x-0 top-0 z-[70] border-b border-gray-100 py-4 transition-all duration-300 glass-nav">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
         <Link
           to="/"
-          className="group relative z-[60] inline-flex items-center text-2xl font-bold tracking-tight text-[#111111] no-underline transition-colors duration-300"
+          className={`group relative z-[90] inline-flex items-center text-2xl font-bold tracking-tight no-underline transition-colors duration-300 ${isHome ? 'text-[#111111]' : 'text-[#111111]/70 hover:text-[#111111]'}`}
           onClick={closeMobileMenu}
           aria-current={isHome ? 'page' : undefined}
         >
@@ -140,7 +121,7 @@ const Navbar = () => {
 
         <button
           type="button"
-          className="motion-button motion-pill motion-pill-light relative z-[60] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
+          className="motion-button motion-pill motion-pill-light relative z-[90] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
           onClick={toggleMobileMenu}
           aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={mobileMenuOpen}
@@ -151,35 +132,34 @@ const Navbar = () => {
           </span>
         </button>
 
-        {mobileMenuMounted && (
-          <div
-            id="mobile-navigation"
-            className={`mobile-menu-shell fixed inset-0 z-50 flex min-h-[100dvh] flex-col items-center justify-center gap-8 bg-white px-6 md:hidden ${mobileMenuOpen ? 'is-open' : ''}`}
-            aria-hidden={!mobileMenuOpen}
-          >
-            {mobileNavLinks.map((link, index) => (
-              <div key={link.name} className="mobile-menu-item" style={{ '--mobile-menu-delay': `${90 + index * 55}ms` }}>
-                <NavLink to={link.to} onClick={(event) => handleMobileNavigation(event, link.to)} className={mobileNavClassName}>
-                  {({ isActive }) => (
-                    <>
-                      <span>{link.name}</span>
-                      <Underline active={isActive} mobile />
-                    </>
-                  )}
-                </NavLink>
-              </div>
-            ))}
+        <div
+          id="mobile-navigation"
+          className={`mobile-menu-shell fixed left-0 top-0 z-[80] flex h-[100dvh] min-h-[100dvh] w-screen flex-col items-center justify-center gap-8 bg-white px-6 md:hidden ${mobileMenuOpen ? 'is-open' : ''}`}
+          aria-hidden={!mobileMenuOpen}
+          inert={mobileMenuOpen ? undefined : ''}
+        >
+          {mobileNavLinks.map((link, index) => (
+            <div key={link.name} className="mobile-menu-item" style={{ '--mobile-menu-delay': `${120 + index * 70}ms` }}>
+              <NavLink to={link.to} onClick={(event) => handleMobileNavigation(event, link.to)} className={mobileNavClassName}>
+                {({ isActive }) => (
+                  <>
+                    <span>{link.name}</span>
+                    <Underline active={isActive} mobile />
+                  </>
+                )}
+              </NavLink>
+            </div>
+          ))}
 
-            <a
-              href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
-              onClick={closeMobileMenu}
-              className="motion-button motion-pill motion-pill-dark mobile-menu-item mt-4 rounded-full bg-[#111111] px-8 py-4 text-lg font-medium tracking-wide text-white no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
-              style={{ '--mobile-menu-delay': `${90 + mobileNavLinks.length * 55}ms` }}
-            >
-              <span>Start a Project</span>
-            </a>
-          </div>
-        )}
+          <a
+            href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
+            onClick={closeMobileMenu}
+            className="motion-button motion-pill motion-pill-dark mobile-menu-item mt-4 rounded-full bg-[#111111] px-8 py-4 text-lg font-medium tracking-wide text-white no-underline outline-none hover:bg-gray-800 hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
+            style={{ '--mobile-menu-delay': `${120 + mobileNavLinks.length * 70}ms` }}
+          >
+            <span>Start a Project</span>
+          </a>
+        </div>
       </div>
     </nav>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const HASH_RETRY_TIMEOUT = 900;
+const HASH_RETRY_TIMEOUT = 1000;
 
 const getNavbarOffset = () => {
   const nav = document.querySelector('nav');
@@ -21,13 +21,46 @@ const getHashTarget = (hash) => {
   }
 };
 
+const easeInOutCubic = (value) => (value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2);
+
+export const smoothScrollToY = (targetY, duration = 760) => {
+  if (typeof window === 'undefined') return;
+
+  const startY = window.scrollY || document.documentElement.scrollTop || 0;
+  const distance = Math.max(Math.round(targetY), 0) - startY;
+
+  if (Math.abs(distance) < 2) {
+    window.scrollTo(0, Math.max(Math.round(targetY), 0));
+    return;
+  }
+
+  const startedAt = window.performance.now();
+
+  const step = (now) => {
+    const elapsed = now - startedAt;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeInOutCubic(progress);
+    window.scrollTo(0, Math.round(startY + distance * eased));
+
+    if (progress < 1) window.requestAnimationFrame(step);
+  };
+
+  window.requestAnimationFrame(step);
+};
+
 const scrollToTarget = (target, behavior = 'smooth') => {
   const targetTop = target.getBoundingClientRect().top + window.scrollY - getNavbarOffset();
+  const resolvedTop = Math.max(Math.round(targetTop), 0);
+
+  if (behavior === 'smooth') {
+    smoothScrollToY(resolvedTop, 780);
+    return;
+  }
 
   window.scrollTo({
-    top: Math.max(Math.round(targetTop), 0),
+    top: resolvedTop,
     left: 0,
-    behavior,
+    behavior: 'auto',
   });
 };
 
@@ -39,8 +72,10 @@ export const scrollToHashTarget = (hash, behavior = 'smooth') => {
   return true;
 };
 
-const RouteScrollManager = () => {
-  const { pathname, hash } = useLocation();
+const RouteScrollManager = ({ locationOverride = null }) => {
+  const routerLocation = useLocation();
+  const activeLocation = locationOverride ?? routerLocation;
+  const { pathname, hash } = activeLocation;
   const previousPathnameRef = useRef(null);
 
   useEffect(() => {
@@ -62,22 +97,24 @@ const RouteScrollManager = () => {
     const isNewPathname = previousPathname !== null && previousPathname !== pathname;
     previousPathnameRef.current = pathname;
 
+    const hardScrollTop = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
     const cancel = () => {
       cancelled = true;
       window.cancelAnimationFrame(animationFrame);
     };
 
     if (!hash) {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
+      hardScrollTop();
       return cancel;
     }
 
     if (isNewPathname) {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
+      hardScrollTop();
     }
 
     const behavior = isSamePageHashNavigation ? 'smooth' : 'auto';
@@ -89,9 +126,7 @@ const RouteScrollManager = () => {
       if (scrollToHashTarget(hash, behavior)) return;
 
       if (performance.now() - startedAt >= HASH_RETRY_TIMEOUT) {
-        window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
+        hardScrollTop();
         return;
       }
 

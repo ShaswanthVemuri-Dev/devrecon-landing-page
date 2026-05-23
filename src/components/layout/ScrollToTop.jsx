@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUp } from 'lucide-react';
+import { smoothScrollToY } from './RouteScrollManager.jsx';
 
 const VISIBILITY_OFFSET = 500;
 
@@ -38,7 +39,7 @@ const ScrollToTop = () => {
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollToY(0, 820);
   };
 
   return (

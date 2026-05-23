@@ -134,38 +134,89 @@
   transition: transform 640ms cubic-bezier(.18,.9,.2,1);
 }
 
-@media (hover: hover) and (pointer: fine) {
+/*
+  Keep the infographic hover path independent from device media detection.
+  Some desktop browsers and hybrid laptops report coarse/touch capability even when
+  the user is using a normal cursor, which previously made hover feel tap-only.
+  React state still protects touch interactions; CSS :hover is the guaranteed
+  desktop fallback.
+*/
+.product-preview-card:hover {
+  transform: translate3d(0, -5px, 0) scale(1.012);
+}
+
+.product-preview-card:hover .product-preview-viewport {
+  transform: translate3d(0, -2px, 0) scale(1.004);
+}
+
+.product-preview-card:hover::after {
+  opacity: 0;
+}
+
+.product-preview-card:hover .mastermentor-logo-bw {
+  opacity: 0;
+}
+
+.product-preview-card:hover .mastermentor-logo-colour {
+  opacity: 1;
+}
+
+.product-preview-card:hover .preview-hover-text-light {
+  color: rgba(255,255,255,0.86);
+}
+
+.mini-mymed-nav-pill:hover::before,
+.mini-mymed-nav-pill:focus-visible::before {
+  opacity: 1;
+}
+
+.product-hover-lift:hover {
+  transform: translateY(-1px) scale(1.012);
+}
+
+@media (hover: none), (pointer: coarse) {
   .product-preview-card:hover {
-    transform: translate3d(0, -5px, 0) scale(1.012);
+    transform: none;
   }
 
   .product-preview-card:hover .product-preview-viewport {
-    transform: translate3d(0, -2px, 0) scale(1.004);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 
   .product-preview-card:hover::after {
+    opacity: 1;
+  }
+
+  .product-preview-card[data-menu-open="true"]::after,
+  .product-preview-card[data-colour-active="true"]::after,
+  .product-preview-card:focus-within::after {
     opacity: 0;
   }
 
   .product-preview-card:hover .mastermentor-logo-bw {
-    opacity: 0;
-  }
-
-  .product-preview-card:hover .mastermentor-logo-colour {
     opacity: 1;
   }
 
-  .product-preview-card:hover .preview-hover-text-light {
-    color: rgba(255,255,255,0.86);
+  .product-preview-card:hover .mastermentor-logo-colour {
+    opacity: 0;
   }
 
-  .mini-mymed-nav-pill:hover::before,
-  .mini-mymed-nav-pill:focus-visible::before {
+  .product-preview-card[data-menu-open="true"] .mastermentor-logo-bw,
+  .product-preview-card[data-colour-active="true"] .mastermentor-logo-bw,
+  .product-preview-card[data-hover-active="true"] .mastermentor-logo-bw,
+  .product-preview-card:focus-within .mastermentor-logo-bw {
+    opacity: 0;
+  }
+
+  .product-preview-card[data-menu-open="true"] .mastermentor-logo-colour,
+  .product-preview-card[data-colour-active="true"] .mastermentor-logo-colour,
+  .product-preview-card[data-hover-active="true"] .mastermentor-logo-colour,
+  .product-preview-card:focus-within .mastermentor-logo-colour {
     opacity: 1;
   }
 
   .product-hover-lift:hover {
-    transform: translateY(-1px) scale(1.012);
+    transform: none;
   }
 }
 

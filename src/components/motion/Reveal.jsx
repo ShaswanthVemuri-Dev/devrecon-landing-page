@@ -50,7 +50,7 @@ const Reveal = ({
   const resolvedDuration = duration ?? (profile.useSimpleMobileMotion ? motionDuration.revealMobile : motionDuration.reveal);
   const selectedVariant = revealVariants[variant] ?? revealVariants.rise;
   const resolvedDistance = distance ?? selectedVariant.distance ?? (profile.useSimpleMobileMotion ? motionDistance.revealMobile : motionDistance.revealDesktop);
-  const resolvedDelay = profile.useSimpleMobileMotion ? Math.min(delay, 0.06) : delay;
+  const resolvedDelay = profile.useSimpleMobileMotion ? Math.min(delay, 0.16) : delay;
 
   return (
     <Component
