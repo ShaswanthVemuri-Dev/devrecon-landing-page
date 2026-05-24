@@ -137,7 +137,7 @@ const WorkingWith = () => {
           </p>
         </Reveal>
 
-        <Reveal className="grid gap-4 md:gap-5" variant="fade" duration={0.66}>
+        <Reveal className="grid gap-4 md:gap-5" variant="fade" duration={0.92}>
           <LogoMarquee items={firstRow} />
           <LogoMarquee items={secondRow} reverse />
         </Reveal>

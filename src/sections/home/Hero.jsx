@@ -22,7 +22,7 @@ const Hero = () => {
       <CircuitBackground />
 
       <div className="relative z-10 mx-auto flex min-h-[calc(82svh-11rem)] max-w-7xl flex-col justify-center sm:min-h-[calc(84svh-11rem)] md:min-h-[calc(88vh-16rem)] lg:min-h-[calc(90vh-16rem)]">
-        <Reveal className="max-w-6xl" distance={24} duration={0.78}>
+        <Reveal className="max-w-6xl" distance={26} duration={1.08}>
           <h1 className="mb-6 max-w-full text-[clamp(2.35rem,11.4vw,5.4rem)] font-bold uppercase leading-[1.08] tracking-[0.02em] text-[#111111] text-balance sm:text-[clamp(3.25rem,10vw,5.4rem)] sm:tracking-[0.075em] md:mb-8 md:text-7xl md:leading-[1.08] md:tracking-[0.12em] lg:text-8xl lg:tracking-[0.16em] xl:text-9xl xl:leading-[1.1] xl:tracking-widest">
             Engineering Clarity.
           </h1>

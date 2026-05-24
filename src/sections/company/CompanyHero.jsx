@@ -5,7 +5,7 @@ const CompanyHero = () => {
   return (
     <section className="relative px-6 pt-32 md:pt-40 pb-14 md:pb-20 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <Reveal duration={0.62}>
+        <Reveal duration={1.08} distance={22}>
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-gray-400 mb-6">
             Company
           </p>

@@ -27,8 +27,8 @@ const DetailColumn = ({ title, items }) => (
 );
 
 const DetailContent = ({ solution, mailto }) => (
-  <div className="px-5 pb-7 sm:px-8 sm:pb-8 md:px-10 md:pb-11">
-    <div className="border-t border-white/10 pt-3 sm:pt-5 md:pt-7">
+  <div className="solution-detail-content px-5 pb-7 sm:px-8 sm:pb-8 md:px-10 md:pb-11">
+    <div className="solution-detail-divider border-t border-white/10 pt-3 sm:pt-5 md:pt-7">
       <p className="max-w-5xl text-base font-light leading-loose tracking-wide text-gray-200 sm:text-lg md:text-2xl">
         {solution.continuation}
       </p>
@@ -70,12 +70,15 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className={`group relative w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 ${isOpen ? 'px-5 pt-5 pb-0 sm:px-8 sm:pt-8 sm:pb-2 md:px-10 md:pt-10 md:pb-3' : 'px-5 pt-5 pb-5 sm:px-8 sm:pt-8 sm:pb-8 md:px-10 md:pt-10 md:pb-10'}`}
+        className={`group relative w-full px-5 pt-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 sm:px-8 sm:pt-8 md:px-10 md:pt-10 ${isOpen ? 'pb-4 sm:pb-2 md:pb-3' : 'pb-5 sm:pb-8 md:pb-10'}`}
       >
         <div className="flex flex-col gap-5 sm:gap-7 lg:flex-row lg:items-start lg:gap-12">
           <div className="flex shrink-0 items-center justify-between lg:block lg:w-28">
-            <span className="text-xs font-bold tracking-[0.2em] text-gray-500 sm:text-sm md:text-base">
+            <span className="inline-flex items-center text-xs font-bold tracking-[0.2em] text-gray-500 sm:text-sm md:text-base">
               {solution.index}
+              <span className="ml-3 text-[0.62rem] uppercase tracking-[0.2em] text-gray-500 sm:hidden">
+                {solution.shortTitle}
+              </span>
             </span>
             <span className={`flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#111111] transition-transform duration-[var(--duration-button)] ease-[var(--ease-bubble)] sm:h-11 sm:w-11 lg:hidden ${isOpen ? 'rotate-180' : ''}`}>
               <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -84,7 +87,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
 
           <div className="min-w-0 flex-1">
             <div className="flex flex-col gap-2 sm:gap-3">
-              <span className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-gray-500 sm:text-xs sm:tracking-[0.25em]">
+              <span className="hidden text-[0.68rem] font-bold uppercase tracking-[0.2em] text-gray-500 sm:inline sm:text-xs sm:tracking-[0.25em]">
                 {solution.shortTitle}
               </span>
               <h2 className="text-2xl font-bold leading-tight tracking-tight text-balance sm:text-3xl md:text-5xl">
@@ -129,7 +132,7 @@ const SolutionDeepDive = () => {
   return (
     <section className="px-6 pb-20 md:pb-32">
       <div className="mx-auto max-w-7xl">
-        <Reveal className="space-y-5 md:space-y-6" variant="fade" distance={0} duration={0.68}>
+        <Reveal className="space-y-5 md:space-y-6" distance={18} duration={1.04}>
           {solutions.map((solution) => (
             <SolutionPanel
               key={solution.id}

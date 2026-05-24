@@ -1,15 +1,15 @@
 export const motionEase = {
-  standard: [0.16, 1, 0.3, 1],
-  soft: [0.16, 1, 0.3, 1],
+  standard: [0.22, 1, 0.36, 1],
+  soft: [0.22, 1, 0.36, 1],
   quick: [0.2, 0.8, 0.2, 1],
-  bubble: [0.18, 1, 0.32, 1],
+  bubble: [0.2, 1, 0.34, 1],
 };
 
 export const motionCssEase = {
-  standard: 'cubic-bezier(0.16, 1, 0.3, 1)',
-  soft: 'cubic-bezier(0.16, 1, 0.3, 1)',
+  standard: 'cubic-bezier(0.22, 1, 0.36, 1)',
+  soft: 'cubic-bezier(0.22, 1, 0.36, 1)',
   quick: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
-  bubble: 'cubic-bezier(0.18, 1, 0.32, 1)',
+  bubble: 'cubic-bezier(0.2, 1, 0.34, 1)',
 };
 
 export const motionDuration = {
@@ -17,18 +17,18 @@ export const motionDuration = {
   hover: 0.32,
   button: 0.3,
   underline: 0.32,
-  reveal: 0.9,
+  reveal: 1.08,
   pageEnter: 0.26,
-  menu: 0.68,
-  menuItem: 0.48,
-  accordion: 0.62,
+  menu: 1.08,
+  menuItem: 0.62,
+  accordion: 0.96,
   productColour: 0.72,
   ambientSlow: 14,
   ambientVerySlow: 24,
 };
 
 export const motionDistance = {
-  reveal: 16,
+  reveal: 20,
   hoverLift: -2,
   cardLift: -3,
 };
