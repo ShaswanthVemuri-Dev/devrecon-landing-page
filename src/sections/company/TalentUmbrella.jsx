@@ -18,7 +18,7 @@ const supportPoints = [
 
 const TalentUmbrella = () => {
   return (
-    <section id="talent-umbrella" className="relative overflow-hidden px-6 py-14 md:py-24">
+    <section id="talent-umbrella" className="relative overflow-x-hidden px-6 py-14 md:py-24">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
       <div className="max-w-7xl mx-auto">
         <div className="grid items-start gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
@@ -58,11 +58,8 @@ const TalentUmbrella = () => {
 
               <div className="grid gap-4">
                 {supportPoints.map((point, index) => (
-                  <Reveal
-                    as="article"
+                  <article
                     key={point.title}
-                    delay={0.12 + index * 0.05}
-                    distance={12}
                     className="motion-card rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-5 transition-colors duration-500 hover:border-white/20 hover:bg-white/[0.07] md:p-6"
                   >
                     <div className="flex items-start gap-4">
@@ -78,7 +75,7 @@ const TalentUmbrella = () => {
                         </p>
                       </div>
                     </div>
-                  </Reveal>
+                  </article>
                 ))}
               </div>
             </div>

@@ -8,7 +8,7 @@ import CompanyCTA from '../sections/company/CompanyCTA.jsx';
 
 const Company = () => {
   return (
-    <main className="relative overflow-hidden bg-white text-[#111111]">
+    <main className="relative overflow-x-hidden bg-white text-[#111111]">
       <div className="pointer-events-none absolute inset-0 opacity-[0.045]">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>

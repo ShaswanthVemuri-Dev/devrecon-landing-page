@@ -64,23 +64,30 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
   const mailto = useMemo(() => buildMailto(solution.subject, solution.mailBody), [solution.subject, solution.mailBody]);
 
   useEffect(() => {
-    let frameId;
+    let firstFrameId;
+    let secondFrameId;
 
     const updateHeight = () => {
       setDetailHeight(isOpen && detailRef.current ? detailRef.current.scrollHeight : 0);
     };
 
-    frameId = window.requestAnimationFrame(updateHeight);
-
     if (!isOpen) {
-      return () => window.cancelAnimationFrame(frameId);
+      firstFrameId = window.requestAnimationFrame(updateHeight);
+
+      return () => window.cancelAnimationFrame(firstFrameId);
     }
+
+    setDetailHeight(0);
+    firstFrameId = window.requestAnimationFrame(() => {
+      secondFrameId = window.requestAnimationFrame(updateHeight);
+    });
 
     const handleResize = () => updateHeight();
     window.addEventListener('resize', handleResize);
 
     return () => {
-      window.cancelAnimationFrame(frameId);
+      window.cancelAnimationFrame(firstFrameId);
+      window.cancelAnimationFrame(secondFrameId);
       window.removeEventListener('resize', handleResize);
     };
   }, [isOpen]);
@@ -94,9 +101,9 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className={`group relative w-full px-5 pt-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 sm:px-8 sm:pt-8 md:px-10 md:pt-10 ${isOpen ? 'pb-4 sm:pb-2 md:pb-3' : 'pb-5 sm:pb-8 md:pb-10'}`}
+        className={`group relative w-full px-5 pt-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 sm:px-8 sm:pt-8 md:px-10 md:pt-10 ${isOpen ? 'pb-3 sm:pb-2 md:pb-3' : 'pb-5 sm:pb-8 md:pb-10'}`}
       >
-        <div className="flex flex-col gap-5 sm:gap-7 lg:flex-row lg:items-start lg:gap-12">
+        <div className="flex flex-col gap-3 sm:gap-7 lg:flex-row lg:items-start lg:gap-12">
           <div className="flex shrink-0 items-center justify-between lg:block lg:w-28">
             <span className="inline-flex items-center text-xs font-bold tracking-[0.2em] text-gray-500 sm:text-sm md:text-base">
               {solution.index}
@@ -114,7 +121,7 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
               <span className="hidden text-[0.68rem] font-bold uppercase tracking-[0.2em] text-gray-500 sm:inline sm:text-xs sm:tracking-[0.25em]">
                 {solution.shortTitle}
               </span>
-              <h2 className="text-2xl font-bold leading-tight tracking-tight text-balance sm:text-3xl md:text-5xl">
+              <h2 className="text-[1.42rem] font-bold leading-[1.12] tracking-tight text-balance min-[380px]:text-2xl sm:text-3xl md:text-5xl">
                 {solution.title}
               </h2>
             </div>
