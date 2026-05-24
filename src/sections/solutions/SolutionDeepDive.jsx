@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import Reveal from '../../components/motion/Reveal.jsx';
@@ -59,7 +59,31 @@ const DetailContent = ({ solution, mailto }) => (
 );
 
 const SolutionPanel = ({ solution, isOpen, onToggle }) => {
+  const detailRef = useRef(null);
+  const [detailHeight, setDetailHeight] = useState(0);
   const mailto = useMemo(() => buildMailto(solution.subject, solution.mailBody), [solution.subject, solution.mailBody]);
+
+  useEffect(() => {
+    let frameId;
+
+    const updateHeight = () => {
+      setDetailHeight(isOpen && detailRef.current ? detailRef.current.scrollHeight : 0);
+    };
+
+    frameId = window.requestAnimationFrame(updateHeight);
+
+    if (!isOpen) {
+      return () => window.cancelAnimationFrame(frameId);
+    }
+
+    const handleResize = () => updateHeight();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isOpen]);
 
   return (
     <article
@@ -108,8 +132,8 @@ const SolutionPanel = ({ solution, isOpen, onToggle }) => {
         </div>
       </button>
 
-      <div className={`solution-detail-shell ${isOpen ? 'is-open' : ''}`}>
-        <div className="solution-detail-inner">
+      <div className={`solution-detail-shell ${isOpen ? 'is-open' : ''}`} style={{ maxHeight: `${detailHeight}px` }}>
+        <div ref={detailRef} className="solution-detail-inner">
           <DetailContent solution={solution} mailto={mailto} />
         </div>
       </div>

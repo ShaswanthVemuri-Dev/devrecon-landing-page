@@ -5,7 +5,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="py-12 md:py-20 px-6 border-t border-gray-200 bg-white">
+    <footer className="site-footer px-6 pt-12 md:pt-20 border-t border-gray-200 bg-white">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 md:gap-8">
         <div>
           <div className="text-3xl font-bold tracking-tight mb-6">DevReCon</div>

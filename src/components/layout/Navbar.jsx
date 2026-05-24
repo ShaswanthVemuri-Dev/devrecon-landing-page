@@ -39,7 +39,6 @@ const Navbar = () => {
   const isHome = location.pathname === '/';
   const menuMounted = menuPhase !== MENU_PHASE.CLOSED;
   const menuOpen = menuPhase === MENU_PHASE.OPEN || menuPhase === MENU_PHASE.OPENING;
-  const menuButtonActive = menuMounted;
 
   const clearFrameQueue = () => {
     rafRefs.current.forEach((id) => window.cancelAnimationFrame(id));
@@ -221,13 +220,13 @@ const Navbar = () => {
           type="button"
           className="motion-button motion-pill motion-pill-light relative z-[1210] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
           onClick={toggleMobileMenu}
-          aria-label={menuButtonActive ? 'Close navigation menu' : 'Open navigation menu'}
-          aria-expanded={menuButtonActive}
+          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={menuOpen}
           aria-controls="mobile-navigation"
         >
           <span className="relative z-10 block h-5 w-5" aria-hidden="true">
-            <Menu className={`mobile-menu-glyph absolute inset-0 h-5 w-5 ${menuButtonActive ? 'is-hidden' : 'is-visible'}`} />
-            <X className={`mobile-menu-glyph absolute inset-0 h-5 w-5 ${menuButtonActive ? 'is-visible' : 'is-hidden'}`} />
+            <Menu className={`mobile-menu-glyph absolute inset-0 h-5 w-5 ${menuOpen ? 'is-hidden' : 'is-visible'}`} />
+            <X className={`mobile-menu-glyph absolute inset-0 h-5 w-5 ${menuOpen ? 'is-visible' : 'is-hidden'}`} />
           </span>
         </button>
       </div>
