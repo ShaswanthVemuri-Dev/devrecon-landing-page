@@ -21,7 +21,9 @@ const getHashTarget = (hash) => {
   }
 };
 
-const easeInOutCubic = (value) => (value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2);
+const easeOutQuart = (value) => 1 - Math.pow(1 - value, 4);
+
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
 let activeScrollAnimation = null;
 
@@ -38,7 +40,7 @@ const prefersReducedMotion = () =>
   typeof window.matchMedia === 'function' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-export const smoothScrollToY = (targetY, duration = 820) => {
+export const smoothScrollToY = (targetY, duration = 760) => {
   if (typeof window === 'undefined') return;
 
   cancelSmoothScroll();
@@ -52,6 +54,7 @@ export const smoothScrollToY = (targetY, duration = 820) => {
     return;
   }
 
+  const resolvedDuration = clamp(duration ?? 760, 420, 980);
   const startedAt = window.performance.now();
   const controller = { cancelled: false, frame: 0, cleanup: null };
   activeScrollAnimation = controller;
@@ -73,8 +76,8 @@ export const smoothScrollToY = (targetY, duration = 820) => {
     if (controller.cancelled) return;
 
     const elapsed = now - startedAt;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = easeInOutCubic(progress);
+    const progress = Math.min(elapsed / resolvedDuration, 1);
+    const eased = easeOutQuart(progress);
     window.scrollTo(0, Math.round(startY + distance * eased));
 
     if (progress < 1) {
@@ -94,7 +97,7 @@ const scrollToTarget = (target, behavior = 'smooth') => {
   const resolvedTop = Math.max(Math.round(targetTop), 0);
 
   if (behavior === 'smooth') {
-    smoothScrollToY(resolvedTop, 860);
+    smoothScrollToY(resolvedTop, 780);
     return;
   }
 

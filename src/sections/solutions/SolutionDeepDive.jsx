@@ -17,7 +17,7 @@ const DetailColumn = ({ title, items }) => (
       {items.map((item) => (
         <p
           key={item}
-          className="flex items-start border-l border-white/20 pl-4 text-sm font-light leading-loose tracking-wide text-gray-300 transition-transform duration-[var(--duration-button)] ease-[var(--ease-soft)] hover:translate-x-1 sm:min-h-[4.6rem] sm:pl-5 sm:text-base md:text-lg"
+          className="flex items-start border-l border-white/20 pl-4 text-sm font-light leading-loose tracking-wide text-gray-300 sm:min-h-[4.6rem] sm:pl-5 sm:text-base md:text-lg"
         >
           {item}
         </p>
@@ -143,7 +143,7 @@ const SolutionDeepDive = () => {
           ))}
         </div>
 
-        <Reveal className="mt-9 flex flex-col gap-8 rounded-[2rem] border border-gray-100 bg-white/85 p-7 shadow-[0_20px_70px_rgba(0,0,0,0.035)] backdrop-blur-sm sm:p-8 md:mt-12 md:p-10 lg:flex-row lg:items-center lg:justify-between">
+        <Reveal className="mt-9 flex flex-col gap-8 rounded-[2rem] border border-gray-100 bg-white p-7 shadow-[0_18px_56px_rgba(0,0,0,0.03)] sm:p-8 md:mt-12 md:p-10 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-3xl">
             <h2 className="text-2xl font-bold tracking-tight text-[#111111] md:text-3xl">
               When the work crosses categories, send the problem as it is.

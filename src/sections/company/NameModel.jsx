@@ -41,7 +41,7 @@ const NameModel = () => {
               as="article"
               key={part.short}
               delay={index * 0.07}
-              className="motion-card rounded-[1.75rem] border border-gray-100 bg-white/82 p-6 shadow-[0_18px_60px_rgba(17,17,17,0.04)] backdrop-blur-sm hover:border-gray-200 hover:shadow-[0_26px_76px_rgba(17,17,17,0.08)] md:p-7"
+              className="motion-card rounded-[1.75rem] border border-gray-100 bg-white p-6 shadow-[0_16px_52px_rgba(17,17,17,0.035)] hover:border-gray-200 md:p-7"
             >
               <div className="flex items-baseline justify-between gap-4">
                 <span className="text-5xl font-bold tracking-tighter text-[#111111] md:text-6xl">

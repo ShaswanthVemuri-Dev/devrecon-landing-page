@@ -31,12 +31,18 @@ const getConnection = () => (
     : navigator.connection || navigator.mozConnection || navigator.webkitConnection || null
 );
 
-const shouldAvoidDecorativePreload = () => {
+const getNetworkProfile = () => {
   const connection = getConnection();
-  if (!connection) return false;
+  if (!connection) return { saveData: false, slow: false, constrained: false };
 
-  const slowTypes = new Set(['slow-2g', '2g', '3g']);
-  return Boolean(connection.saveData || slowTypes.has(connection.effectiveType));
+  const effectiveType = connection.effectiveType || '';
+  const verySlowTypes = new Set(['slow-2g', '2g']);
+
+  return {
+    saveData: Boolean(connection.saveData),
+    slow: verySlowTypes.has(effectiveType),
+    constrained: effectiveType === '3g' || verySlowTypes.has(effectiveType) || Boolean(connection.saveData),
+  };
 };
 
 const preloadImage = (src) => {
@@ -64,15 +70,18 @@ export const preloadRouteAssets = () => {
 
   hasPreloaded = true;
   const cleanups = [];
+  const network = getNetworkProfile();
 
-  cleanups.push(runIdle(() => {
-    ROUTE_CRITICAL_ASSETS.forEach(preloadImage);
-  }, 1400));
+  if (!network.saveData && !network.slow) {
+    cleanups.push(runIdle(() => {
+      ROUTE_CRITICAL_ASSETS.forEach(preloadImage);
+    }, network.constrained ? 6400 : 1400));
+  }
 
-  if (!shouldAvoidDecorativePreload()) {
+  if (!network.constrained) {
     cleanups.push(runIdle(() => {
       DECORATIVE_LOGO_ASSETS.forEach(preloadImage);
-    }, 3600));
+    }, 4200));
   }
 
   return () => cleanups.forEach((cleanup) => cleanup?.());

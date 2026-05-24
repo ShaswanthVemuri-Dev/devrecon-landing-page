@@ -26,6 +26,7 @@ const LogoItem = ({ logo, index }) => (
       aria-hidden="true"
       loading="lazy"
       decoding="async"
+      fetchPriority="low"
       draggable="false"
       className={`pointer-events-none w-full select-none object-contain ${logo.className}`}
     />

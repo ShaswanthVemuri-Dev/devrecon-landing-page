@@ -33,7 +33,7 @@ const SolutionsHero = () => {
                 key={solution.id}
                 href={`#${solution.id}`}
                 onClick={(event) => handleChipClick(event, solution.id)}
-                className="motion-pill motion-pill-light rounded-full border border-gray-200 bg-white/75 px-4 py-2.5 text-xs font-semibold tracking-wide text-[#111111] backdrop-blur-sm hover:border-[#111111] hover:bg-white hover:text-[#111111] sm:px-5 sm:py-3 sm:text-sm"
+                className="motion-pill motion-pill-light rounded-full border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold tracking-wide text-[#111111] hover:border-[#111111] hover:bg-white hover:text-[#111111] sm:px-5 sm:py-3 sm:text-sm"
                 style={{ '--motion-reveal-delay': `${index * 45}ms` }}
               >
                 <span>{solution.label}</span>

@@ -5,7 +5,7 @@ import Footer from './Footer.jsx';
 import ScrollToTop from './ScrollToTop.jsx';
 import RouteScrollManager from './RouteScrollManager.jsx';
 
-const ENTER_DURATION_MS = 720;
+const ENTER_DURATION_MS = 560;
 
 const getRouteSignature = (location) => `${location.pathname}${location.search}`;
 

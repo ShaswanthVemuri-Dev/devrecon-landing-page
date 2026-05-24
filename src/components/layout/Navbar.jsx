@@ -10,8 +10,8 @@ const desktopNavLinks = [
 
 const mobileNavLinks = [{ name: 'Home', to: '/' }, ...desktopNavLinks];
 
-const MOBILE_MENU_RELEASE_MS = 700;
-const MOBILE_ROUTE_PUSH_MS = 90;
+const MOBILE_MENU_FALLBACK_RELEASE_MS = 760;
+const MOBILE_ROUTE_PUSH_MS = 80;
 
 const Underline = ({ active = false, mobile = false }) => (
   <span
@@ -22,12 +22,26 @@ const Underline = ({ active = false, mobile = false }) => (
 
 const normalizeRoute = (route) => route.replace(/\/$/, '') || '/';
 
+const afterTwoFrames = (callback) => {
+  let secondFrame = 0;
+  const firstFrame = window.requestAnimationFrame(() => {
+    secondFrame = window.requestAnimationFrame(callback);
+  });
+
+  return () => {
+    window.cancelAnimationFrame(firstFrame);
+    window.cancelAnimationFrame(secondFrame);
+  };
+};
+
 const Navbar = () => {
   const [menuMounted, setMenuMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const releaseTimerRef = useRef(null);
   const navigateTimerRef = useRef(null);
-  const animationFrameRef = useRef(null);
+  const frameCleanupRef = useRef(null);
+  const lockScrollYRef = useRef(0);
+  const routeChangingRef = useRef(false);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
@@ -35,30 +49,38 @@ const Navbar = () => {
   const clearTimers = () => {
     window.clearTimeout(releaseTimerRef.current);
     window.clearTimeout(navigateTimerRef.current);
-    window.cancelAnimationFrame(animationFrameRef.current);
+    frameCleanupRef.current?.();
     releaseTimerRef.current = null;
     navigateTimerRef.current = null;
-    animationFrameRef.current = null;
+    frameCleanupRef.current = null;
+  };
+
+  const scheduleUnmountFallback = () => {
+    window.clearTimeout(releaseTimerRef.current);
+    releaseTimerRef.current = window.setTimeout(() => {
+      setMenuMounted(false);
+      releaseTimerRef.current = null;
+    }, MOBILE_MENU_FALLBACK_RELEASE_MS);
   };
 
   const openMobileMenu = () => {
     clearTimers();
+    routeChangingRef.current = false;
     setMenuMounted(true);
-    animationFrameRef.current = window.requestAnimationFrame(() => {
+    frameCleanupRef.current = afterTwoFrames(() => {
       setMenuOpen(true);
-      animationFrameRef.current = null;
+      frameCleanupRef.current = null;
     });
   };
 
-  const closeMobileMenu = () => {
+  const closeMobileMenu = ({ routeChange = false } = {}) => {
     window.clearTimeout(releaseTimerRef.current);
-    window.cancelAnimationFrame(animationFrameRef.current);
+    frameCleanupRef.current?.();
+    frameCleanupRef.current = null;
+    routeChangingRef.current = routeChange;
     setMenuOpen(false);
     setMenuMounted(true);
-    releaseTimerRef.current = window.setTimeout(() => {
-      setMenuMounted(false);
-      releaseTimerRef.current = null;
-    }, MOBILE_MENU_RELEASE_MS);
+    scheduleUnmountFallback();
   };
 
   const toggleMobileMenu = () => {
@@ -76,7 +98,7 @@ const Navbar = () => {
     const currentRoute = normalizeRoute(`${location.pathname}${location.hash}`);
     const nextRoute = normalizeRoute(to);
 
-    closeMobileMenu();
+    closeMobileMenu({ routeChange: currentRoute !== nextRoute });
 
     if (currentRoute === nextRoute) return;
 
@@ -86,9 +108,15 @@ const Navbar = () => {
     }, MOBILE_ROUTE_PUSH_MS);
   };
 
-  useEffect(() => {
-    return clearTimers;
-  }, []);
+  const handleMenuTransitionEnd = (event) => {
+    if (event.target !== event.currentTarget || event.propertyName !== 'transform' || menuOpen) return;
+
+    window.clearTimeout(releaseTimerRef.current);
+    releaseTimerRef.current = null;
+    setMenuMounted(false);
+  };
+
+  useEffect(() => clearTimers, []);
 
   useEffect(() => {
     if (!menuMounted) return undefined;
@@ -97,10 +125,18 @@ const Navbar = () => {
     const body = document.body;
     const previousRootOverflow = root.style.overflow;
     const previousBodyOverflow = body.style.overflow;
+    const previousBodyPosition = body.style.position;
+    const previousBodyTop = body.style.top;
+    const previousBodyWidth = body.style.width;
     const previousOverscroll = root.style.overscrollBehavior;
+
+    lockScrollYRef.current = window.scrollY || document.documentElement.scrollTop || 0;
 
     root.style.overflow = 'hidden';
     body.style.overflow = 'hidden';
+    body.style.position = 'fixed';
+    body.style.top = `-${lockScrollYRef.current}px`;
+    body.style.width = '100%';
     root.style.overscrollBehavior = 'none';
     root.classList.add('mobile-nav-open');
 
@@ -111,11 +147,25 @@ const Navbar = () => {
     window.addEventListener('keydown', closeOnEscape);
 
     return () => {
+      const shouldRestoreScroll = !routeChangingRef.current;
+      const previousScrollY = lockScrollYRef.current;
+
       root.style.overflow = previousRootOverflow;
       body.style.overflow = previousBodyOverflow;
+      body.style.position = previousBodyPosition;
+      body.style.top = previousBodyTop;
+      body.style.width = previousBodyWidth;
       root.style.overscrollBehavior = previousOverscroll;
       root.classList.remove('mobile-nav-open');
       window.removeEventListener('keydown', closeOnEscape);
+
+      if (shouldRestoreScroll) {
+        window.scrollTo(0, previousScrollY);
+      } else {
+        window.requestAnimationFrame(() => window.scrollTo(0, 0));
+      }
+
+      routeChangingRef.current = false;
     };
   }, [menuMounted]);
 
@@ -126,11 +176,11 @@ const Navbar = () => {
     `group relative inline-flex items-center justify-center text-2xl font-semibold tracking-wide no-underline transition-colors duration-300 ${active ? 'text-[#111111]' : 'text-[#111111]/52'}`;
 
   return (
-    <nav className={`devrecon-nav fixed inset-x-0 top-0 z-[1200] border-b py-4 transition-[height,background-color,border-color,backdrop-filter] duration-[var(--duration-menu)] ease-[var(--ease-soft)] ${menuMounted ? 'is-mobile-shell-active h-[100dvh] overflow-hidden border-transparent bg-white' : 'h-auto overflow-visible border-gray-100 glass-nav'}`}>
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
+    <nav className={`devrecon-nav fixed inset-x-0 top-0 z-[1200] border-b py-4 transition-[background-color,border-color,backdrop-filter] duration-[var(--duration-menu)] ease-[var(--ease-soft)] ${menuMounted ? 'is-mobile-shell-active border-transparent bg-transparent' : 'overflow-visible border-gray-100 glass-nav'}`}>
+      <div className="relative z-[1210] mx-auto flex max-w-7xl items-center justify-between px-6">
         <Link
           to="/"
-          className={`group relative z-[1210] inline-flex items-center text-2xl font-bold tracking-tight no-underline transition-colors duration-300 ${isHome ? 'text-[#111111]' : 'text-[#111111]/70 hover:text-[#111111]'}`}
+          className={`group relative inline-flex items-center text-2xl font-bold tracking-tight no-underline transition-colors duration-300 ${isHome ? 'text-[#111111]' : 'text-[#111111]/70 hover:text-[#111111]'}`}
           onClick={(event) => {
             if (!menuMounted) return;
             event.preventDefault();
@@ -164,7 +214,7 @@ const Navbar = () => {
 
         <button
           type="button"
-          className="motion-button motion-pill motion-pill-light relative z-[1210] flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
+          className="motion-button motion-pill motion-pill-light relative flex h-11 w-11 items-center justify-center rounded-full text-[#111111] md:hidden"
           onClick={toggleMobileMenu}
           aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={menuOpen}
@@ -181,6 +231,7 @@ const Navbar = () => {
         id="mobile-navigation"
         className={`mobile-menu-shell md:hidden ${menuMounted ? 'is-active' : ''} ${menuOpen ? 'is-open' : ''}`}
         aria-hidden={!menuMounted}
+        onTransitionEnd={handleMenuTransitionEnd}
       >
         <div className="flex h-full flex-col items-center justify-center px-6 pb-[calc(2rem+env(safe-area-inset-bottom,0px))] pt-24">
           <div className="flex w-full max-w-2xl flex-col items-center gap-8 sm:gap-9">
@@ -188,7 +239,7 @@ const Navbar = () => {
               const active = normalizeRoute(location.pathname) === normalizeRoute(link.to);
 
               return (
-                <div key={link.name} className="mobile-menu-item" style={{ '--mobile-menu-delay': `${110 + index * 80}ms` }}>
+                <div key={link.name} className="mobile-menu-item" style={{ '--mobile-menu-delay': `${110 + index * 72}ms` }}>
                   <button
                     type="button"
                     onClick={() => handleMobileRoute(link.to)}
@@ -204,9 +255,9 @@ const Navbar = () => {
 
             <a
               href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
-              onClick={closeMobileMenu}
+              onClick={() => closeMobileMenu()}
               className="motion-button motion-pill motion-pill-dark mobile-menu-item mt-4 rounded-full bg-[#111111] px-8 py-4 text-lg font-medium tracking-wide text-white no-underline outline-none hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
-              style={{ '--mobile-menu-delay': `${110 + mobileNavLinks.length * 80}ms` }}
+              style={{ '--mobile-menu-delay': `${110 + mobileNavLinks.length * 72}ms` }}
             >
               <span>Start a Project</span>
             </a>

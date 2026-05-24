@@ -14,11 +14,11 @@ const toPixels = (value) => {
 
 const revealVariants = {
   rise: {
-    scale: 0.994,
+    scale: 0.998,
     blur: '0px',
   },
   soft: {
-    scale: 0.988,
+    scale: 0.996,
     blur: '0px',
   },
   fade: {
@@ -27,7 +27,7 @@ const revealVariants = {
     blur: '0px',
   },
   lift: {
-    scale: 0.982,
+    scale: 0.996,
     blur: '0px',
   },
 };
