@@ -10,8 +10,14 @@ const desktopNavLinks = [
 
 const mobileNavLinks = [{ name: 'Home', to: '/' }, ...desktopNavLinks];
 
-const MOBILE_MENU_RELEASE_MS = 460;
-const MOBILE_MENU_OPEN_FRAME_DELAY = 2;
+const MOBILE_MENU_RELEASE_MS = 680;
+const MOBILE_MENU_OPEN_FRAME_DELAY = 1;
+const MENU_PHASE = {
+  CLOSED: 'closed',
+  OPENING: 'opening',
+  OPEN: 'open',
+  CLOSING: 'closing',
+};
 
 const Underline = ({ active = false, mobile = false }) => (
   <span
@@ -23,14 +29,16 @@ const Underline = ({ active = false, mobile = false }) => (
 const normalizeRoute = (route) => route.replace(/\/$/, '') || '/';
 
 const Navbar = () => {
-  const [menuMounted, setMenuMounted] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuPhase, setMenuPhase] = useState(MENU_PHASE.CLOSED);
   const releaseTimerRef = useRef(null);
   const rafRefs = useRef([]);
   const afterCloseRef = useRef(null);
+  const shellRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
+  const menuMounted = menuPhase !== MENU_PHASE.CLOSED;
+  const menuOpen = menuPhase === MENU_PHASE.OPEN || menuPhase === MENU_PHASE.OPENING;
 
   const clearFrameQueue = () => {
     rafRefs.current.forEach((id) => window.cancelAnimationFrame(id));
@@ -59,7 +67,7 @@ const Navbar = () => {
   };
 
   const releaseMobileMenu = () => {
-    setMenuMounted(false);
+    setMenuPhase(MENU_PHASE.CLOSED);
     releaseTimerRef.current = null;
 
     const afterClose = afterCloseRef.current;
@@ -70,10 +78,10 @@ const Navbar = () => {
   const openMobileMenu = () => {
     clearTimers();
     afterCloseRef.current = null;
-    setMenuMounted(true);
+    setMenuPhase(MENU_PHASE.OPENING);
 
     runAfterFrames(() => {
-      setMenuOpen(true);
+      setMenuPhase(MENU_PHASE.OPEN);
       clearFrameQueue();
     }, MOBILE_MENU_OPEN_FRAME_DELAY);
   };
@@ -81,8 +89,7 @@ const Navbar = () => {
   const closeMobileMenu = ({ afterClose } = {}) => {
     clearTimers();
     afterCloseRef.current = afterClose ?? null;
-    setMenuMounted(true);
-    setMenuOpen(false);
+    setMenuPhase((current) => (current === MENU_PHASE.CLOSED ? MENU_PHASE.CLOSED : MENU_PHASE.CLOSING));
     releaseTimerRef.current = window.setTimeout(releaseMobileMenu, MOBILE_MENU_RELEASE_MS);
   };
 
@@ -98,12 +105,26 @@ const Navbar = () => {
   const handleMobileRoute = (to) => {
     const currentRoute = normalizeRoute(`${location.pathname}${location.hash}`);
     const nextRoute = normalizeRoute(to);
+    const shouldNavigate = currentRoute !== nextRoute;
 
-    closeMobileMenu({
-      afterClose: () => {
-        if (currentRoute !== nextRoute) navigate(to);
-      },
-    });
+    closeMobileMenu();
+
+    if (shouldNavigate) {
+      window.requestAnimationFrame(() => navigate(to));
+    }
+  };
+
+  const handleShellTransitionEnd = (event) => {
+    if (
+      event.target !== shellRef.current ||
+      (event.propertyName !== 'clip-path' && event.propertyName !== '-webkit-clip-path')
+    ) {
+      return;
+    }
+    if (menuPhase === MENU_PHASE.CLOSING) {
+      window.clearTimeout(releaseTimerRef.current);
+      releaseMobileMenu();
+    }
   };
 
   useEffect(() => {
@@ -157,7 +178,7 @@ const Navbar = () => {
     `group relative inline-flex items-center justify-center text-2xl font-semibold tracking-wide no-underline transition-colors duration-300 ${active ? 'text-[#111111]' : 'text-[#111111]/52'}`;
 
   return (
-    <nav className={`devrecon-nav fixed inset-x-0 top-0 z-[1200] border-b py-4 transition-[height,background-color,border-color,backdrop-filter] duration-[var(--duration-menu)] ease-[var(--ease-soft)] ${menuMounted ? 'is-mobile-shell-active h-[100dvh] overflow-hidden border-transparent bg-white' : 'h-[76px] overflow-visible border-gray-100 glass-nav md:h-auto'}`}>
+    <nav className={`devrecon-nav fixed inset-x-0 top-0 z-[1200] h-[76px] overflow-visible border-b py-4 transition-[background-color,border-color,backdrop-filter] duration-[var(--duration-menu)] ease-[var(--ease-soft)] md:h-auto ${menuMounted ? 'is-mobile-shell-active border-transparent bg-transparent' : 'border-gray-100 glass-nav'}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
         <Link
           to="/"
@@ -209,9 +230,11 @@ const Navbar = () => {
       </div>
 
       <div
+        ref={shellRef}
         id="mobile-navigation"
-        className={`mobile-menu-shell md:hidden ${menuMounted ? 'is-active' : ''} ${menuOpen ? 'is-open' : ''}`}
+        className={`mobile-menu-shell md:hidden ${menuMounted ? 'is-active' : ''} ${menuPhase === MENU_PHASE.OPEN ? 'is-open' : ''} ${menuPhase === MENU_PHASE.CLOSING ? 'is-closing' : ''}`}
         aria-hidden={!menuMounted}
+        onTransitionEnd={handleShellTransitionEnd}
       >
         <div className="flex h-full flex-col items-center justify-center px-6 pb-[calc(2rem+env(safe-area-inset-bottom,0px))] pt-24">
           <div className="flex w-full max-w-2xl flex-col items-center gap-8 sm:gap-9">
@@ -236,6 +259,7 @@ const Navbar = () => {
             <a
               href="mailto:management@devrecon.in?subject=Project%20Inquiry%20-%20[Your%20Name]"
               onClick={() => closeMobileMenu()}
+              draggable="false"
               className="motion-button motion-pill motion-pill-dark mobile-menu-item mt-4 rounded-full bg-[#111111] px-8 py-4 text-lg font-medium tracking-wide text-white no-underline outline-none hover:text-white active:text-white visited:text-white focus:text-white focus:outline-none focus-visible:outline-none"
             >
               <span>Start a Project</span>

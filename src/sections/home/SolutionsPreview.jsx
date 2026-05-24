@@ -37,7 +37,7 @@ const ServiceCard = ({ icon: Icon, title, desc, to, index }) => (
       <Icon className="h-6 w-6 lg:h-7 lg:w-7" />
     </div>
 
-    <h4 className="relative z-10 mb-4 text-xl font-bold tracking-tight lg:text-2xl">{title}</h4>
+    <h3 className="relative z-10 mb-4 text-xl font-bold tracking-tight lg:text-2xl">{title}</h3>
     <p className="relative z-10 mb-8 font-light leading-loose tracking-wide text-gray-600">{desc}</p>
 
     <Link
@@ -55,7 +55,7 @@ const SolutionsPreview = () => {
     <section id="solutions-preview" className="relative px-6 pt-20 pb-8 md:pt-28 md:pb-10 xl:pt-32 xl:pb-12">
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-14 max-w-2xl md:mb-20 xl:mb-24">
-          <h3 className="text-3xl font-bold leading-relaxed tracking-tighter text-[#111111] text-balance sm:text-5xl xl:text-6xl">The Solution Landscape.</h3>
+          <h2 className="text-3xl font-bold leading-relaxed tracking-tighter text-[#111111] text-balance sm:text-5xl xl:text-6xl">The Solution Landscape.</h2>
           <p className="mt-6 text-lg font-light leading-relaxed tracking-wide text-gray-500 md:text-xl">
             We do not sell preset packages. We choose the technical path based on the problem.
           </p>

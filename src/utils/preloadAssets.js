@@ -1,7 +1,7 @@
 import publicAsset from './assetPaths.js';
 
 const ROUTE_CRITICAL_ASSETS = [
-  '/founder/shaswanth-vemuri.webp',
+  '/founder/shaswanth-vemuri.jpg',
   '/product-previews/mymedicals/logo.png',
   '/product-previews/mymedicals/phone-hero.png',
   '/product-previews/mastermentor/logo.png',
@@ -72,10 +72,10 @@ export const preloadRouteAssets = () => {
   const cleanups = [];
   const network = getNetworkProfile();
 
-  if (!network.saveData && !network.slow) {
+  if (!network.saveData && !network.slow && !network.constrained) {
     cleanups.push(runIdle(() => {
       ROUTE_CRITICAL_ASSETS.forEach(preloadImage);
-    }, network.constrained ? 6400 : 1400));
+    }, 1400));
   }
 
   if (!network.constrained) {

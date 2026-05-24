@@ -10,13 +10,13 @@ const Home = () => {
   useEffect(() => preloadRouteAssets(), []);
 
   return (
-    <>
+    <main className="bg-white text-[#111111]">
       <Hero />
       <HowItWorks />
       <SolutionsPreview />
       <WorkingWith />
       <TalentUmbrellaTeaser />
-    </>
+    </main>
   );
 };
 

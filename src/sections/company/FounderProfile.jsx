@@ -11,7 +11,7 @@ const FounderProfile = () => {
           <div className="grid gap-5 lg:grid-cols-[0.38fr_0.62fr] lg:items-stretch">
             <div className="motion-surface relative h-[300px] overflow-hidden rounded-[1.6rem] bg-[#111111] sm:h-[340px] md:h-[380px] lg:h-auto lg:min-h-full">
               <img
-                src={publicAsset('founder/shaswanth-vemuri.webp')}
+                src={publicAsset('founder/shaswanth-vemuri.jpg')}
                 alt="Shaswanth Vemuri, Founder and CEO of DevReCon"
                 className="absolute inset-0 h-full w-full object-cover object-[50%_24%]"
                 loading="lazy"

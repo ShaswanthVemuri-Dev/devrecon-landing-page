@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/layout/Layout.jsx';
 import Home from './pages/Home.jsx';
 import Solutions from './pages/Solutions.jsx';
@@ -15,7 +15,7 @@ export default function App() {
           <Route path="/solutions" element={<Solutions />} />
           <Route path="/products" element={<Products />} />
           <Route path="/company" element={<Company />} />
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

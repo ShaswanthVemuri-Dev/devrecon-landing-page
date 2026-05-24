@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="py-12 md:py-20 px-6 border-t border-gray-200 bg-white">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 md:gap-8">
@@ -29,7 +31,7 @@ const Footer = () => {
       </div>
 
       <div className="max-w-7xl mx-auto mt-16 md:mt-20 pt-8 border-t border-gray-100 text-sm text-gray-400 flex flex-col md:flex-row justify-between gap-4 font-light tracking-wide">
-        <p>© 2025 DEVRECON Softwares Pvt. Ltd.</p>
+        <p>© {currentYear} DEVRECON Softwares Pvt. Ltd.</p>
         <p>Engineering Clarity.</p>
       </div>
     </footer>
@@ -37,4 +39,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

@@ -15,20 +15,16 @@ const toPixels = (value) => {
 const revealVariants = {
   rise: {
     scale: 0.998,
-    blur: '0px',
   },
   soft: {
     scale: 0.996,
-    blur: '0px',
   },
   fade: {
     scale: 1,
     distance: '0px',
-    blur: '0px',
   },
   lift: {
     scale: 0.996,
-    blur: '0px',
   },
 };
 
@@ -49,7 +45,7 @@ const Reveal = ({
   const { ref, isVisible } = useRevealOnce({ disabled, rootMargin, threshold });
   const selectedVariant = revealVariants[variant] ?? revealVariants.rise;
   const resolvedDuration = duration ?? motionDuration.reveal;
-  const resolvedDistance = distance ?? selectedVariant.distance ?? motionDistance.revealDesktop;
+  const resolvedDistance = distance ?? selectedVariant.distance ?? motionDistance.reveal;
 
   return (
     <Component
@@ -60,7 +56,6 @@ const Reveal = ({
         '--motion-reveal-delay': toSeconds(delay),
         '--motion-reveal-distance': toPixels(resolvedDistance),
         '--motion-reveal-scale': selectedVariant.scale,
-        '--motion-reveal-blur': selectedVariant.blur,
         '--motion-reveal-ease': motionCssEase.soft,
         ...style,
       }}

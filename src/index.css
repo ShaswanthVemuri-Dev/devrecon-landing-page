@@ -3,20 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-bubble: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bubble: cubic-bezier(0.18, 1, 0.32, 1);
   --ease-quick: cubic-bezier(0.2, 0.8, 0.2, 1);
   --duration-tap: 120ms;
   --duration-hover: 320ms;
   --duration-button: 300ms;
   --duration-underline: 320ms;
-  --duration-reveal: 780ms;
-  --duration-reveal-mobile: 780ms;
+  --duration-reveal: 900ms;
+  --duration-reveal-mobile: 900ms;
   --duration-page-enter: 260ms;
   --duration-page-exit: 0ms;
-  --duration-menu: 420ms;
-  --duration-accordion: 460ms;
+  --duration-menu: 680ms;
+  --duration-accordion: 620ms;
 }
 
 html {
@@ -35,12 +35,6 @@ body,
 body {
   @apply bg-white text-[#111111];
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-@supports (height: 100svh) {
-  .devrecon-nav.is-mobile-shell-active {
-    height: 100svh;
-  }
 }
 
 @supports not (overflow: clip) {
@@ -94,38 +88,18 @@ img {
   text-wrap: balance;
 }
 
-@keyframes devreconRouteEnter {
-  0% {
-    opacity: 0.985;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes devreconRouteExit {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 .route-transition-shell {
   opacity: 1;
   transform: none;
   transform-origin: 50% 0;
-  will-change: opacity;
 }
 
 .route-transition-shell.is-entering {
-  animation: devreconRouteEnter var(--duration-page-enter) var(--ease-soft) both;
+  opacity: 1;
 }
 
 .route-transition-shell.is-exiting {
-  animation: devreconRouteExit var(--duration-page-exit) var(--ease-soft) both;
-  pointer-events: none;
+  opacity: 1;
 }
 
 .route-transition-shell.is-entered {
@@ -135,18 +109,20 @@ img {
 }
 
 .solution-detail-shell {
-  height: var(--solution-detail-height, 0px);
+  display: grid;
+  grid-template-rows: 0fr;
   opacity: 0;
   overflow: hidden;
-  transform: translate3d(0, -2px, 0);
+  transform: translate3d(0, -4px, 0);
   transition:
-    height var(--duration-accordion) var(--ease-soft),
-    opacity 260ms var(--ease-soft),
+    grid-template-rows var(--duration-accordion) var(--ease-soft),
+    opacity 340ms var(--ease-soft),
     transform var(--duration-accordion) var(--ease-soft);
-  will-change: height, opacity;
+  will-change: grid-template-rows, opacity;
 }
 
 .solution-detail-shell.is-open {
+  grid-template-rows: 1fr;
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
@@ -161,9 +137,9 @@ img {
   max-height: 16rem;
   opacity: 1;
   transition:
-    max-height 420ms var(--ease-soft),
-    margin-top 420ms var(--ease-soft),
-    opacity 260ms var(--ease-soft);
+    max-height 500ms var(--ease-soft),
+    margin-top 500ms var(--ease-soft),
+    opacity 300ms var(--ease-soft);
 }
 
 .solution-preview-text.is-hidden {
@@ -176,26 +152,25 @@ img {
 @media (max-width: 767px) {
   .solution-preview-text {
     margin-top: 1rem;
-    max-height: 18rem;
-    transition-duration: 360ms, 360ms, 220ms;
+    max-height: 22rem;
+    transition-duration: 460ms, 460ms, 260ms;
   }
 }
 
 .motion-reveal {
   opacity: 0;
-  transform: translate3d(0, var(--motion-reveal-distance, 22px), 0) scale(var(--motion-reveal-scale, 0.994));
-  transition-property: opacity, transform, filter;
+  transform: translate3d(0, var(--motion-reveal-distance, 18px), 0) scale(var(--motion-reveal-scale, 0.998));
+  transition-property: opacity, transform;
   transition-duration: var(--motion-reveal-duration, var(--duration-reveal));
   transition-delay: var(--motion-reveal-delay, 0ms);
   transition-timing-function: var(--motion-reveal-ease, var(--ease-soft));
-  filter: blur(var(--motion-reveal-blur, 0px));
+  backface-visibility: hidden;
   will-change: opacity, transform;
 }
 
 .motion-reveal.is-visible {
   opacity: 1;
   transform: translate3d(0, 0, 0) scale(1);
-  filter: blur(0);
   will-change: auto;
 }
 
@@ -396,31 +371,36 @@ a.motion-pill {
 }
 
 .devrecon-nav.is-mobile-shell-active {
-  background: #ffffff;
+  background: transparent;
   border-color: transparent;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
 .mobile-menu-shell {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 1200;
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
   clip-path: inset(0 0 100% 0);
+  background: #ffffff;
   transition:
     clip-path var(--duration-menu) var(--ease-soft),
     opacity 220ms var(--ease-soft),
     visibility 0s linear var(--duration-menu);
   will-change: clip-path, opacity;
   backface-visibility: hidden;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .mobile-menu-shell.is-active {
   visibility: visible;
   opacity: 1;
+  transition-delay: 0s;
 }
 
 .mobile-menu-shell.is-open {
@@ -446,13 +426,7 @@ a.motion-pill {
 .mobile-menu-item {
   opacity: 1;
   transform: translate3d(0, 0, 0);
-  transition: opacity 260ms var(--ease-soft), transform 320ms var(--ease-soft);
-  transition-delay: 0ms;
-}
-
-.mobile-menu-shell:not(.is-active) .mobile-menu-item {
-  opacity: 0;
-  transform: translate3d(0, 10px, 0);
+  transition: color var(--duration-button) var(--ease-soft), transform var(--duration-button) var(--ease-soft);
 }
 
 .mobile-nav-open .scroll-to-top-button {
@@ -491,7 +465,8 @@ a.motion-pill {
 .scroll-to-top-button:hover,
 .scroll-to-top-button:focus-visible {
   border-color: rgba(255, 255, 255, 0.76);
-  outline: none;
+  outline: 2px solid rgba(17, 17, 17, 0.28);
+  outline-offset: 4px;
 }
 
 .scroll-to-top-icon-shell {
@@ -546,13 +521,9 @@ a:focus {
   }
 
   .motion-reveal,
-  .route-transition-shell,
-  .mobile-menu-item,
-  .mobile-menu-shell,
-  .scroll-to-top-button {
+  .route-transition-shell {
     opacity: 1 !important;
     transform: none !important;
-    filter: none !important;
   }
 }
 
@@ -584,4 +555,3 @@ a:focus {
   pointer-events: none;
   background: linear-gradient(to right, transparent, #111111 85%);
 }
-

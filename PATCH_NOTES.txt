@@ -1,0 +1,9 @@
+DevReCon stability rebuild package
+
+Apply the files in this folder over the same relative paths in the project root.
+
+Deployment notes:
+- Remove public/founder/shaswanth-vemuri.webp if it exists locally or in Hostinger public_html.
+- Use public/founder/shaswanth-vemuri.jpg instead. The old .webp file contained JPEG bytes.
+- Confirm public/.htaccess is present in the deployed Hostinger root so BrowserRouter direct routes resolve to index.html.
+- Product preview hover/tap implementation files were intentionally not included or refactored.

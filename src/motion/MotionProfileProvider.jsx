@@ -16,14 +16,6 @@ export const buildMotionProfile = (prefersReducedMotion) => {
     prefersReducedMotion,
     enableMotion,
     enableHoverMotion: enableMotion,
-
-    // Backward-compatible fields. These intentionally no longer drive reveal behavior.
-    isSmallScreen: false,
-    isCoarsePointer: false,
-    isMobileMotion: false,
-    useSimpleMobileMotion: false,
-    hasFineHover: true,
-    hasAnyHover: true,
   };
 };
 

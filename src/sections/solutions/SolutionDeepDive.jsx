@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import Reveal from '../../components/motion/Reveal.jsx';
@@ -58,46 +58,19 @@ const DetailContent = ({ solution, mailto }) => (
   </div>
 );
 
-const SolutionPanel = ({ solution, isOpen, onToggle, index }) => {
+const SolutionPanel = ({ solution, isOpen, onToggle }) => {
   const mailto = useMemo(() => buildMailto(solution.subject, solution.mailBody), [solution.subject, solution.mailBody]);
-  const detailInnerRef = useRef(null);
-  const [detailHeight, setDetailHeight] = useState(0);
-
-  useLayoutEffect(() => {
-    const element = detailInnerRef.current;
-    if (!element) return undefined;
-
-    const measure = () => {
-      setDetailHeight(Math.ceil(element.scrollHeight));
-    };
-
-    measure();
-
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', measure);
-      return () => window.removeEventListener('resize', measure);
-    }
-
-    const observer = new ResizeObserver(measure);
-    observer.observe(element);
-
-    return () => observer.disconnect();
-  }, [solution]);
 
   return (
-    <Reveal
-      as="article"
+    <article
       id={solution.id}
-      delay={index * 0.035}
-      variant="fade"
-      distance={0}
       className="motion-surface scroll-mt-28 overflow-hidden rounded-[1.75rem] border border-black bg-[#111111] text-white shadow-[0_24px_70px_rgba(0,0,0,0.08)] sm:rounded-[2.15rem] md:scroll-mt-32"
     >
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className={`group relative w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 ${isOpen ? 'px-5 pt-5 pb-2 sm:px-8 sm:pt-8 sm:pb-3 md:px-10 md:pt-10 md:pb-4' : 'px-5 pt-5 pb-5 sm:px-8 sm:pt-8 sm:pb-8 md:px-10 md:pt-10 md:pb-10'}`}
+        className={`group relative w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 ${isOpen ? 'px-5 pt-5 pb-0 sm:px-8 sm:pt-8 sm:pb-2 md:px-10 md:pt-10 md:pb-3' : 'px-5 pt-5 pb-5 sm:px-8 sm:pt-8 sm:pb-8 md:px-10 md:pt-10 md:pb-10'}`}
       >
         <div className="flex flex-col gap-5 sm:gap-7 lg:flex-row lg:items-start lg:gap-12">
           <div className="flex shrink-0 items-center justify-between lg:block lg:w-28">
@@ -132,15 +105,12 @@ const SolutionPanel = ({ solution, isOpen, onToggle, index }) => {
         </div>
       </button>
 
-      <div
-        className={`solution-detail-shell ${isOpen ? 'is-open' : ''}`}
-        style={{ '--solution-detail-height': isOpen ? `${detailHeight}px` : '0px' }}
-      >
-        <div ref={detailInnerRef} className="solution-detail-inner">
+      <div className={`solution-detail-shell ${isOpen ? 'is-open' : ''}`}>
+        <div className="solution-detail-inner">
           <DetailContent solution={solution} mailto={mailto} />
         </div>
       </div>
-    </Reveal>
+    </article>
   );
 };
 
@@ -159,17 +129,16 @@ const SolutionDeepDive = () => {
   return (
     <section className="px-6 pb-20 md:pb-32">
       <div className="mx-auto max-w-7xl">
-        <div className="space-y-5 md:space-y-6">
-          {solutions.map((solution, index) => (
+        <Reveal className="space-y-5 md:space-y-6" variant="fade" distance={0} duration={0.68}>
+          {solutions.map((solution) => (
             <SolutionPanel
               key={solution.id}
               solution={solution}
-              index={index}
               isOpen={openId === solution.id}
               onToggle={() => setOpenId((current) => (current === solution.id ? '' : solution.id))}
             />
           ))}
-        </div>
+        </Reveal>
 
         <Reveal className="mt-9 flex flex-col gap-8 rounded-[2rem] border border-gray-100 bg-white/85 p-7 shadow-[0_20px_70px_rgba(0,0,0,0.035)] backdrop-blur-sm sm:p-8 md:mt-12 md:p-10 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-3xl">

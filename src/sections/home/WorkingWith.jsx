@@ -3,16 +3,16 @@ import Reveal from '../../components/motion/Reveal.jsx';
 import publicAsset from '../../utils/assetPaths.js';
 
 const logos = [
-  { src: 'working-with/logo-01.png', className: 'max-h-16 sm:max-h-20 md:max-h-24' },
-  { src: 'working-with/logo-02.png', className: 'max-h-10 sm:max-h-12 md:max-h-14' },
-  { src: 'working-with/logo-03.png', className: 'max-h-16 sm:max-h-20 md:max-h-24' },
-  { src: 'working-with/logo-04.png', className: 'max-h-10 sm:max-h-12 md:max-h-14' },
-  { src: 'working-with/logo-05.png', className: 'max-h-16 sm:max-h-20 md:max-h-24' },
-  { src: 'working-with/logo-06.png', className: 'max-h-16 sm:max-h-20 md:max-h-24' },
-  { src: 'working-with/logo-07.png', className: 'max-h-16 sm:max-h-20 md:max-h-24' },
-  { src: 'working-with/logo-08.png', className: 'max-h-10 sm:max-h-12 md:max-h-14' },
-  { src: 'working-with/logo-09.png', className: 'max-h-16 sm:max-h-20 md:max-h-24' },
-  { src: 'working-with/logo-10.png', className: 'max-h-10 sm:max-h-12 md:max-h-14' },
+  { src: 'working-with/logo-01.png', width: 1096, height: 1135, className: 'max-h-16 sm:max-h-20 md:max-h-24' },
+  { src: 'working-with/logo-02.png', width: 2048, height: 682, className: 'max-h-10 sm:max-h-12 md:max-h-14' },
+  { src: 'working-with/logo-03.png', width: 1090, height: 1037, className: 'max-h-16 sm:max-h-20 md:max-h-24' },
+  { src: 'working-with/logo-04.png', width: 2048, height: 672, className: 'max-h-10 sm:max-h-12 md:max-h-14' },
+  { src: 'working-with/logo-05.png', width: 1254, height: 1254, className: 'max-h-16 sm:max-h-20 md:max-h-24' },
+  { src: 'working-with/logo-06.png', width: 1181, height: 929, className: 'max-h-16 sm:max-h-20 md:max-h-24' },
+  { src: 'working-with/logo-07.png', width: 478, height: 496, className: 'max-h-16 sm:max-h-20 md:max-h-24' },
+  { src: 'working-with/logo-08.png', width: 2048, height: 528, className: 'max-h-10 sm:max-h-12 md:max-h-14' },
+  { src: 'working-with/logo-09.png', width: 994, height: 941, className: 'max-h-16 sm:max-h-20 md:max-h-24' },
+  { src: 'working-with/logo-10.png', width: 2048, height: 734, className: 'max-h-10 sm:max-h-12 md:max-h-14' },
 ];
 
 const firstRow = logos.slice(0, 5);
@@ -28,6 +28,8 @@ const LogoItem = ({ logo, index }) => (
       decoding="async"
       fetchPriority="low"
       draggable="false"
+      width={logo.width}
+      height={logo.height}
       className={`pointer-events-none w-full select-none object-contain ${logo.className}`}
     />
   </div>
