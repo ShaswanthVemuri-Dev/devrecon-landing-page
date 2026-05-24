@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --ease-standard: cubic-bezier(0.2, 0.9, 0.18, 1);
-  --ease-soft: cubic-bezier(0.19, 1, 0.22, 1);
-  --ease-bubble: cubic-bezier(0.2, 0.9, 0.18, 1);
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bubble: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-quick: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --duration-tap: 150ms;
-  --duration-hover: 380ms;
-  --duration-button: 380ms;
-  --duration-underline: 360ms;
-  --duration-reveal: 920ms;
-  --duration-reveal-mobile: 820ms;
-  --duration-page-enter: 560ms;
+  --duration-tap: 120ms;
+  --duration-hover: 320ms;
+  --duration-button: 300ms;
+  --duration-underline: 320ms;
+  --duration-reveal: 780ms;
+  --duration-reveal-mobile: 780ms;
+  --duration-page-enter: 260ms;
   --duration-page-exit: 0ms;
-  --duration-menu: 680ms;
+  --duration-menu: 420ms;
   --duration-accordion: 460ms;
 }
 
@@ -35,6 +35,12 @@ body,
 body {
   @apply bg-white text-[#111111];
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+@supports (height: 100svh) {
+  .devrecon-nav.is-mobile-shell-active {
+    height: 100svh;
+  }
 }
 
 @supports not (overflow: clip) {
@@ -90,31 +96,27 @@ img {
 
 @keyframes devreconRouteEnter {
   0% {
-    opacity: 0;
-    transform: translate3d(0, 12px, 0) scale(0.998);
+    opacity: 0.985;
   }
   100% {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
 @keyframes devreconRouteExit {
   0% {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
   }
   100% {
-    opacity: 0;
-    transform: translate3d(0, -12px, 0) scale(0.997);
+    opacity: 1;
   }
 }
 
 .route-transition-shell {
   opacity: 1;
-  transform: translate3d(0, 0, 0) scale(1);
+  transform: none;
   transform-origin: 50% 0;
-  will-change: opacity, transform;
+  will-change: opacity;
 }
 
 .route-transition-shell.is-entering {
@@ -128,23 +130,23 @@ img {
 
 .route-transition-shell.is-entered {
   opacity: 1;
-  transform: translate3d(0, 0, 0) scale(1);
+  transform: none;
   will-change: auto;
 }
 
 .solution-detail-shell {
-  display: grid;
-  grid-template-rows: 0fr;
+  height: var(--solution-detail-height, 0px);
   opacity: 0;
-  transform: translate3d(0, -4px, 0);
+  overflow: hidden;
+  transform: translate3d(0, -2px, 0);
   transition:
-    grid-template-rows var(--duration-accordion) var(--ease-soft),
-    opacity 320ms var(--ease-soft),
+    height var(--duration-accordion) var(--ease-soft),
+    opacity 260ms var(--ease-soft),
     transform var(--duration-accordion) var(--ease-soft);
+  will-change: height, opacity;
 }
 
 .solution-detail-shell.is-open {
-  grid-template-rows: 1fr;
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
@@ -181,7 +183,7 @@ img {
 
 .motion-reveal {
   opacity: 0;
-  transform: translate3d(0, var(--motion-reveal-distance, 16px), 0) scale(var(--motion-reveal-scale, 0.998));
+  transform: translate3d(0, var(--motion-reveal-distance, 22px), 0) scale(var(--motion-reveal-scale, 0.994));
   transition-property: opacity, transform, filter;
   transition-duration: var(--motion-reveal-duration, var(--duration-reveal));
   transition-delay: var(--motion-reveal-delay, 0ms);
@@ -259,11 +261,9 @@ a.motion-pill {
   text-decoration: none !important;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .motion-pill-light:hover {
-    background-color: rgba(255, 255, 255, 0.96) !important;
-    border-color: rgba(17, 17, 17, 0.34) !important;
-  }
+.motion-pill-light:hover {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(17, 17, 17, 0.34) !important;
 }
 
 .motion-pill::before,
@@ -274,40 +274,37 @@ a.motion-pill {
 @media (hover: hover) and (pointer: fine) {
   .motion-button:hover,
   .motion-pill:hover {
-    transform: translate3d(0, -1px, 0) scale(1.008);
+    transform: translate3d(0, -2px, 0) scale(1.014);
     box-shadow: none;
   }
 
   .motion-surface:hover,
   .motion-card:hover {
-    transform: translate3d(0, -2px, 0) scale(1.002);
-    box-shadow: 0 14px 42px rgba(17,17,17,0.045);
+    transform: translate3d(0, -3px, 0) scale(1.004);
+    box-shadow: 0 16px 48px rgba(17,17,17,0.055);
   }
 
   .motion-icon-card:hover {
-    transform: translate3d(0, -1px, 0) rotate(-1.25deg) scale(1.014);
+    transform: translate3d(0, -1px, 0) rotate(-2deg) scale(1.025);
   }
+}
+
+.motion-button:active,
+.motion-pill:active {
+  transform: translate3d(0, 0, 0) scale(0.986);
+  transition-duration: var(--duration-tap);
 }
 
 @media (hover: none), (pointer: coarse) {
   .motion-surface:hover,
   .motion-card:hover,
   .motion-icon-card:hover,
+  .motion-button:hover,
+  .motion-pill:hover,
   .motion-underline-action:hover {
     transform: translate3d(0, 0, 0) scale(1);
-    box-shadow: inherit;
+    box-shadow: none;
   }
-
-  .motion-button:hover,
-  .motion-pill:hover {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-}
-
-.motion-button:active,
-.motion-pill:active {
-  transform: translate3d(0, 0, 0) scale(0.992);
-  transition-duration: var(--duration-tap);
 }
 
 .motion-button:focus-visible,
@@ -319,7 +316,7 @@ a.motion-pill {
 
 .motion-surface:active,
 .motion-card:active {
-  transform: translate3d(0, 0, 0) scale(0.997);
+  transform: translate3d(0, -1px, 0) scale(0.994);
   transition-duration: var(--duration-tap);
 }
 
@@ -337,42 +334,49 @@ a.motion-pill {
 
 @media (hover: hover) and (pointer: fine) {
   .motion-underline-action:hover {
-    transform: translate3d(0, -1px, 0) scale(1.004);
+    transform: translate3d(0, -1px, 0) scale(1.006);
   }
-}
 
-@media (hover: hover) and (pointer: fine) {
   .motion-underline-action:hover .motion-action-arrow,
   .motion-button:hover .motion-action-arrow,
   .motion-pill:hover .motion-action-arrow {
-    transform: translate3d(2px, -2px, 0) scale(1.02);
+    transform: translate3d(3px, -3px, 0) scale(1.035);
   }
 
   .motion-underline-action:hover .motion-action-arrow-right,
   .motion-button:hover .motion-action-arrow-right,
   .motion-pill:hover .motion-action-arrow-right {
-    transform: translate3d(3px, 0, 0) scale(1.02);
+    transform: translate3d(4px, 0, 0) scale(1.035);
   }
 
   .motion-underline-action:hover .motion-action-arrow-down,
   .motion-button:hover .motion-action-arrow-down,
   .motion-pill:hover .motion-action-arrow-down {
-    transform: translate3d(0, 3px, 0) scale(1.02);
-  }
-}
-
-@media (hover: none), (pointer: coarse) {
-  .motion-action-arrow,
-  .motion-button:hover .motion-action-arrow,
-  .motion-pill:hover .motion-action-arrow,
-  .motion-underline-action:hover .motion-action-arrow {
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 4px, 0) scale(1.035);
   }
 }
 
 .motion-underline-action:active {
   transform: translate3d(0, 0, 0) scale(0.988);
   transition-duration: var(--duration-tap);
+}
+
+.motion-underline-action:active .motion-action-arrow,
+.motion-button:active .motion-action-arrow,
+.motion-pill:active .motion-action-arrow {
+  transform: translate3d(2px, -2px, 0) scale(1.02);
+}
+
+.motion-underline-action:active .motion-action-arrow-right,
+.motion-button:active .motion-action-arrow-right,
+.motion-pill:active .motion-action-arrow-right {
+  transform: translate3d(3px, 0, 0) scale(1.02);
+}
+
+.motion-underline-action:active .motion-action-arrow-down,
+.motion-button:active .motion-action-arrow-down,
+.motion-pill:active .motion-action-arrow-down {
+  transform: translate3d(0, 3px, 0) scale(1.02);
 }
 
 .mobile-menu-glyph {
@@ -392,44 +396,37 @@ a.motion-pill {
 }
 
 .devrecon-nav.is-mobile-shell-active {
-  background: transparent;
+  background: #ffffff;
   border-color: transparent;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
 .mobile-menu-shell {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  min-height: 100vh;
-  min-height: 100dvh;
-  z-index: 1190;
-  overflow-y: auto;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  overscroll-behavior: contain;
+  z-index: 1200;
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
-  transform: translate3d(0, -1.25rem, 0) scaleY(0.985);
-  transform-origin: 50% 0;
+  clip-path: inset(0 0 100% 0);
   transition:
-    transform var(--duration-menu) var(--ease-soft),
-    opacity var(--duration-menu) var(--ease-soft),
+    clip-path var(--duration-menu) var(--ease-soft),
+    opacity 220ms var(--ease-soft),
     visibility 0s linear var(--duration-menu);
-  will-change: transform, opacity;
+  will-change: clip-path, opacity;
   backface-visibility: hidden;
 }
 
 .mobile-menu-shell.is-active {
   visibility: visible;
+  opacity: 1;
 }
 
 .mobile-menu-shell.is-open {
   opacity: 1;
   pointer-events: auto;
-  transform: translate3d(0, 0, 0) scaleY(1);
+  clip-path: inset(0 0 0 0);
   transition-delay: 0s;
 }
 
@@ -447,16 +444,15 @@ a.motion-pill {
 }
 
 .mobile-menu-item {
-  opacity: 0;
-  transform: translate3d(0, 14px, 0);
-  transition: opacity 520ms var(--ease-soft), transform 580ms var(--ease-soft);
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 260ms var(--ease-soft), transform 320ms var(--ease-soft);
   transition-delay: 0ms;
 }
 
-.mobile-menu-shell.is-open .mobile-menu-item {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  transition-delay: var(--mobile-menu-delay, 0ms);
+.mobile-menu-shell:not(.is-active) .mobile-menu-item {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
 }
 
 .mobile-nav-open .scroll-to-top-button {
@@ -537,41 +533,6 @@ a:hover,
 a:active,
 a:focus {
   color: inherit;
-}
-
-
-@media (max-width: 767px) {
-  .solution-detail-shell {
-    display: block;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transform: translate3d(0, -2px, 0);
-    transition:
-      opacity 260ms var(--ease-soft),
-      transform 320ms var(--ease-soft);
-  }
-
-  .solution-detail-shell.is-open {
-    max-height: none;
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-
-  .solution-detail-inner {
-    overflow: visible;
-  }
-}
-
-@media (update: slow) {
-  .motion-reveal {
-    transition-duration: 620ms;
-  }
-
-  .devrecon-ring-slow,
-  .devrecon-ring-slower {
-    animation: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

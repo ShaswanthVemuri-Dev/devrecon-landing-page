@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import Reveal from '../../components/motion/Reveal.jsx';
@@ -17,7 +17,7 @@ const DetailColumn = ({ title, items }) => (
       {items.map((item) => (
         <p
           key={item}
-          className="flex items-start border-l border-white/20 pl-4 text-sm font-light leading-loose tracking-wide text-gray-300 sm:min-h-[4.6rem] sm:pl-5 sm:text-base md:text-lg"
+          className="flex items-start border-l border-white/20 pl-4 text-sm font-light leading-loose tracking-wide text-gray-300 transition-transform duration-[var(--duration-button)] ease-[var(--ease-soft)] hover:translate-x-1 sm:min-h-[4.6rem] sm:pl-5 sm:text-base md:text-lg"
         >
           {item}
         </p>
@@ -60,12 +60,37 @@ const DetailContent = ({ solution, mailto }) => (
 
 const SolutionPanel = ({ solution, isOpen, onToggle, index }) => {
   const mailto = useMemo(() => buildMailto(solution.subject, solution.mailBody), [solution.subject, solution.mailBody]);
+  const detailInnerRef = useRef(null);
+  const [detailHeight, setDetailHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    const element = detailInnerRef.current;
+    if (!element) return undefined;
+
+    const measure = () => {
+      setDetailHeight(Math.ceil(element.scrollHeight));
+    };
+
+    measure();
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', measure);
+      return () => window.removeEventListener('resize', measure);
+    }
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [solution]);
 
   return (
     <Reveal
       as="article"
       id={solution.id}
-      delay={index * 0.05}
+      delay={index * 0.035}
+      variant="fade"
+      distance={0}
       className="motion-surface scroll-mt-28 overflow-hidden rounded-[1.75rem] border border-black bg-[#111111] text-white shadow-[0_24px_70px_rgba(0,0,0,0.08)] sm:rounded-[2.15rem] md:scroll-mt-32"
     >
       <button
@@ -107,8 +132,11 @@ const SolutionPanel = ({ solution, isOpen, onToggle, index }) => {
         </div>
       </button>
 
-      <div className={`solution-detail-shell ${isOpen ? 'is-open' : ''}`}>
-        <div className="solution-detail-inner">
+      <div
+        className={`solution-detail-shell ${isOpen ? 'is-open' : ''}`}
+        style={{ '--solution-detail-height': isOpen ? `${detailHeight}px` : '0px' }}
+      >
+        <div ref={detailInnerRef} className="solution-detail-inner">
           <DetailContent solution={solution} mailto={mailto} />
         </div>
       </div>
@@ -143,7 +171,7 @@ const SolutionDeepDive = () => {
           ))}
         </div>
 
-        <Reveal className="mt-9 flex flex-col gap-8 rounded-[2rem] border border-gray-100 bg-white p-7 shadow-[0_18px_56px_rgba(0,0,0,0.03)] sm:p-8 md:mt-12 md:p-10 lg:flex-row lg:items-center lg:justify-between">
+        <Reveal className="mt-9 flex flex-col gap-8 rounded-[2rem] border border-gray-100 bg-white/85 p-7 shadow-[0_20px_70px_rgba(0,0,0,0.035)] backdrop-blur-sm sm:p-8 md:mt-12 md:p-10 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-3xl">
             <h2 className="text-2xl font-bold tracking-tight text-[#111111] md:text-3xl">
               When the work crosses categories, send the problem as it is.

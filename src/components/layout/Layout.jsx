@@ -5,7 +5,7 @@ import Footer from './Footer.jsx';
 import ScrollToTop from './ScrollToTop.jsx';
 import RouteScrollManager from './RouteScrollManager.jsx';
 
-const ENTER_DURATION_MS = 560;
+const ENTER_DURATION_MS = 260;
 
 const getRouteSignature = (location) => `${location.pathname}${location.search}`;
 
@@ -31,11 +31,7 @@ const Layout = () => {
     <div className="overflow-x-hidden bg-white text-slate-900">
       <RouteScrollManager />
       <Navbar />
-      <div
-        key={signature}
-        className={`route-transition-shell min-h-screen is-${phase}`}
-        aria-busy={phase !== 'entered'}
-      >
+      <div className={`route-transition-shell min-h-screen is-${phase}`} aria-busy={phase !== 'entered'}>
         {outlet}
       </div>
       <Footer />
