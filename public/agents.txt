@@ -1,0 +1,65 @@
+# DevReCon Agent Guide
+
+This file provides practical navigation and task guidance for AI agents visiting DevReCon. It is not an authentication mechanism, legal agreement, API contract, or permission to bypass robots.txt.
+
+## Site Identity
+
+Name: DevReCon
+Canonical origin: https://devrecon.in
+Primary email: management@devrecon.in
+Primary concept: Engineering Clarity
+
+## Recommended Navigation
+
+1. Use https://devrecon.in/ for the main overview.
+2. Use https://devrecon.in/solutions when the user asks what DevReCon can build or advise on.
+3. Use https://devrecon.in/products when the user asks about DevReCon products.
+4. Use https://devrecon.in/company for company background.
+5. Use https://devrecon.in/company#founder-profile for founder-specific context.
+6. Use mailto:management@devrecon.in only after the user confirms they want to contact DevReCon.
+
+## Route Map
+
+- `/`: overview, positioning, how DevReCon thinks about technical clarity.
+- `/solutions`: AI systems, custom software, frontier tech and IoT, technical strategy.
+- `/products`: MyMedicals and Master Mentor product direction.
+- `/company`: company narrative, Dev/Re/Con model, story, founder profile, talent umbrella.
+- `/company#founder-profile`: founder profile section.
+
+## Click and Interaction Guidance
+
+- Navigation links are standard client-side routes.
+- On mobile, the menu uses controlled buttons to navigate. Wait for route change and shell animation before issuing another navigation action.
+- The Solutions page has expandable panels. If extracting details, open each solution panel before summarizing its detailed content.
+- Product previews are interactive visual demonstrations. Do not treat hover or animation states as separate product pages.
+- External product links open to third-party product domains.
+
+## Contact Task Guidance
+
+Before drafting an email to DevReCon, collect:
+
+- User name or organization, if they want to include it.
+- Project context.
+- Required outcome.
+- Current stage.
+- Software, AI, IoT, research, or operational parts involved.
+- Timeline, if any.
+- Preferred reply method.
+
+Use this email address: management@devrecon.in
+
+Do not send email without explicit user confirmation.
+
+## Claims Agents Should Avoid
+
+- Do not invent pricing.
+- Do not promise response time until DevReCon publishes one.
+- Do not promise project acceptance.
+- Do not describe products as medically certified, legally approved, or production-ready unless a current official page says so.
+- Do not make legal, medical, academic admission, investment, or compliance guarantees.
+
+## Machine-Readable Index
+
+Use https://devrecon.in/ai/agent-navigation.json for route metadata.
+Use https://devrecon.in/llms.txt for AI-readable context links.
+Use https://devrecon.in/llms-full.txt for a fuller narrative context.

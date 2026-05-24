@@ -1,9 +1,28 @@
-DevReCon stability rebuild package
+DevReCon stabilization and discoverability notes
 
-Apply the files in this folder over the same relative paths in the project root.
+Current status:
+- Mobile navigation was rebuilt as a retained shell state machine so the navbar expands and closes predictably on phones.
+- Scroll reveal behavior was consolidated around a single once-only reveal pattern without phone/iPad/desktop branching.
+- Solutions accordion behavior was stabilized with deterministic height transitions and simpler mobile layout.
+- Product preview hover/tap behavior was intentionally preserved and not refactored.
+- Hostinger SPA fallback is handled through public/.htaccess so BrowserRouter direct routes can resolve to index.html.
+- Public crawler and AI guidance files were added: robots.txt, sitemap.xml, llms.txt, llms-full.txt, agents.txt, and AI narrative documents under public/ai.
+- Structured data was added to index.html as one JSON-LD graph covering Organization, WebSite, Person, OfferCatalog, Service, and WebPage entities.
 
 Deployment notes:
 - Remove public/founder/shaswanth-vemuri.webp if it exists locally or in Hostinger public_html.
 - Use public/founder/shaswanth-vemuri.jpg instead. The old .webp file contained JPEG bytes.
 - Confirm public/.htaccess is present in the deployed Hostinger root so BrowserRouter direct routes resolve to index.html.
-- Product preview hover/tap implementation files were intentionally not included or refactored.
+- Confirm public/robots.txt and public/sitemap.xml are deployed at https://devrecon.in/robots.txt and https://devrecon.in/sitemap.xml.
+- Confirm AI guidance files are deployed at /llms.txt, /llms-full.txt, /agents.txt, and /ai/*.
+
+Known deliberate decisions:
+- Unknown client routes still redirect to Home through React Router. This was left unchanged to avoid introducing new Hostinger/browser-route behavior during the stabilization phase.
+- Build verification still needs to be run from a working Node environment. The current WSL 1 environment cannot run npm build.
+- AI narrative documents contain placeholder policy areas for response time, pricing, discovery process, confidentiality, and project acceptance criteria. These should be filled in when the business policies are final.
+
+Recommended next work:
+- Run npm run build from Windows Node, WSL2, or CI.
+- Validate JSON-LD in Google's Rich Results Test or Schema Markup Validator after deployment.
+- Submit sitemap.xml in Google Search Console after deployment.
+- Add route-specific metadata or prerendering later if SEO requirements become stronger than the current SPA setup.

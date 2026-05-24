@@ -1,0 +1,33 @@
+{
+  "name": "DevReCon",
+  "description": "DevReCon combines development, research, and consultation to create Engineering Clarity for software, AI, IoT, products, and technical strategy.",
+  "url": "https://devrecon.in/",
+  "documentationUrl": "https://devrecon.in/llms.txt",
+  "provider": {
+    "organization": "DevReCon",
+    "url": "https://devrecon.in/"
+  },
+  "contact": {
+    "email": "management@devrecon.in"
+  },
+  "capabilities": [
+    "site_navigation",
+    "company_information",
+    "solution_discovery",
+    "product_context",
+    "contact_preparation"
+  ],
+  "routes": {
+    "home": "https://devrecon.in/",
+    "solutions": "https://devrecon.in/solutions",
+    "products": "https://devrecon.in/products",
+    "company": "https://devrecon.in/company",
+    "founderProfile": "https://devrecon.in/company#founder-profile"
+  },
+  "aiResources": {
+    "llms": "https://devrecon.in/llms.txt",
+    "fullContext": "https://devrecon.in/llms-full.txt",
+    "agents": "https://devrecon.in/agents.txt",
+    "navigation": "https://devrecon.in/ai/agent-navigation.json"
+  }
+}

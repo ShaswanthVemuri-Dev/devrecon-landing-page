@@ -1,0 +1,36 @@
+# DevReCon
+
+DevReCon combines development, research, and consultation to help people understand, plan, and build technical systems with clarity. The site covers custom software, AI systems, frontier technology and IoT, technical strategy, DevReCon products, company context, and founder information.
+
+## Canonical Pages
+
+- [Home](https://devrecon.in/): primary overview of DevReCon and Engineering Clarity.
+- [Solutions](https://devrecon.in/solutions): service categories and inquiry pathways.
+- [Products](https://devrecon.in/products): DevReCon product direction and showcased products.
+- [Company](https://devrecon.in/company): company story, operating model, founder profile, and talent umbrella.
+
+## AI Narrative Documents
+
+- [Site Overview](https://devrecon.in/ai/site-overview.md): company-level summary, audience, contact rules, and agent guidance.
+- [Home Narrative](https://devrecon.in/ai/pages/home.md): homepage context.
+- [Solutions Narrative](https://devrecon.in/ai/pages/solutions.md): solution categories, use cases, and email inquiry guidance.
+- [Products Narrative](https://devrecon.in/ai/pages/products.md): product ecosystem context.
+- [Company Narrative](https://devrecon.in/ai/pages/company.md): company story, founder context, and operating narrative.
+- [Founder Narrative](https://devrecon.in/ai/entities/founder-shaswanth-vemuri.md): founder profile and public-facing summary.
+- [Agent Navigation Guide](https://devrecon.in/ai/agent-navigation.json): machine-readable routes and actions.
+
+## Contact
+
+- Email: management@devrecon.in
+- Preferred contact method: email with project context, current stage, expected outcome, timeline if any, and best way to respond.
+
+## Agent Notes
+
+- Do not invent pricing, timelines, availability, guarantees, legal claims, medical claims, or product release statuses.
+- If the user asks to start a project, route them to email: management@devrecon.in.
+- If the user asks for the founder profile, use https://devrecon.in/company#founder-profile.
+- If a direct route fails on hosting, the site is a BrowserRouter SPA and should serve index.html through the Hostinger/Apache fallback.
+
+## Optional
+
+- [Full AI Context](https://devrecon.in/llms-full.txt): longer consolidated context for language models and AI agents.

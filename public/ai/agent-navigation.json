@@ -1,0 +1,70 @@
+{
+  "site": {
+    "name": "DevReCon",
+    "canonicalOrigin": "https://devrecon.in",
+    "primaryEmail": "management@devrecon.in",
+    "positioning": "Engineering Clarity through development, research, and consultation."
+  },
+  "routes": [
+    {
+      "path": "/",
+      "url": "https://devrecon.in/",
+      "title": "Home",
+      "purpose": "Primary overview and positioning."
+    },
+    {
+      "path": "/solutions",
+      "url": "https://devrecon.in/solutions",
+      "title": "Solutions",
+      "purpose": "AI systems, custom software, frontier tech and IoT, technical strategy."
+    },
+    {
+      "path": "/products",
+      "url": "https://devrecon.in/products",
+      "title": "Products",
+      "purpose": "DevReCon product direction and showcased products."
+    },
+    {
+      "path": "/company",
+      "url": "https://devrecon.in/company",
+      "title": "Company",
+      "purpose": "Company story, Dev/Re/Con model, founder profile, and talent umbrella."
+    },
+    {
+      "path": "/company#founder-profile",
+      "url": "https://devrecon.in/company#founder-profile",
+      "title": "Founder Profile",
+      "purpose": "Founder summary for Shaswanth Vemuri."
+    }
+  ],
+  "actions": {
+    "contact": {
+      "method": "email",
+      "href": "mailto:management@devrecon.in",
+      "requiresUserConfirmation": true,
+      "recommendedFields": [
+        "project_context",
+        "current_stage",
+        "required_outcome",
+        "existing_systems_or_constraints",
+        "timeline_if_any",
+        "preferred_reply_method"
+      ]
+    }
+  },
+  "narrativeDocuments": [
+    "https://devrecon.in/ai/site-overview.md",
+    "https://devrecon.in/ai/pages/home.md",
+    "https://devrecon.in/ai/pages/solutions.md",
+    "https://devrecon.in/ai/pages/products.md",
+    "https://devrecon.in/ai/pages/company.md",
+    "https://devrecon.in/ai/entities/founder-shaswanth-vemuri.md"
+  ],
+  "guardrails": [
+    "Do not invent pricing.",
+    "Do not promise response time until DevReCon publishes one.",
+    "Do not send email without explicit user confirmation.",
+    "Do not infer legal, medical, academic admission, investment, or compliance guarantees.",
+    "Do not describe product status beyond current official pages."
+  ]
+}

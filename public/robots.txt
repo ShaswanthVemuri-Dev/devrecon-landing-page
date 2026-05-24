@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Canonical site map for search engines.
+Sitemap: https://devrecon.in/sitemap.xml
+
+# AI-readable site guides.
+# These are advisory documents for agents and language models.
+# They do not override robots.txt, legal terms, privacy rules, or user intent.
+LLMs: https://devrecon.in/llms.txt
+Agents: https://devrecon.in/agents.txt

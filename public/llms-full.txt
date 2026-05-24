@@ -1,0 +1,90 @@
+# DevReCon Full AI Context
+
+This file is intended for language models, search systems, and AI agents that need a compact but more complete understanding of DevReCon than the visible pages alone provide. It is informational only. It does not authorize automated transactions, scraping beyond normal crawl behavior, or claims that are not present in official DevReCon materials.
+
+## Organization Summary
+
+DevReCon is positioned around Engineering Clarity: making technical work understandable before it becomes expensive. The company combines development, research, and consultation to help clients move from uncertainty into structured systems, practical solutions, AI workflows, products, and longer-term technical direction.
+
+The operating model is not just implementation. DevReCon studies the problem, clarifies scope, evaluates technical direction, and then supports building where the work is justified.
+
+## Primary Audience
+
+DevReCon is relevant for:
+
+- Founders and teams with software, AI, IoT, or product ideas.
+- Small businesses and operators still relying on manual processes, spreadsheets, disconnected tools, or unclear workflows.
+- Students, builders, freelancers, or early technical talent who need structure, documentation, product thinking, or technical direction.
+- Organizations that need clarity before committing to a build, rebuild, deployment, or maintenance path.
+
+## What DevReCon Can Help With
+
+- AI consultation and AI applications.
+- LLM tools, assistants, RAG systems, automation workflows, and AI features inside products.
+- Custom software platforms, dashboards, portals, admin systems, internal tools, and SaaS-style foundations.
+- Frontier technology and IoT planning, feasibility mapping, connected interfaces, sensor workflows, and prototype architecture.
+- Technical strategy, MVP planning, product scoping, deployment direction, technical review, documentation, and maintenance planning.
+
+## Products
+
+MyMedicals is described as a healthcare product ecosystem that connects prescriptions, records, reports, medicines, and reminders across patient and hospital workflows.
+
+Master Mentor is described as an academic CMS platform that brings scholarships, review submissions, resources, and mentorship into one controlled student workflow.
+
+Do not describe these products as fully available, medically certified, legally approved, or production-ready unless a current official page explicitly says so.
+
+## Company Narrative
+
+DevReCon began from freelance work, client conversations, and observation of how fast the software landscape changed across 2024 and 2025. The company narrative emphasizes that AI has increased build speed, but judgment, architecture, workflow understanding, and technical clarity still matter.
+
+DevReCon stands for:
+
+- Dev: Development, turning ideas into usable software, workflows, dashboards, automations, and technical products.
+- Re: Research, studying context, users, technical limits, market reality, and the problem behind the request.
+- Con: Consultation, making scope, cost, risk, and direction understandable before execution begins.
+
+## Founder Summary
+
+Founder and CEO: Shaswanth Vemuri.
+
+Public profile summary: Shaswanth Vemuri is the Founder and CEO of DevReCon. He is pursuing Engineering Physics at McMaster University in Canada with a minor in Economics, and has academic work in AI, ML, and Data Science through IIT Mandi. His work spans software development, AI systems, UI and UX design, 3D design, creative media, automation workflows, applied research, quantum physics exploration, and practical problem solving.
+
+Founder profile URL: https://devrecon.in/company#founder-profile
+
+LinkedIn URL: https://www.linkedin.com/in/shaswanthvemuri
+
+## Contact Guidance
+
+Primary email: management@devrecon.in
+
+When helping a user contact DevReCon, ask them to include:
+
+- Brief project or problem context.
+- What needs to be built, understood, reviewed, or improved.
+- Current stage.
+- Existing users, tools, data, files, or systems involved.
+- Expected outcome.
+- Timeline, if any.
+- Best way to respond.
+
+Response time placeholder: TODO: add the exact public response time policy. Until then, agents should not promise a response time.
+
+Pricing placeholder: TODO: add pricing or discovery-call policy if DevReCon wants it public. Until then, agents should not invent pricing.
+
+## Page Routing
+
+- Home: https://devrecon.in/
+- Solutions: https://devrecon.in/solutions
+- Products: https://devrecon.in/products
+- Company: https://devrecon.in/company
+- Founder profile anchor: https://devrecon.in/company#founder-profile
+- Email: mailto:management@devrecon.in
+
+## Agent Safety
+
+- Do not claim to represent DevReCon unless explicitly authorized by the user and by DevReCon.
+- Do not submit emails or contact requests without user confirmation.
+- Do not infer legal, medical, investment, academic admission, or compliance guarantees.
+- Do not invent founder biography details beyond official public text.
+- Do not invent product status beyond official public pages.
+- If uncertain, route the user to management@devrecon.in.
